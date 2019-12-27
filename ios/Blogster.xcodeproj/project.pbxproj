@@ -33,11 +33,11 @@
 		C1FFBC55A33E469791CEF734 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E6F6AE2EDB4144B8A2C76C96 /* rubicon-icon-font.ttf */; };
 		CA413A58139F42EAB93BCAE5 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B6207DED2A14BE899FBCCEA /* AntDesign.ttf */; };
 		CCBE9A008F36593BCE8E0004 /* libPods-BlogApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2733FB9454F25EE3021247C8 /* libPods-BlogApp-tvOSTests.a */; };
-		D01E436A23B519AB006AF511 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D01E436923B519AB006AF511 /* GoogleService-Info.plist */; };
 		D32360D77CAA47F486081849 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B4D9CE3854041A7B02945F2 /* Foundation.ttf */; };
 		DBB81FA552594A40A55B2382 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 76EA6B828ACD434A89DE17D0 /* FontAwesome5_Regular.ttf */; };
 		E65515B2C3E646C093C60154 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3839F62AE227437BB2257E9B /* Octicons.ttf */; };
 		F0082BBCB58246A4ADFC3E24 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A6BEC16F111345E88952FC6A /* FontAwesome5_Solid.ttf */; };
+		F1252E1123B6995E00B6FCFC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1252E1023B6995E00B6FCFC /* GoogleService-Info.plist */; };
 		FCCAB7BF1FB344BFB84DDFE5 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 643500A266DF494C8ACD0FDC /* Feather.ttf */; };
 		FDB2D297DA6955B67A151709 /* libPods-BlogAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB954A78B21E645C26B83853 /* libPods-BlogAppTests.a */; };
 /* End PBXBuildFile section */
@@ -61,13 +61,13 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* BlogAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlogAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* BlogsterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlogsterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BlogAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlogAppTests.m; sourceTree = "<group>"; };
 		0B4D9CE3854041A7B02945F2 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		0DD848193E377C6D5D67592E /* libPods-BlogApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlogApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F019894FC6447B7B069158E /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* BlogApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlogApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Blogster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blogster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = BlogApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = BlogApp/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -78,8 +78,8 @@
 		1DDC45827801D588D5886492 /* Pods-BlogApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlogApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BlogApp-tvOSTests/Pods-BlogApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2368333314B34DF39257E7A1 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		2733FB9454F25EE3021247C8 /* libPods-BlogApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlogApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E47B1E0B4A5D006451C7 /* BlogApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BlogApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* BlogApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BlogApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E47B1E0B4A5D006451C7 /* Blogster-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Blogster-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* Blogster-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Blogster-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3141B9DCAE909DCBF9BD2F52 /* Pods-BlogApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlogApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BlogApp-tvOS/Pods-BlogApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		31CDA0DE1E874DA3BA13ABCE /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		3666186FB18646628AF360D5 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
@@ -97,7 +97,6 @@
 		A6BEC16F111345E88952FC6A /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		AB25208214244075A8ED20C8 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
 		B325A8678092551AA41B9E7A /* libPods-BlogApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlogApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D01E436923B519AB006AF511 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D18E4D46541C466690BD8AD9 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		D3EDD279FA634E54B21EEAFA /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		E1008DAA7F934DBC82902F5F /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
@@ -106,6 +105,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EEC07EE912DA6FA4BE8913D7 /* Pods-BlogAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlogAppTests.debug.xcconfig"; path = "Target Support Files/Pods-BlogAppTests/Pods-BlogAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F1252E1023B6995E00B6FCFC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F6B8BBBC1A624717ACA7CBF8 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -168,6 +168,7 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				F1252E1023B6995E00B6FCFC /* GoogleService-Info.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
@@ -225,7 +226,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				D01E436923B519AB006AF511 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* BlogApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BlogAppTests */,
@@ -242,10 +242,10 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* BlogApp.app */,
-				00E356EE1AD99517003FC87E /* BlogAppTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* BlogApp-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* BlogApp-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* Blogster.app */,
+				00E356EE1AD99517003FC87E /* BlogsterTests.xctest */,
+				2D02E47B1E0B4A5D006451C7 /* Blogster-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* Blogster-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -268,9 +268,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* BlogAppTests */ = {
+		00E356ED1AD99517003FC87E /* BlogsterTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BlogAppTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BlogsterTests" */;
 			buildPhases = (
 				4109A385A5C4CEA0972BE256 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -282,14 +282,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = BlogAppTests;
+			name = BlogsterTests;
 			productName = BlogAppTests;
-			productReference = 00E356EE1AD99517003FC87E /* BlogAppTests.xctest */;
+			productReference = 00E356EE1AD99517003FC87E /* BlogsterTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* BlogApp */ = {
+		13B07F861A680F5B00A75B9A /* Blogster */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BlogApp" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Blogster" */;
 			buildPhases = (
 				9D07E1786B275993DD610106 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -302,14 +302,14 @@
 			);
 			dependencies = (
 			);
-			name = BlogApp;
+			name = Blogster;
 			productName = BlogApp;
-			productReference = 13B07F961A680F5B00A75B9A /* BlogApp.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Blogster.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* BlogApp-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* Blogster-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BlogApp-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Blogster-tvOS" */;
 			buildPhases = (
 				D353E6509353A418DBB484E1 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
@@ -322,14 +322,14 @@
 			);
 			dependencies = (
 			);
-			name = "BlogApp-tvOS";
+			name = "Blogster-tvOS";
 			productName = "BlogApp-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* BlogApp-tvOS.app */;
+			productReference = 2D02E47B1E0B4A5D006451C7 /* Blogster-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* BlogApp-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* Blogster-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BlogApp-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Blogster-tvOSTests" */;
 			buildPhases = (
 				A1F3AD5454CC61EB2E291E22 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
@@ -341,9 +341,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "BlogApp-tvOSTests";
+			name = "Blogster-tvOSTests";
 			productName = "BlogApp-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* BlogApp-tvOSTests.xctest */;
+			productReference = 2D02E4901E0B4A5D006451C7 /* Blogster-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -359,6 +359,9 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = HH224W24B5;
+					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
@@ -370,7 +373,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "BlogApp" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Blogster" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -383,10 +386,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* BlogApp */,
-				00E356ED1AD99517003FC87E /* BlogAppTests */,
-				2D02E47A1E0B4A5D006451C7 /* BlogApp-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* BlogApp-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* Blogster */,
+				00E356ED1AD99517003FC87E /* BlogsterTests */,
+				2D02E47A1E0B4A5D006451C7 /* Blogster-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* Blogster-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -422,7 +425,7 @@
 				5407B9DF4D3A4904BD047D9E /* Roboto_medium.ttf in Resources */,
 				25719898B7204E70A854D618 /* Roboto.ttf in Resources */,
 				C1FFBC55A33E469791CEF734 /* rubicon-icon-font.ttf in Resources */,
-				D01E436A23B519AB006AF511 /* GoogleService-Info.plist in Resources */,
+				F1252E1123B6995E00B6FCFC /* GoogleService-Info.plist in Resources */,
 				5564DD93F53E46A49074F702 /* SimpleLineIcons.ttf in Resources */,
 				738CC26C02FB498E932D4B52 /* Zocial.ttf in Resources */,
 			);
@@ -642,12 +645,12 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* BlogApp */;
+			target = 13B07F861A680F5B00A75B9A /* Blogster */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* BlogApp-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* Blogster-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -684,7 +687,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlogApp.app/BlogApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blogster.app/Blogster";
 			};
 			name = Debug;
 		};
@@ -704,7 +707,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlogApp.app/BlogApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blogster.app/Blogster";
 			};
 			name = Release;
 		};
@@ -715,6 +718,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = HH224W24B5;
 				INFOPLIST_FILE = BlogApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -722,8 +726,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = BlogApp;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Blogster;
+				PRODUCT_NAME = Blogster;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -734,6 +738,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HH224W24B5;
 				INFOPLIST_FILE = BlogApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -741,8 +746,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = BlogApp;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Blogster;
+				PRODUCT_NAME = Blogster;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -825,7 +830,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.BlogApp-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlogApp-tvOS.app/BlogApp-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blogster-tvOS.app/Blogster-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
@@ -852,7 +857,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.BlogApp-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlogApp-tvOS.app/BlogApp-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blogster-tvOS.app/Blogster-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -959,7 +964,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BlogAppTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BlogsterTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -968,7 +973,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BlogApp" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Blogster" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -977,7 +982,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BlogApp-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Blogster-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -986,7 +991,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BlogApp-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Blogster-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -995,7 +1000,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "BlogApp" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Blogster" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
