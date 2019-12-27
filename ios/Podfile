@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 target 'Blogster' do
   # Pods for BlogApp
-  pod 'Firebase/Core', '~> 6.3.0'
+  pod 'Firebase/Core', '~> 6.13.0'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -36,6 +36,7 @@ target 'Blogster' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
+  pod 'Firebase/Auth', '~> 6.13.0'
 
   target 'BlogsterTests' do
     inherit! :search_paths
