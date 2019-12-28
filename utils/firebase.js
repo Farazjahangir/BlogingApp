@@ -25,6 +25,15 @@ firebaseFunctions.signUpWithEmail = async (email , password , userName) => {
         throw e
     }
 }
+firebaseFunctions.signInWithEmail = async (email , password) => {
+    try{
+        const authResponse = await auth.signInWithEmailAndPassword(email, password)
+        return authResponse
+    }
+    catch(e){
+        throw {message : e.message}
+    }
+}
 
 firebaseFunctions.setDocument = (collection, docId, data) => {
     return db.collection(collection).doc(docId).set(data)

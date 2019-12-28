@@ -23,6 +23,33 @@ import {Icon , Input , Button} from 'react-native-elements'
   static navigationOptions = {
     header: null,
 };
+checkValidation() {
+  const { email, password } = this.state
+  if (!email || !password) {
+    this.setState({ password: null })
+    alert('All fields are required')
+    return true
+  }
+}
+
+async login() {
+  const { email, password } = this.state
+
+  if (this.checkValidation()) return
+  try {
+    const res = await firebase.signInWithEmail(email, password)
+    const uid = res.user.uid
+    const dbResponse = await firebase.getDocument('Users', uid)
+    const userData = dbResponse._data
+    // this.props.loginUser(userData)
+    this.props.navigation.navigate('App')
+  }
+  catch (e) {
+    alert(e.message)
+  }
+
+}  
+
 async facebookLogin() {
   try{
     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
