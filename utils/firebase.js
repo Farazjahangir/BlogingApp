@@ -4,6 +4,7 @@ import firebaseLib from "react-native-firebase";
 const firebaseFunctions = {};
 
 const auth = firebaseLib.auth()
+const db = firebaseLib.firestore()
 
 firebaseFunctions.signUpWithEmail = async (email , password , userName) => {
     try{
@@ -16,13 +17,18 @@ firebaseFunctions.signUpWithEmail = async (email , password , userName) => {
             followers: [],
             following: []
         }
-    //    await firebaseFunctions.setDocument('Users' , userId , userObj)
-    //    userObj.userId = userId
-    //     return userObj
+       await firebaseFunctions.setDocument('Users' , userId , userObj)
+       userObj.userId = userId
+        return userObj
     }
     catch(e){
         throw e
     }
 }
+
+firebaseFunctions.setDocument = (collection, docId, data) => {
+    return db.collection(collection).doc(docId).set(data)
+}
+
 
 export default firebaseFunctions

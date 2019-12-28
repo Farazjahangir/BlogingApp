@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import FirebaseLib from 'react-native-firebase'
+import firebase from '../utils/firebase'
 
 
 import {Icon , Input , Button} from 'react-native-elements'
@@ -35,7 +36,6 @@ async facebookLogin() {
     const credential = FirebaseLib.auth.FacebookAuthProvider.credential(data.accessToken);
     const firebaseUserCredential = await FirebaseLib.auth().signInWithCredential(credential);
     const fbUid = firebaseUserCredential.user.uid
-    alert(firebaseUserCredential.user.displayName)
     // const response = await firebase.getDocument('Users' , fbUid)
     let userObj = {}
     // response.exists
@@ -51,7 +51,7 @@ async facebookLogin() {
         followers: [],
         following: []
       }
-      // await firebase.setDocument('Users', fbUid , userObj)
+      await firebase.setDocument('Users', fbUid , userObj)
     }
     // this.props.loginUser(userObj) 
     this.props.navigation.navigate('App')
