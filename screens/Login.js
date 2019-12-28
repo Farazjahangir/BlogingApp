@@ -8,7 +8,11 @@ import {
 } from 'react-native';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import FirebaseLib from 'react-native-firebase'
+import { connect } from 'react-redux'
+
 import firebase from '../utils/firebase'
+import { loginUser } from '../redux/actions/authActions'
+
 
 
 import {Icon , Input , Button} from 'react-native-elements'
@@ -34,6 +38,10 @@ checkValidation() {
 
 async login() {
   const { email, password } = this.state
+  console.log('Email' , email);
+  console.log('PAss' , password);
+  
+  
 
   if (this.checkValidation()) return
   try {
@@ -41,7 +49,7 @@ async login() {
     const uid = res.user.uid
     const dbResponse = await firebase.getDocument('Users', uid)
     const userData = dbResponse._data
-    // this.props.loginUser(userData)
+    this.props.loginUser(userData)
     this.props.navigation.navigate('App')
   }
   catch (e) {
@@ -80,7 +88,7 @@ async facebookLogin() {
       }
       await firebase.setDocument('Users', fbUid , userObj)
     }
-    // this.props.loginUser(userObj) 
+    this.props.loginUser(userObj) 
     this.props.navigation.navigate('App')
   }
   catch(e){
@@ -90,6 +98,7 @@ async facebookLogin() {
 
     render() {
       const {navigation} = this.props
+      const { email, password } = this.state
         return (
             <ScrollView style={{backgroundColor : '#323643'}}>
                 <View style = {{height : 100 , flexDirection : 'row' , alignItems : 'center' ,
@@ -100,13 +109,13 @@ async facebookLogin() {
                  </View>
                  <View style = {{flex : 1 , alignItems : 'center' , marginTop : "32%"}}>
                      <Input placeholder = {'Email'} placeholderTextColor = {'#fff'} 
-                     inputContainerStyle = {styles.inputContainer} inputStyle = {{fontWeight : 'bold'}} />
+                     inputContainerStyle = {styles.inputContainer} inputStyle = {{fontWeight : 'bold'}}  onChangeText={(email) => this.setState({ email: email })} value={email} />
 
                      <Input placeholder = {'Password'} secureTextEntry = {true} placeholderTextColor = {'#fff'} 
-                     inputContainerStyle = {styles.inputContainer} inputStyle = {{fontWeight : 'bold'}} />
+                     inputContainerStyle = {styles.inputContainer} inputStyle = {{fontWeight : 'bold'}} onChangeText={(password) => this.setState({ password: password })} value={password} />
 
                      <View style = {{flexDirection : "row" , justifyContent : "center" , marginVertical : 12}}>
-                         <Button onPress = {()=> this.props.navigation.navigate('App')} title = {'Login'} buttonStyle = {styles.buttonStyle} />
+                         <Button onPress = {()=> this.login()} title = {'Login'} buttonStyle = {styles.buttonStyle} />
                          <Button title = {'Sign Up'} buttonStyle = {[styles.buttonStyle , {backgroundColor : "#FD7496" , borderWidth : 0}]} />
                       </View>
 
@@ -144,5 +153,16 @@ async facebookLogin() {
         bottomLink : {fontSize : 14 ,fontWeight : "bold",  color : "#ccc"},
         line : {flex : 1, height : 0.5, borderWidth : 0.3 , borderColor : "#ccc"}
     })
-    export default Login
- 
+    const mapDispatchToProps = (dispatch) => {
+      return {
+        loginUser: (userData) => dispatch(loginUser(userData))
+      }
+    }
+    const mapStateToProps = (state) => {
+      return {
+        userObj: state.auth.user
+      }
+    }
+    
+    export default connect(mapStateToProps, mapDispatchToProps)(Login)
+     

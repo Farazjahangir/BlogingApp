@@ -1,7 +1,13 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, ScrollView , StatusBar } from 'react-native';
 import Routes from './navigation'
 import {themeColor} from './Constant/index'
+import { store, persistor } from './redux/store'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+
 export default class App extends Component {
   constructor(props){
     super(props)
@@ -10,7 +16,11 @@ export default class App extends Component {
 
   render() {
     return (
-        <Routes />
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Routes />
+        </PersistGate>
+      </Provider>
     );
   }
 }

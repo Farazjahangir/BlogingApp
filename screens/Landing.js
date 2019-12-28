@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Fragment } from 'react';
 import {
     StyleSheet,
@@ -13,6 +15,8 @@ import CustomButton from '../Component/Button'
 // import Logo from '../Component/LogoImage'
 import {themeColor, pinkColor} from '../Constant/index'
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux'
+
 // import  from '../Component/Slogan'
 export const ENTRIES1 = [
   {
@@ -53,6 +57,11 @@ export const ENTRIES1 = [
   }
   static navigationOptions = {
     header: null
+  }
+  componentDidMount() {
+    console.log('this.props',this.props);
+    
+    if (this.props.userObj) this.props.navigation.navigate('App')
   }
   _renderItem ({item, index}, parallaxProps) {
     return (
@@ -143,4 +152,14 @@ export const ENTRIES1 = [
         resizeMode: 'cover',
       },
     })
-    export default withNavigation(LandingScreen)
+    const mapDispatchToProps = (dispatch) => {
+      return {}
+    }
+    const mapStateToProps = (state) => {
+      return {
+        userObj: state.auth.user
+      }
+    }
+    export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(LandingScreen))
+    
+    
