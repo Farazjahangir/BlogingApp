@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Fragment } from 'react'
 import {
   StyleSheet,
@@ -32,6 +34,8 @@ _icon = (name , color) =>
 
   render () {
     const { navigation } = this.props
+    const data  = this.props.navigation.state.params.data 
+    console.log('data =======>' , data)
     let { follow } = this.state
     return (
       <ScrollView stickyHeaderIndices = {[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
@@ -55,11 +59,9 @@ _icon = (name , color) =>
     borderRadius : 12 }} />
 
     <Text style = {{color : '#fff' , fontSize : 20  , fontWeight : 'bold' , 
-    paddingLeft: 12, marginVertical : 12}}> Beauty </Text>
+    paddingLeft: 12, marginVertical : 12}}> {data.blogTitle} </Text>
     <Text style = {{color : '#fff' , fontSize : 18  , 
-    paddingHorizontal:  12, marginVertical : 12}}>Lorem Spum Taken Lorem Spum Taken Lorem Spum 
-    Taken Lorem Spum Taken Lorem Spum Taken Lorem Spum Taken Lorem Spum Taken Lorem Spum Taken
-    Lorem Spum Taken Lorem Spum Taken Lorem Spum TakenLorem Spum TakenLorem Spum Taken Lorem Spum Taken  </Text>
+    paddingHorizontal:  12, marginVertical : 12}}>{data.blog}  </Text>
        </ScrollView>
     )
   }
