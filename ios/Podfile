@@ -37,6 +37,7 @@ target 'Blogster' do
 
   pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
   pod 'Firebase/Auth', '~> 6.13.0'
+  pod 'Firebase/Firestore', '~> 6.13.0'
 
   target 'BlogsterTests' do
     inherit! :search_paths
