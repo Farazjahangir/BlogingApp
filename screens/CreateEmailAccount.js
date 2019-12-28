@@ -7,9 +7,13 @@ import {
   Text, ScrollView
 } from 'react-native';
 import { Icon, Input, Button } from 'react-native-elements'
+import { connect } from 'react-redux'
+
 import CustomHeader from '../Component/header'
 import CustomButton from '../Component/Button'
 import firebase from '../utils/firebase'
+import { loginUser } from '../redux/actions/authActions'
+
 
 class EmailAccount extends React.Component {
   constructor(props) {
@@ -49,7 +53,7 @@ class EmailAccount extends React.Component {
 
     try {
       const response = await firebase.signUpWithEmail(email, password, userName)
-      // this.props.loginUser(response)
+      this.props.loginUser(response)
       this.props.navigation.navigate('App')
 
       alert('Success')
@@ -98,4 +102,16 @@ const styles = StyleSheet.create({
   bottomLink: { fontSize: 14, fontWeight: "bold", color: "#ccc" },
   line: { flex: 1, height: 0.5, borderWidth: 0.3, borderColor: "#ccc" }
 })
-export default EmailAccount
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loginUser: (userData) => dispatch(loginUser(userData))
+  }
+}
+const mapStateToProps = (state) => {
+  return {
+    userObj: state.auth.user
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EmailAccount)
+

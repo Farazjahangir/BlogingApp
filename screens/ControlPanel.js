@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Fragment } from 'react'
 import { StyleSheet, View, TouchableOpacity, Text, Image , ScrollView } from 'react-native'
 import CustomInput from '../Component/Input'
@@ -7,6 +9,8 @@ import { Picker } from 'native-base'
 import { withNavigation } from 'react-navigation'
 import { pinkColor } from '../Constant';
 import LinearGradient from 'react-native-linear-gradient';
+import { connect } from 'react-redux'
+import { logoutUser } from '../redux/actions/authActions'
 
 class ControlPanel extends React.Component {
   constructor (props) {
@@ -17,6 +21,11 @@ class ControlPanel extends React.Component {
   static navigationOptions = {
     header: null
   }
+  logout(){
+    this.props.logoutUser()
+    this.props.navigation.navigate('Auth')
+  }
+
 
   menuButtons = (name , route)=><TouchableOpacity style = {{height : 40 , borderBottomColor : '#bbb' ,
   borderBottomWidth : 0.5 , margin : 2 , justifyContent : 'center'}}
@@ -48,6 +57,15 @@ class ControlPanel extends React.Component {
             {this.menuButtons('Privacy' , 'Privacy')}
             {this.menuButtons('Payment' , 'Payment')}
             {this.menuButtons('Support' , 'Support')}
+            <TouchableOpacity style={{
+            height: 40, borderBottomColor: '#bbb',
+            borderBottomWidth: 0.5, margin: 2, justifyContent: 'center'
+          }}
+            onPress={() => this.logout()}
+          >
+            <Text style={{ color: '#fff', fontWeight: 'bold', paddingLeft: 12, }}>Logout</Text>
+          </TouchableOpacity>
+
             </ScrollView>
 </LinearGradient>
     )
@@ -63,4 +81,16 @@ const styles = StyleSheet.create({
   borderWidth : 0.5 , alignSelf: 'center' , marginLeft: 17, paddingLeft : 6},
   pickerHeading: { paddingLeft: '6%', fontWeight: '700' , marginTop : 6}
 })
-export default withNavigation(ControlPanel)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logoutUser: (userData) => dispatch(logoutUser(userData))
+  }
+}
+const mapStateToProps = (state) => {
+  return {
+    userObj: state.auth.user
+  }
+}
+
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(ControlPanel))
+
