@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Fragment } from 'react'
 import {
   StyleSheet,
@@ -12,24 +14,31 @@ import { SearchBar, Icon } from 'react-native-elements'
 import CustomInput from '../Component/Input'
 import ControlPanel from '../screens/ControlPanel'
 import CustomButton from '../Component/Button'
-import {NavigationEvents} from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
+import { connect } from 'react-redux'
 
 import CustomHeader from '../Component/header'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import Drawer from 'react-native-drawer'
+import firebase from '../utils/firebase'
 
 import { themeColor, pinkColor } from '../Constant'
 class Feedback extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
-      comments: false
+      comments: false,
+      users: []
     }
   }
   static navigationOptions = {
     header: null
   }
-  
+  async componentDidMount() {
+    const users = await firebase.getCollection('Users')
+    this.setState({ users })
+  }
+
   closeControlPanel = () => {
     this._drawer.close()
   };
@@ -64,127 +73,148 @@ class Feedback extends React.Component {
     </View>
   )
 
-  feedBackListItem = (item , index) =><View style={styles.itemContainer}>
-  <View>
-    <Image
-      source={require('../assets/avatar.png')}
-      style={styles.imageStyle}
-    />
-    <Icon
-      type={'font-awesome'}
-      name={index % 2 !== 1 ? 'heart-o' : 'user-plus'}
-      color={'#fff'}
-      size={10}
-      containerStyle={[
-        styles.iconContainer,
-        {
-          backgroundColor:
-            index % 2 !== 1 ? pinkColor : '#72CEBA'
-        }
-      ]}
-    />
-  </View>
-  <View>
-    <Text
-      style={{ color: '#fff', fontSize: 15, fontWeight: 'bold' }}
-    >
-      {' '}
-      Ivan Morris{' '}
+  feedBackListItem = (item, index) => 
+  this.props.userObj.userId  !== item.userId &&
+    <View style={styles.itemContainer}>
+    <View>
+      <Image
+        source={require('../assets/avatar.png')}
+        style={styles.imageStyle}
+      />
+      <Icon
+        type={'font-awesome'}
+        name={index % 2 !== 1 ? 'heart-o' : 'user-plus'}
+        color={'#fff'}
+        size={10}
+        containerStyle={[
+          styles.iconContainer,
+          {
+            backgroundColor:
+              index % 2 !== 1 ? pinkColor : '#72CEBA'
+          }
+        ]}
+      />
+    </View>
+    {/* <View>
       <Text
-        style={{ fontWeight: '400', color: '#ccc', fontSize: 12 }}
+        style={{ color: '#fff', fontSize: 15, fontWeight: 'bold' }}
       >
         {' '}
-        added you to friends
+        Ivan Morris{' '}
+        <Text
+          style={{ fontWeight: '400', color: '#ccc', fontSize: 12 }}
+        >
+          {' '}
+          added you to friends
       </Text>
+      </Text>
+      <Text style={{ color: '#ccc', fontSize: 12 }}>
+        {' '}
+        4 Hrs ago
     </Text>
-    <Text style={{ color: '#ccc', fontSize: 12 }}>
-      {' '}
-      4 Hrs ago
-    </Text>
+    </View> */}
+    <View style={styles.userContainer}>
+      <Text style={styles.userName}>{item.userName}</Text>
+      <TouchableOpacity style={styles.chatBtnContainer} onPress={() => this.startChat(`${item.userId}`)}>
+        <Text style={styles.chatBtn}>Chat</Text>
+      </TouchableOpacity>
+    </View>
   </View>
-</View>
-  render () {
+
+  startChat(otherUserId) {
+    this.props.navigation.navigate('Chat' , {otherUserId})
+    
+  }
+
+  render() {
     const { navigation } = this.props
-    let { comments } = this.state
+    let { comments, users } = this.state
     return (
-              <Drawer
+      <Drawer
         ref={(ref) => this._drawer = ref}
         type="overlay"
-  tapToClose={true}
-  openDrawerOffset={0.2} // 20% gap on the right side of drawer
-  panCloseMask={0.2}
-  closedDrawerOffset={-3}
-  styles={styles.drawer}
-  tweenHandler={(ratio) => ({
-    main: { opacity:(2-ratio)/2 }
-  })}
+        tapToClose={true}
+        openDrawerOffset={0.2} // 20% gap on the right side of drawer
+        panCloseMask={0.2}
+        closedDrawerOffset={-3}
+        styles={styles.drawer}
+        tweenHandler={(ratio) => ({
+          main: { opacity: (2 - ratio) / 2 }
+        })}
         content={<ControlPanel />}
-        >
-          <NavigationEvents onDidFocus = {()=> this.closeControlPanel()} />
-      <View style={{ backgroundColor: '#323643', flex: 1 }}>
-        <CustomHeader home title={comments ? 'Comments' : 'Feedback'} onPress = {()=>this.openControlPanel()} />
-        <SearchBar
-          containerStyle={{
-            margin: 8,
-            borderRadius: 5,
-            borderTopColor: themeColor,
-            borderBottomColor: themeColor
-          }}
-          placeholder={'Search'}
-          inputContainerStyle={{ backgroundColor: '#fff' }}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            marginBottom: 12
-          }}
-        >
-          <CustomButton
-            onPress={() => this.setState({ comments: true })}
-            buttonStyle={styles.commentButton}
-            title={'Comments'}
-            backgroundColor={comments ? pinkColor : themeColor}
+      >
+        <NavigationEvents onDidFocus={() => this.closeControlPanel()} />
+        <View style={{ backgroundColor: '#323643', flex: 1 }}>
+          <CustomHeader home title={comments ? 'Comments' : 'Feedback'} onPress={() => this.openControlPanel()} />
+          <SearchBar
+            containerStyle={{
+              margin: 8,
+              borderRadius: 5,
+              borderTopColor: themeColor,
+              borderBottomColor: themeColor
+            }}
+            placeholder={'Search'}
+            inputContainerStyle={{ backgroundColor: '#fff' }}
           />
-          <CustomButton
-            onPress={() => this.setState({ comments: false })}
-            buttonStyle={styles.commentButton}
-            backgroundColor={!comments ? pinkColor : themeColor}
-            title={'Feedback'}
-          />
-        </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              marginBottom: 12
+            }}
+          >
+            <CustomButton
+              // onPress={() => this.setState({ comments: true })}
+              buttonStyle={styles.commentButton}
+              title={'Comments'}
+              backgroundColor={comments ? pinkColor : themeColor}
+            />
+            <CustomButton
+              onPress={() => this.setState({ comments: false })}
+              buttonStyle={styles.commentButton}
+              backgroundColor={!comments ? pinkColor : themeColor}
+              title={'Feedback'}
+            />
+          </View>
 
-        {comments ? (
-          <SwipeListView
-            data={['1', '2', '3', '4', '5', '6', '7']}
-            renderItem={(data, rowMap) => this.swipListItem(data, rowMap)}
-            renderHiddenItem={(data, rowMap) => (
-              <View
-                style={{
-                  alignSelf: 'flex-end',
-                  marginRight: 20,
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <TouchableOpacity style={styles.arrowButton}>
-                  <Icon type={'font-awesome'} name={'reply'} color={'#fff'} />
-                </TouchableOpacity>
-              </View>
-            )}
-            disableRightSwipe
-            leftOpenValue={0}
-            rightOpenValue={-75}
-          />
-        ) : (
-          <FlatList
-            data={['1', '2', '3', '4', '5', '6', '7']}
-            keyExtractor={item => item}
-            renderItem={({ item, index }) => this.feedBackListItem(item , index)}
-          />
-        )}
-      </View>
+          {/* {comments ? (
+            <SwipeListView
+              data={['1', '2', '3', '4', '5', '6', '7']}
+              renderItem={(data, rowMap) => this.swipListItem(data, rowMap)}
+              renderHiddenItem={(data, rowMap) => (
+                <View
+                  style={{
+                    alignSelf: 'flex-end',
+                    marginRight: 20,
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <TouchableOpacity style={styles.arrowButton}>
+                    <Icon type={'font-awesome'} name={'reply'} color={'#fff'} />
+                  </TouchableOpacity>
+                </View>
+              )}
+              disableRightSwipe
+              leftOpenValue={0}
+              rightOpenValue={-75}
+            />
+          ) : (
+              <FlatList
+                data={['1', '2', '3', '4', '5', '6', '7']}
+                keyExtractor={item => item}
+                renderItem={({ item, index }) => this.feedBackListItem(item, index)}
+              />
+            )} */}
+          {users &&
+            <FlatList
+              data={users}
+              keyExtractor={item => item}
+              renderItem={({ item, index }) => this.feedBackListItem(item, index)}
+            />
+          }
+        </View>
       </Drawer>
     )
   }
@@ -194,8 +224,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
-  main: {paddingLeft: 3},
+  drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3 },
+  main: { paddingLeft: 3 },
   imageStyle: {
     height: 45,
     width: 45,
@@ -246,6 +276,30 @@ const styles = StyleSheet.create({
     backgroundColor: pinkColor,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+
+  userContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingHorizontal: 10
+  },
+  userName: {
+    color: '#fff',
+    fontSize: 18
+  },
+  chatBtn: {
+    color: '#fff',
+    fontSize: 18
   }
 })
-export default Feedback
+const mapDispatchToProps = (dispatch) => {
+  return {}
+}
+const mapStateToProps = (state) => {
+  return {
+    userObj: state.auth.user
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feedback)
