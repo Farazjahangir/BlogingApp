@@ -1,4 +1,5 @@
 /* eslint-disable */
+
 import firebaseLib from "react-native-firebase";
 
 const firebaseFunctions = {};
@@ -25,6 +26,7 @@ firebaseFunctions.signUpWithEmail = async (email , password , userName) => {
         throw e
     }
 }
+
 firebaseFunctions.signInWithEmail = async (email , password) => {
     try{
         const authResponse = await auth.signInWithEmailAndPassword(email, password)
@@ -39,6 +41,16 @@ firebaseFunctions.setDocument = (collection, docId, data) => {
     return db.collection(collection).doc(docId).set(data)
 }
 
+firebaseFunctions.addDocument = async (collection, data) => {
+    try{
+        const response = await db.collection(collection).add(data)
+        return response
+    }
+    catch(e){
+        return e
+    }
+}
+
 firebaseFunctions.getDocument = async (collection, docId ) => {
     try{
         const dbResponse = await db.collection(collection).doc(docId).get()
@@ -49,6 +61,47 @@ firebaseFunctions.getDocument = async (collection, docId ) => {
     }
 }
 
+firebaseFunctions.getCollection = async collection => {
+    try{
+        const usersArr = []
+        const querySnapshot = await db.collection(collection).get()
+        querySnapshot.forEach(doc => usersArr.push(doc.data()))
+        return usersArr
+    }
+    catch(e){
+        alert(e.message)
+    }
+}
 
+firebaseFunctions.getDocumentByQuery = async (collection, find , operator , findBy) => {
+    try{
+        const userIds = []
+        const response =  await db.collection(collection).where(find , operator, findBy).get()
+        response.forEach(doc => {
+            idsObj = doc.data().userObj
+            const keysArr = Object.keys(idsObj)
+            for(var i =0; i < keysArr.length; i++){
+                if(userIds.indexOf(keysArr[i]) === -1 && keysArr[i] !== 'createdAt'){
+                    userIds.push(keysArr[i])
+                }
+            }
+            // var set = new Set(userIds)
+            // var a = Array.from(set)
+        })
+        return userIds
+    }
+    catch(e){
+        return e.message
+    }
+}
+
+firebaseFunctions.deleteDoc = async (collection , docId) => {
+    try{
+        await db.collection(collection).doc(docId).delete()
+    }
+    catch(e){
+        return e.message
+    }
+}
 
 export default firebaseFunctions

@@ -82,7 +82,7 @@ async facebookLogin() {
         userName: firebaseUserCredential.user.displayName,
         email: firebaseUserCredential.user.email,
         photoUrl: firebaseUserCredential.user.photoURL,
-        fbUid,
+        userId: fbUid,
         followers: [],
         following: []
       }
