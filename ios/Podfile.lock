@@ -310,6 +310,11 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
+  - Permission-MediaLibrary (2.0.8):
+    - RNPermissions
+  - Permission-PhotoLibrary (2.0.8):
+    - RNPermissions
+  - QBImagePickerController (3.4.0)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -537,6 +542,14 @@ PODS:
     - React
   - RNGestureHandler (1.5.2):
     - React
+  - RNImageCropPicker (0.26.1):
+    - QBImagePickerController
+    - React-Core
+    - React-RCTImage
+    - RSKImageCropper
+  - RNPermissions (2.0.8):
+    - React
+  - RSKImageCropper (2.2.3)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -549,6 +562,8 @@ DEPENDENCIES:
   - Firebase/Firestore (~> 6.13.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Permission-MediaLibrary (from `../node_modules/react-native-permissions/ios/MediaLibrary.podspec`)
+  - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -576,6 +591,8 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNFirebase (from `../node_modules/react-native-firebase/ios`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -606,6 +623,8 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - QBImagePickerController
+    - RSKImageCropper
 
 EXTERNAL SOURCES:
   BVLinearGradient:
@@ -620,6 +639,10 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Permission-MediaLibrary:
+    :path: "../node_modules/react-native-permissions/ios/MediaLibrary.podspec"
+  Permission-PhotoLibrary:
+    :path: "../node_modules/react-native-permissions/ios/PhotoLibrary.podspec"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -668,6 +691,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-firebase/ios"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -704,6 +731,9 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 43b8b64263023d4f32caa0b40f4c8bfa3c5f36d8
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  Permission-MediaLibrary: 534beaed81f6e75f290c03c05d1f3353a3bb1644
+  Permission-PhotoLibrary: c15c7245aeb74aff3ad5edf70ce34adbcf02541b
+  QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -728,8 +758,11 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 44395cb9c7c1523104c2b499eb426ef7aff82bca
   RNFirebase: 37daa9a346d070f9f6ee1f3b4aaf4c8e3b1d5d1c
   RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
+  RNImageCropPicker: e1d8c3381e5b05a1bdcd13ea57a4f1c020a09cef
+  RNPermissions: 923c1506d0bde387fbcfc18a8f87945806d03c19
+  RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 422af01db4103cbe27aaf3029fea3b35c49f20f6
+PODFILE CHECKSUM: 38cc72c2548ec8ed0ffc46100d7cbe70d5e00dca
 
 COCOAPODS: 1.8.4

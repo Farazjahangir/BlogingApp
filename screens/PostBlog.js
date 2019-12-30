@@ -4,12 +4,12 @@ import React, { Fragment } from 'react';
 import {
   StyleSheet,
   View, TouchableOpacity,
-  Text, ScrollView, BackHandler,CameraRoll, Image
+  Text, ScrollView, BackHandler,CameraRoll, Image, Platform
 } from 'react-native';
 import { Icon, Input, Button } from 'react-native-elements'
 import { connect } from 'react-redux'
 import ImagePicker from 'react-native-image-crop-picker';
-import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {request, PERMISSIONS, RESULTS, check} from 'react-native-permissions';
 
 import { themeColor, pinkColor } from '../Constant';
 import CustomButton from '../Component/Button'
@@ -94,39 +94,53 @@ class PostBlog extends React.Component {
     this.savingDraft()
   }
   uploadMedia(){
-    request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
-  .then(result => {
-    switch (result) {
-      case RESULTS.UNAVAILABLE:
-        console.log(
-          'This feature is not available (on this device / in this context)',
-        );
-        break;
-      case RESULTS.DENIED:
-        console.log(
-          'The permission has not been requested / is denied but requestable',
-        );
-        break;
-      case RESULTS.GRANTED:
-        console.log('The permission is granted');
-        ImagePicker.openPicker({
-          mediaType: 'image',
-          width: 300,
-          height: 400,
-          includeBase64: true
-        }).then(image => {
-          console.log(image);
-          this.setState({ mime: image.mime, data: image.data })
-        });
-        break;
-      case RESULTS.BLOCKED:
-        console.log('The permission is denied and not requestable anymore');
-        break;
+    console.log('uploadMedia');
+    
+    if(Platform.OS === 'android'){
+      request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
+    .then(result => {
+      switch (result) {
+        case RESULTS.UNAVAILABLE:
+          console.log(
+            'This feature is not available (on this device / in this context)',
+          );
+          break;
+        case RESULTS.DENIED:
+          console.log(
+            'The permission has not been requested / is denied but requestable',
+          );
+          break;
+        case RESULTS.GRANTED:
+          console.log('The permission is granted');
+          ImagePicker.openPicker({
+            mediaType: 'image',
+            width: 300,
+            height: 400,
+            includeBase64: true
+          }).then(image => {
+            console.log(image);
+            this.setState({ mime: image.mime, data: image.data })
+          });
+          break;
+        case RESULTS.BLOCKED:
+          console.log('The permission is denied and not requestable anymore');
+          break;
+      }
+    })
+    .catch(error => {
+      alert(error.message)
+    });
+    return
     }
+  ImagePicker.openPicker({
+    mediaType: 'image',
+    width: 300,
+    height: 400,
+    includeBase64: true
+  }).then(image => {
+    console.log(image);
+    this.setState({ mime: image.mime, data: image.data })
   })
-  .catch(error => {
-    alert(error.message)
-  });
   }
 
   render() {

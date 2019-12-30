@@ -6,7 +6,7 @@ const firebaseFunctions = {};
 
 const auth = firebaseLib.auth()
 const db = firebaseLib.firestore()
-const storageRef = firebaseLib.storage().ref()
+// const storageRef = firebaseLib.storage().ref()
 
 firebaseFunctions.signUpWithEmail = async (email , password , userName) => {
     try{
