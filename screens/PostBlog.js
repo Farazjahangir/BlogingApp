@@ -57,7 +57,7 @@ class PostBlog extends React.Component {
       imageUrl: ''
     }
     try {
-      if(path){
+      if (path) {
         const imageUrl = await firebase.uploadImage(path, userObj.userId)
         blogData.imageUrl = imageUrl
       }
@@ -94,60 +94,27 @@ class PostBlog extends React.Component {
   back() {
     this.savingDraft()
   }
-  uploadMedia() {
-    console.log('uploadMedia');
 
+  galleryPermissionAndroid() {
+    return request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
+  }
+  async uploadMedia() {
     if (Platform.OS === 'android') {
-      request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
-        .then(result => {
-          switch (result) {
-            case RESULTS.UNAVAILABLE:
-              console.log(
-                'This feature is not available (on this device / in this context)',
-              );
-              break;
-            case RESULTS.DENIED:
-              console.log(
-                'The permission has not been requested / is denied but requestable',
-              );
-              break;
-            case RESULTS.GRANTED:
-              console.log('The permission is granted');
-              ImagePicker.openPicker({
-                mediaType: 'photo',
-                width: 300,
-                height: 400,
-                includeBase64: true
-              }).then(image => {
-                console.log('imagee====>', image);
-                this.setState({ mime: image.mime, data: image.data, path: image.path })
-              });
-              break;
-            case RESULTS.BLOCKED:
-              console.log('The permission is denied and not requestable anymore');
-              break;
-          }
-        })
-        .catch(error => {
-          alert(error.message)
-        });
-      return
+      const result = await this.galleryPermissionAndroid();
+      if (result !== RESULTS.GRANTED) return;
     }
-    ImagePicker.openPicker({
+    const image = await ImagePicker.openPicker({
       mediaType: 'photo',
       width: 300,
       height: 400,
       includeBase64: true
-    }).then(image => {
-      console.log(image);
-      this.setState({ mime: image.mime, data: image.data })
     })
+      this.setState({ path: image.path })
   }
 
   render() {
     const { navigation } = this.props
-    const { blogTitle, blog, mime, data,path } = this.state
-
+    const { blogTitle, blog, mime, data, path } = this.state
     return (
       <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{
@@ -186,7 +153,7 @@ class PostBlog extends React.Component {
           placeholder={'Your Blog'}
           placeholderTextColor={'#fff'}
           inputStyle={{ color: '#fff', letterSpacing: 2 }} />
-        {data && <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
+        {!!path && <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
           <Image source={{ uri: path }} style={{ width: 150, height: 150 }} />
         </View>}
         <CustomButton
