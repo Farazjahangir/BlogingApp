@@ -6,7 +6,7 @@ const firebaseFunctions = {};
 
 const auth = firebaseLib.auth()
 const db = firebaseLib.firestore()
-// const storageRef = firebaseLib.storage().ref()
+const storageRef = firebaseLib.storage().ref()
 
 firebaseFunctions.signUpWithEmail = async (email , password , userName) => {
     try{
@@ -105,20 +105,20 @@ firebaseFunctions.deleteDoc = async (collection , docId) => {
     }
 }
 
-// firebaseFunctions.uploadImage = async (image , userId) => {
-//     try{
-//         let name = `${Date.now()} - ${userId}`
-//         let message = image
-//         await storageRef.child(name).putString(message, 'data_url')
-//         const url = await storageRef.child(name).getDownloadURL();
-//         // userObj.profilePicUrl = url
-//         console.log('Url' , url);
+firebaseFunctions.uploadImage = async (image , userId) => {
+    try{
+        let name = `${Date.now()} - ${userId}`
+        let message = image
+        await storageRef.child(name).putString(message, 'data_url')
+        const url = await storageRef.child(name).getDownloadURL();
+        // userObj.profilePicUrl = url
+        alert(url);
         
-//     }
-//     catch(e){
-//         console.log('Storgae =======>' , e.message);
+    }
+    catch(e){
+       alert(e.message);
         
-//     }
-// }
+    }
+}
 
 export default firebaseFunctions

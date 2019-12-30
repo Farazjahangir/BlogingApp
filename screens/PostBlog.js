@@ -57,7 +57,7 @@ class PostBlog extends React.Component {
     }
     try {
       const image = `data:${mime};base64,${data}`
-      // const imageResponse = await firebase.uploadImage(image, userObj.userId)
+      const imageResponse = await firebase.uploadImage(image, userObj.userId)
       // console.log('imageResponse', imageResponse);
       
       // const response = await firebase.addDocument('Blog', blogData)
