@@ -4,12 +4,12 @@ import React, { Fragment } from 'react';
 import {
   StyleSheet,
   View, TouchableOpacity,
-  Text, ScrollView, BackHandler,CameraRoll, Image, Platform
+  Text, ScrollView, BackHandler, CameraRoll, Image, Platform
 } from 'react-native';
 import { Icon, Input, Button } from 'react-native-elements'
 import { connect } from 'react-redux'
 import ImagePicker from 'react-native-image-crop-picker';
-import {request, PERMISSIONS, RESULTS, check} from 'react-native-permissions';
+import { request, PERMISSIONS, RESULTS, check } from 'react-native-permissions';
 
 import { themeColor, pinkColor } from '../Constant';
 import CustomButton from '../Component/Button'
@@ -46,25 +46,26 @@ class PostBlog extends React.Component {
   }
 
   async publishBlog() {
-    const { blogTitle, blog, mime, data } = this.state
+    const { blogTitle, blog, mime, data, path } = this.state
     const { userObj } = this.props
-    console.log('UserObj' , userObj);
-    
+    console.log('UserObj', userObj);
+
     const blogData = {
       blogTitle,
       blog,
-      userId: userObj.userId
+      userId: userObj.userId,
+      imageUrl: ''
     }
     try {
-      const image = `data:${mime};base64,${data}`
-      const imageResponse = await firebase.uploadImage(image, userObj.userId)
-      // console.log('imageResponse', imageResponse);
-      
-      // const response = await firebase.addDocument('Blog', blogData)
-      // alert('Published')
-      // this.setState({ blog: '', blogTitle: '' })
-      // await firebase.deleteDoc('Drafts', userObj.userId)
-      // this.props.navigation.goBack()
+      if(path){
+        const imageUrl = await firebase.uploadImage(path, userObj.userId)
+        blogData.imageUrl = imageUrl
+      }
+      await firebase.addDocument('Blog', blogData)
+      alert('Published')
+      this.setState({ blog: '', blogTitle: '', path: '' })
+      await firebase.deleteDoc('Drafts', userObj.userId)
+      this.props.navigation.goBack()
     }
     catch (e) {
       alert(e.message)
@@ -93,62 +94,62 @@ class PostBlog extends React.Component {
   back() {
     this.savingDraft()
   }
-  uploadMedia(){
+  uploadMedia() {
     console.log('uploadMedia');
-    
-    if(Platform.OS === 'android'){
+
+    if (Platform.OS === 'android') {
       request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
-    .then(result => {
-      switch (result) {
-        case RESULTS.UNAVAILABLE:
-          console.log(
-            'This feature is not available (on this device / in this context)',
-          );
-          break;
-        case RESULTS.DENIED:
-          console.log(
-            'The permission has not been requested / is denied but requestable',
-          );
-          break;
-        case RESULTS.GRANTED:
-          console.log('The permission is granted');
-          ImagePicker.openPicker({
-            mediaType: 'image',
-            width: 300,
-            height: 400,
-            includeBase64: true
-          }).then(image => {
-            console.log(image);
-            this.setState({ mime: image.mime, data: image.data })
-          });
-          break;
-        case RESULTS.BLOCKED:
-          console.log('The permission is denied and not requestable anymore');
-          break;
-      }
-    })
-    .catch(error => {
-      alert(error.message)
-    });
-    return
+        .then(result => {
+          switch (result) {
+            case RESULTS.UNAVAILABLE:
+              console.log(
+                'This feature is not available (on this device / in this context)',
+              );
+              break;
+            case RESULTS.DENIED:
+              console.log(
+                'The permission has not been requested / is denied but requestable',
+              );
+              break;
+            case RESULTS.GRANTED:
+              console.log('The permission is granted');
+              ImagePicker.openPicker({
+                mediaType: 'photo',
+                width: 300,
+                height: 400,
+                includeBase64: true
+              }).then(image => {
+                console.log('imagee====>', image);
+                this.setState({ mime: image.mime, data: image.data, path: image.path })
+              });
+              break;
+            case RESULTS.BLOCKED:
+              console.log('The permission is denied and not requestable anymore');
+              break;
+          }
+        })
+        .catch(error => {
+          alert(error.message)
+        });
+      return
     }
-  ImagePicker.openPicker({
-    mediaType: 'image',
-    width: 300,
-    height: 400,
-    includeBase64: true
-  }).then(image => {
-    console.log(image);
-    this.setState({ mime: image.mime, data: image.data })
-  })
+    ImagePicker.openPicker({
+      mediaType: 'photo',
+      width: 300,
+      height: 400,
+      includeBase64: true
+    }).then(image => {
+      console.log(image);
+      this.setState({ mime: image.mime, data: image.data })
+    })
   }
 
   render() {
     const { navigation } = this.props
-    const { blogTitle, blog,mime, data } = this.state
+    const { blogTitle, blog, mime, data,path } = this.state
 
     return (
-      <ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{
           height: 100, flexDirection: 'row', alignItems: 'center',
           justifyContent: 'space-between', marginHorizontal: 15,
@@ -185,13 +186,13 @@ class PostBlog extends React.Component {
           placeholder={'Your Blog'}
           placeholderTextColor={'#fff'}
           inputStyle={{ color: '#fff', letterSpacing: 2 }} />
-          {data &&<View style={{display: 'flex', alignItems: 'center', marginVertical: 10}}>
-            <Image source={{uri: `data:${mime};base64,${data}`}} style={{width: 150, height: 150}} />
-          </View>}
-        <CustomButton 
-          title={'Upload'} 
-          buttonStyle={{ borderColor: '#ccc', borderWidth: 1, marginVertical: 10 }} 
-          onPress={()=> this.uploadMedia()} 
+        {data && <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
+          <Image source={{ uri: path }} style={{ width: 150, height: 150 }} />
+        </View>}
+        <CustomButton
+          title={'Upload'}
+          buttonStyle={{ borderColor: '#ccc', borderWidth: 1, marginVertical: 10 }}
+          onPress={() => this.uploadMedia()}
         />
       </ScrollView>
     );
