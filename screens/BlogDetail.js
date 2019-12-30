@@ -54,9 +54,9 @@ _icon = (name , color) =>
   buttonStyle = {{borderColor : '#ccc' , borderWidth:  1, height : 40 }} 
   containerStyle = {{width : 120}} backgroundColor = {this.state.follow ? pinkColor : themeColor} />
     </View>
-    <Image source = {require('../assets/download.jpg')} 
+    {!!data.imageUrl &&<Image source = {{uri: data.imageUrl }} 
     style = {{height :200  , width : '97%' , alignSelf : 'center' , marginVertical : 11 ,
-    borderRadius : 12 }} />
+    borderRadius : 12 }} />}
 
     <Text style = {{color : '#fff' , fontSize : 20  , fontWeight : 'bold' , 
     paddingLeft: 12, marginVertical : 12}}> {data.blogTitle} </Text>

@@ -80,11 +80,11 @@ class Blog extends React.Component {
           buttonStyle={{ borderColor: '#ccc', borderWidth: 1, height: 40 }}
           containerStyle={{ width: 120 }} backgroundColor={this.state.follow ? pinkColor : themeColor} />
       </View>
-      <Image source={require('../assets/download.jpg')}
+      {!!item.imageUrl && <Image source={{uri: item.imageUrl}}
         style={{
           height: 200, width: '100%', alignSelf: 'center', marginVertical: 11,
           borderRadius: 5
-        }} />
+        }} />}
   <Text style={styles.blogHeading}>{item.blog}</Text>
       <Text style={styles.likes}>{item.likes} Likes         73 Comments</Text>
       <View style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
