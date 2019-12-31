@@ -134,7 +134,7 @@ class PostBlog extends React.Component {
       height: 400,
       includeBase64: true
     })
-    this.setState({ path: image.path })
+    this.setState({ path: image.path, videoPath: '' })
   }
   async uploadVideo() {
     if (Platform.OS === 'android') {
@@ -144,7 +144,7 @@ class PostBlog extends React.Component {
     const video = await ImagePicker.openPicker({
       mediaType: 'video',
     })
-    this.setState({ videoPath: video.path })
+    this.setState({ videoPath: video.path , path: '' })
   }
 
 
@@ -190,11 +190,10 @@ class PostBlog extends React.Component {
             placeholderTextColor={'#fff'}
             inputStyle={{ color: '#fff', letterSpacing: 2 }} />
         </>}
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          {!!path && !fullScreenHeight && <View style={{ alignItems: 'center', marginVertical: 10, flex: 0.3, marginRight: fullScreenHeight ? 0 : 10  }}>
-            <Image source={{ uri: path }} style={{ width: '100%', height: 120 }} />
+          {!!path && !fullScreenHeight && <View style={{ alignItems: 'center', marginVertical: 10,  }}>
+            <Image source={{ uri: path }} style={{ width: 180, height: 180 }} />
           </View>}
-          {!!videoPath && <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10, flex: fullScreenHeight ? 0 : 0.5 }}>
+          {!!videoPath && <View style={{ textAlign: 'center', alignItems: 'center', marginVertical: 10}}>
             {/* <Video 
           source={{uri: videoPath }} 
           style={{width: 250, height: 250, backgroundColor: 'black' }} 
@@ -203,9 +202,9 @@ class PostBlog extends React.Component {
           controls= {true}
           /> */}
             <VideoPlayer
-              source={{ uri: videoPath }}
-              videoStyle={{ width: fullScreenWidth ? fullScreenWidth :'100%', height: fullScreenHeight ? fullScreenHeight : 120 }}
-              style={{ width: fullScreenWidth ? fullScreenWidth :'100%', height: fullScreenHeight ? fullScreenHeight : 120 }}
+              source={{ uri: videoPath}}
+              videoStyle={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
+              style={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
               disableVolume={true}
               fullscreen={true}
               paused={this.state.paused}
@@ -218,7 +217,6 @@ class PostBlog extends React.Component {
             />
 
           </View>}
-        </View>
         {!fullScreenHeight && <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <CustomButton
             title={'Upload'}
