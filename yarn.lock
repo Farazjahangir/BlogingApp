@@ -4175,7 +4175,7 @@ lodash@3.10.1:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
   integrity sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y=
 
-lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
+lodash@^4.0.0, lodash@^4.16.4, lodash@^4.17.10, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -5551,6 +5551,13 @@ react-native-vector-icons@^6.6.0:
     lodash "^4.0.0"
     prop-types "^15.6.2"
     yargs "^13.2.2"
+
+react-native-video-controls@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-video-controls/-/react-native-video-controls-2.4.0.tgz#bfc38c56148e45881a4bc3f0ec3c040965c7ae82"
+  integrity sha512-q7QIi96bPFHzDd9RrwI0+gVODFH2aGDbeGo7petr4uEx64Znbj0dECa1aIl4ibwOQLJrY4WiHF4OMQnaU2clEw==
+  dependencies:
+    lodash "^4.16.4"
 
 react-native-video@^5.0.2:
   version "5.0.2"

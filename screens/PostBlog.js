@@ -4,17 +4,21 @@ import React, { Fragment } from 'react';
 import {
   StyleSheet,
   View, TouchableOpacity,
-  Text, ScrollView, BackHandler, CameraRoll, Image, Platform
+  Text, ScrollView, BackHandler, CameraRoll, Image, Platform, Dimensions
 } from 'react-native';
 import { Icon, Input, Button } from 'react-native-elements'
 import { connect } from 'react-redux'
 import ImagePicker from 'react-native-image-crop-picker';
 import { request, PERMISSIONS, RESULTS, check } from 'react-native-permissions';
 import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
+
 
 import { themeColor, pinkColor } from '../Constant';
 import CustomButton from '../Component/Button'
 import firebase from '../utils/firebase'
+const dimensions = Dimensions.get('window')
+const windowHeight = dimensions.height
 
 class PostBlog extends React.Component {
   constructor(props) {
@@ -23,7 +27,12 @@ class PostBlog extends React.Component {
       blogTitle: '',
       blog: '',
       videoPath: '',
-      path: ''
+      path: '',
+      controls: false,
+      paused: true,
+      hidePlayPause: true,
+      hideSeekbar: true,
+      fullScreenHeight: null
     }
   }
   static navigationOptions = {
@@ -106,13 +115,19 @@ class PostBlog extends React.Component {
   galleryPermissionAndroid() {
     return request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
   }
+  videoIsReady(){
+    console.log('videoIsReady');
+    
+    this.setState({ hidePlayPause: false, hideSeekbar: false })
+  }
+
   async uploadMedia() {
     if (Platform.OS === 'android') {
       const result = await this.galleryPermissionAndroid();
       if (result !== RESULTS.GRANTED) return;
     }
     const image = await ImagePicker.openPicker({
-      mediaType: 'video',
+      mediaType: 'photo',
       width: 300,
       height: 400,
       includeBase64: true
@@ -133,10 +148,10 @@ class PostBlog extends React.Component {
 
   render() {
     const { navigation } = this.props
-    const { blogTitle, blog, mime, data, path, videoPath } = this.state
+    const { blogTitle, blog, mime, data, path, videoPath, fullScreenHeight } = this.state
     return (
       <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={{
+      {!fullScreenHeight &&<View style={{
           height: 100, flexDirection: 'row', alignItems: 'center',
           justifyContent: 'space-between', marginHorizontal: 15,
         }}>
@@ -144,15 +159,15 @@ class PostBlog extends React.Component {
           <Icon type={'font-awesome'} name={'angle-left'} color={'#fff'} containerStyle={{ marginTop: 8 }}
             size={25} />
 
-        </View>
-        <View style={{
+        </View>}
+       {!fullScreenHeight &&<View style={{
           flexDirection: 'row', justifyContent: 'space-between',
           marginHorizontal: 12, marginVertical: 12
         }}>
           <CustomButton title={'Close'} buttonStyle={{ borderColor: '#ccc', borderWidth: 1 }} onPress={() => this.back()} />
           <CustomButton title={'Publish'} backgroundColor={pinkColor} onPress={() => this.publishBlog()} />
-        </View>
-
+        </View>}
+        {!fullScreenHeight &&<>
         <Input
           placeholder={'Title'}
           value={blogTitle}
@@ -172,19 +187,35 @@ class PostBlog extends React.Component {
           placeholder={'Your Blog'}
           placeholderTextColor={'#fff'}
           inputStyle={{ color: '#fff', letterSpacing: 2 }} />
-        {!!path && <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
+          </>}
+        {!!path && !fullScreenHeight && <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
           <Image source={{ uri: path }} style={{ width: 150, height: 150 }} />
         </View>}
         {!!videoPath &&  <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
-        <Video 
+        {/* <Video 
           source={{uri: videoPath }} 
           style={{width: 250, height: 250, backgroundColor: 'black' }} 
           paused= {true}
           pictureInPicture= {true}
           controls= {true}
+          /> */}
+        <VideoPlayer 
+          source={{uri: videoPath }} 
+          videoStyle={{width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }} 
+          style={{width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }} 
+          disableVolume= {true}
+          fullscreen = {true}
+          paused= {this.state.paused}
+          onLoad = {()=> this.videoIsReady()}         
+          disablePlayPause={this.state.hidePlayPause}
+          disableSeekbar={this.state.hideSeekbar}
+          disableBack={true}
+          onEnterFullscreen={()=> this.setState({ fullScreenHeight: windowHeight })}
+          onExitFullscreen={()=> this.setState({ fullScreenHeight: null })}
           />
+
         </View>}
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        {!fullScreenHeight && <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <CustomButton
             title={'Upload'}
             buttonStyle={{ borderColor: '#ccc', borderWidth: 1, marginVertical: 10 }}
@@ -194,8 +225,8 @@ class PostBlog extends React.Component {
             title={'Upload Video'}
             buttonStyle={{ borderColor: '#ccc', borderWidth: 1, marginVertical: 10 }}
             onPress={() => this.uploadVideo()}
-          />
-        </View>
+          /> 
+        </View>}
       </ScrollView>
     );
   }

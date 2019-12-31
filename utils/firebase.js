@@ -110,15 +110,11 @@ firebaseFunctions.uploadImage = async (image , userId) => {
         console.log('image===>',image)
         let name = `${Date.now()} - ${userId}`
         const response = await firebaseLib.storage().ref(name).putFile(image)
-        console.log('response =========>', response);
-        
         const url = await storageRef.child(name).getDownloadURL();
         return url
-        
     }
     catch(e){
        alert(e.message);
-        
     }
 }
 
