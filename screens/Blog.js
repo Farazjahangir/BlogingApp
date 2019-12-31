@@ -9,7 +9,8 @@ import {
   FlatList,
   Text,
   ScrollView,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native'
 import { SearchBar, Icon } from 'react-native-elements'
 import CustomInput from '../Component/Input'
@@ -53,7 +54,7 @@ class Blog extends React.Component {
       snapShot.docChanges.forEach((change) => {
         if (change.type === "added") {
           const { blogs } = this.state
-          blogs.unshift({id: change.doc.id, ...change.doc.data()})
+          blogs.unshift({ id: change.doc.id, ...change.doc.data() })
           this.setState({ blogs: [...blogs], isBlogs: true })
 
         }
@@ -72,14 +73,14 @@ class Blog extends React.Component {
     //     console.log('Response =====>', change.doc.data())))
 
   }
-  videoIsReady(){
+  videoIsReady() {
     console.log('videoIsReady');
-    
+
     this.setState({ hidePlayPause: false, hideSeekbar: false })
   }
-  navigateToDetail(item){
-    this.setState({paused: true})
-    this.props.navigation.navigate('BlogDetail' , { data: item })
+  navigateToDetail(item) {
+    this.setState({ paused: true })
+    this.props.navigation.navigate('BlogDetail', { data: item })
   }
 
 
@@ -91,7 +92,7 @@ class Blog extends React.Component {
   blog = (item, index) => {
     return <View style={{ width: '100%', marginBottom: 25, }}>
       {console.log('this.state.controls', this.state.controls)}
-      {!this.state.fullScreenHeight &&<View style={styles.title}>
+      {!this.state.fullScreenHeight && <View style={styles.title}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
             source={require('../assets/avatar.png')}
@@ -105,41 +106,42 @@ class Blog extends React.Component {
           buttonStyle={{ borderColor: '#ccc', borderWidth: 1, height: 40 }}
           containerStyle={{ width: 120 }} backgroundColor={this.state.follow ? pinkColor : themeColor} />
       </View>}
-      {!!item.imageUrl && <Image source={{uri: item.imageUrl}}
+      {!!item.imageUrl && <Image source={{ uri: item.imageUrl }}
         style={{
           height: 200, width: '100%', alignSelf: 'center', marginVertical: 11,
           borderRadius: 5
         }} />}
-      {/* {!!item.videoUrl &&  <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
-        <Video 
-          source={{uri: item.videoUrl }} 
-          style={{width: '100%', height: 250, backgroundColor: 'black' }} 
-          paused= {true}
-          pictureInPicture= {true}
-          controls= {true}
-          onLoad = {()=> this.videoIsReady()}
-          ref = {(ref)=> this.videoRef = ref}
-          />
-        </View>} */}
-              {!!item.videoUrl &&  <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
-        <VideoPlayer 
-          source={{uri: item.videoUrl }} 
-          videoStyle={{width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }} 
-          style={{width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }} 
-          disableVolume= {true}
-          fullscreen = {true}
-          paused= {this.state.paused}
-          onLoad = {()=> this.videoIsReady()}         
-          disablePlayPause={this.state.hidePlayPause}
-          disableSeekbar={this.state.hideSeekbar}
-          disableBack={true}
-          onEnterFullscreen={()=> this.setState({ fullScreenHeight: windowHeight })}
-          onExitFullscreen={()=> this.setState({ fullScreenHeight: null })}
-          />
+      {!!item.videoUrl &&
+        <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
+          {Platform.OS === 'ios' ?
+            <Video
+              source={{ uri: item.videoUrl }}
+              style={{ width: '100%', height: 250, backgroundColor: 'black' }}
+              paused={true}
+              pictureInPicture={true}
+              controls={true}
+              onLoad={() => this.videoIsReady()}
+              ref={(ref) => this.videoRef = ref}
+            />
+            :
+            <VideoPlayer
+              source={{ uri: item.videoUrl }}
+              videoStyle={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }}
+              style={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }}
+              disableVolume={true}
+              fullscreen={true}
+              paused={this.state.paused}
+              onLoad={() => this.videoIsReady()}
+              disablePlayPause={this.state.hidePlayPause}
+              disableSeekbar={this.state.hideSeekbar}
+              disableBack={true}
+              onEnterFullscreen={() => this.setState({ fullScreenHeight: windowHeight })}
+              onExitFullscreen={() => this.setState({ fullScreenHeight: null })}
+            />}
         </View>}
-<TouchableOpacity onPress={() => this.navigateToDetail(item)}>
-  <Text style={styles.blogHeading}>{item.blog}</Text>
-</TouchableOpacity>
+      <TouchableOpacity onPress={() => this.navigateToDetail(item)}>
+        <Text style={styles.blogHeading}>{item.blog}</Text>
+      </TouchableOpacity>
       <Text style={styles.likes}>{item.likes} Likes         73 Comments</Text>
       <View style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row' }}>
@@ -156,11 +158,11 @@ class Blog extends React.Component {
   render() {
     const { navigation } = this.props
     let { follow, blogs, isBlogs } = this.state
-    console.log('Blogs =====>' , blogs);
-    
+    console.log('Blogs =====>', blogs);
+
     return (
       <ScrollView stickyHeaderIndices={[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
-        {!this.state.fullScreenHeight &&<CustomHeader title={'BLOG'} navigation={navigation} />}
+        {!this.state.fullScreenHeight && <CustomHeader title={'BLOG'} navigation={navigation} />}
 
         {isBlogs &&
           <FlatList

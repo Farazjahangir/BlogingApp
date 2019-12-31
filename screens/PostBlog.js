@@ -144,7 +144,7 @@ class PostBlog extends React.Component {
     const video = await ImagePicker.openPicker({
       mediaType: 'video',
     })
-    this.setState({ videoPath: video.path , path: '' })
+    this.setState({ videoPath: video.path, path: '' })
   }
 
 
@@ -190,33 +190,34 @@ class PostBlog extends React.Component {
             placeholderTextColor={'#fff'}
             inputStyle={{ color: '#fff', letterSpacing: 2 }} />
         </>}
-          {!!path && !fullScreenHeight && <View style={{ alignItems: 'center', marginVertical: 10,  }}>
-            <Image source={{ uri: path }} style={{ width: 180, height: 180 }} />
-          </View>}
-          {!!videoPath && <View style={{ textAlign: 'center', alignItems: 'center', marginVertical: 10}}>
-            {/* <Video 
-          source={{uri: videoPath }} 
-          style={{width: 250, height: 250, backgroundColor: 'black' }} 
-          paused= {true}
-          pictureInPicture= {true}
-          controls= {true}
-          /> */}
-            <VideoPlayer
-              source={{ uri: videoPath}}
-              videoStyle={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
-              style={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
-              disableVolume={true}
-              fullscreen={true}
-              paused={this.state.paused}
-              onLoad={() => this.videoIsReady()}
-              disablePlayPause={this.state.hidePlayPause}
-              disableSeekbar={this.state.hideSeekbar}
-              disableBack={true}
-              onEnterFullscreen={() => this.setState({ fullScreenHeight: windowHeight, fullScreenWidth: windowWidth })}
-              onExitFullscreen={() => this.setState({ fullScreenHeight: null, fullScreenWidth: null })}
-            />
+        {!!path && !fullScreenHeight && <View style={{ alignItems: 'center', marginVertical: 10, }}>
+          <Image source={{ uri: path }} style={{ width: 180, height: 180 }} />
+        </View>}
+        {!!videoPath && <View style={{ textAlign: 'center', alignItems: 'center', marginVertical: 10 }}>
+          {Platform.OS === 'ios' ?<Video
+            source={{ uri: videoPath }}
+            style={{ width: 250, height: 250, backgroundColor: 'black' }}
+            paused={true}
+            pictureInPicture={true}
+            controls={true}
+          />
+          :
+          <VideoPlayer
+            source={{ uri: videoPath }}
+            videoStyle={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
+            style={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
+            disableVolume={true}
+            fullscreen={true}
+            paused={this.state.paused}
+            onLoad={() => this.videoIsReady()}
+            disablePlayPause={this.state.hidePlayPause}
+            disableSeekbar={this.state.hideSeekbar}
+            disableBack={true}
+            onEnterFullscreen={() => this.setState({ fullScreenHeight: windowHeight, fullScreenWidth: windowWidth })}
+            onExitFullscreen={() => this.setState({ fullScreenHeight: null, fullScreenWidth: null })}
+          />}
 
-          </View>}
+        </View>}
         {!fullScreenHeight && <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <CustomButton
             title={'Upload'}
