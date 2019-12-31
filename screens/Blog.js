@@ -16,6 +16,8 @@ import CustomButton from '../Component/Button'
 import CustomHeader from '../Component/header'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import firebase from 'react-native-firebase'
+import Video from 'react-native-video';
+
 
 import { themeColor, pinkColor } from '../Constant'
 class Blog extends React.Component {
@@ -65,7 +67,7 @@ class Blog extends React.Component {
     </TouchableOpacity>
 
   blog = (item, index) => {
-    return <TouchableOpacity onPress={() => this.props.navigation.navigate('BlogDetail' , { data: item })} style={{ width: '100%', paddingHorizontal: '2%', marginBottom: 25, }}>
+    return <View style={{ width: '100%', paddingHorizontal: '2%', marginBottom: 25, }}>
       <View style={styles.title}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
@@ -85,7 +87,18 @@ class Blog extends React.Component {
           height: 200, width: '100%', alignSelf: 'center', marginVertical: 11,
           borderRadius: 5
         }} />}
+      {!!item.videoUrl &&  <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
+        <Video 
+          source={{uri: item.videoUrl }} 
+          style={{width: 250, height: 250, backgroundColor: 'black' }} 
+          paused= {true}
+          pictureInPicture= {true}
+          controls= {true}
+          />
+        </View>}
+<TouchableOpacity onPress={() => this.props.navigation.navigate('BlogDetail' , { data: item })}>
   <Text style={styles.blogHeading}>{item.blog}</Text>
+</TouchableOpacity>
       <Text style={styles.likes}>{item.likes} Likes         73 Comments</Text>
       <View style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row' }}>
@@ -97,7 +110,7 @@ class Blog extends React.Component {
 
       </View>
 
-    </TouchableOpacity>
+    </View>
   }
   render() {
     const { navigation } = this.props

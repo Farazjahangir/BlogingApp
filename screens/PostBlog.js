@@ -126,8 +126,6 @@ class PostBlog extends React.Component {
     }
     const video = await ImagePicker.openPicker({
       mediaType: 'video',
-      width: 300,
-      height: 400,
     })
       this.setState({ videoPath: video.path })
   }
@@ -180,7 +178,7 @@ class PostBlog extends React.Component {
         {!!videoPath &&  <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
         <Video 
           source={{uri: videoPath }} 
-          style={{width: 200, height: 200, backgroundColor: 'black' }} 
+          style={{width: 250, height: 250, backgroundColor: 'black' }} 
           paused= {true}
           pictureInPicture= {true}
           controls= {true}
