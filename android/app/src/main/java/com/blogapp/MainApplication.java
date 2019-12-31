@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.brentvatne.react.ReactVideoPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
@@ -13,6 +14,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.brentvatne.react.ReactVideoPackage;
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -32,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
           packages.add(new RNFirebaseAuthPackage());
           packages.add(new RNFirebaseFirestorePackage());
           packages.add(new RNFirebaseStoragePackage());
+          packages.add(new ReactVideoPackage());
           return packages;
         }
 

@@ -10,6 +10,7 @@ import { Icon, Input, Button } from 'react-native-elements'
 import { connect } from 'react-redux'
 import ImagePicker from 'react-native-image-crop-picker';
 import { request, PERMISSIONS, RESULTS, check } from 'react-native-permissions';
+import Video from 'react-native-video';
 
 import { themeColor, pinkColor } from '../Constant';
 import CustomButton from '../Component/Button'
@@ -20,7 +21,9 @@ class PostBlog extends React.Component {
     super(props)
     this.state = {
       blogTitle: '',
-      blog: ''
+      blog: '',
+      videoPath: '',
+      path: ''
     }
   }
   static navigationOptions = {
@@ -46,7 +49,7 @@ class PostBlog extends React.Component {
   }
 
   async publishBlog() {
-    const { blogTitle, blog, mime, data, path } = this.state
+    const { blogTitle, blog, mime, data, path, videoPath } = this.state
     const { userObj } = this.props
     console.log('UserObj', userObj);
 
@@ -54,12 +57,17 @@ class PostBlog extends React.Component {
       blogTitle,
       blog,
       userId: userObj.userId,
-      imageUrl: ''
+      imageUrl: '',
+      videoUrl: ''
     }
     try {
       if (path) {
         const imageUrl = await firebase.uploadImage(path, userObj.userId)
         blogData.imageUrl = imageUrl
+      }
+      if(videoPath) {
+        const videoUrl = await firebase.uploadImage(videoPath, userObj.userId)
+        blogData.videoUrl = videoUrl
       }
       await firebase.addDocument('Blog', blogData)
       alert('Published')
@@ -104,17 +112,30 @@ class PostBlog extends React.Component {
       if (result !== RESULTS.GRANTED) return;
     }
     const image = await ImagePicker.openPicker({
-      mediaType: 'photo',
+      mediaType: 'video',
       width: 300,
       height: 400,
       includeBase64: true
     })
       this.setState({ path: image.path })
   }
+  async uploadVideo() {
+    if (Platform.OS === 'android') {
+      const result = await this.galleryPermissionAndroid();
+      if (result !== RESULTS.GRANTED) return;
+    }
+    const video = await ImagePicker.openPicker({
+      mediaType: 'video',
+      width: 300,
+      height: 400,
+    })
+      this.setState({ videoPath: video.path })
+  }
+
 
   render() {
     const { navigation } = this.props
-    const { blogTitle, blog, mime, data, path } = this.state
+    const { blogTitle, blog, mime, data, path, videoPath } = this.state
     return (
       <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{
@@ -156,11 +177,27 @@ class PostBlog extends React.Component {
         {!!path && <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
           <Image source={{ uri: path }} style={{ width: 150, height: 150 }} />
         </View>}
-        <CustomButton
-          title={'Upload'}
-          buttonStyle={{ borderColor: '#ccc', borderWidth: 1, marginVertical: 10 }}
-          onPress={() => this.uploadMedia()}
-        />
+        {!!videoPath &&  <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
+        <Video 
+          source={{uri: videoPath }} 
+          style={{width: 200, height: 200, backgroundColor: 'black' }} 
+          paused= {true}
+          pictureInPicture= {true}
+          controls= {true}
+          />
+        </View>}
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          <CustomButton
+            title={'Upload'}
+            buttonStyle={{ borderColor: '#ccc', borderWidth: 1, marginVertical: 10 }}
+            onPress={() => this.uploadMedia()}
+          />
+          <CustomButton
+            title={'Upload Video'}
+            buttonStyle={{ borderColor: '#ccc', borderWidth: 1, marginVertical: 10 }}
+            onPress={() => this.uploadVideo()}
+          />
+        </View>
       </ScrollView>
     );
   }
