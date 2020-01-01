@@ -79,13 +79,14 @@ class BlogDetail extends React.Component {
             borderRadius: 12
           }} />}
         {!!data.videoUrl && <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
-          {/* <Video
+        {Platform.OS === 'ios' ? <Video
             source={{ uri: data.videoUrl }}
             style={{ width: 250, height: 250, backgroundColor: 'black' }}
             paused={true}
             pictureInPicture={true}
             controls={true}
-          /> */}
+          />
+          :
           <VideoPlayer
             source={{ uri: data.videoUrl }}
             videoStyle={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
@@ -99,7 +100,7 @@ class BlogDetail extends React.Component {
             disableBack={true}
             onEnterFullscreen={() => this.setState({ fullScreenHeight: windowHeight, })}
             onExitFullscreen={() => this.setState({ fullScreenHeight: null, })}
-          />
+          />}
         </View>}
 
         {!fullScreenHeight && <View>
