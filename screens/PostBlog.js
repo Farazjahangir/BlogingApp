@@ -215,7 +215,8 @@ class PostBlog extends React.Component {
             disableBack={true}
             onEnterFullscreen={() => this.setState({ fullScreenHeight: windowHeight, fullScreenWidth: windowWidth })}
             onExitFullscreen={() => this.setState({ fullScreenHeight: null, fullScreenWidth: null })}
-          />}
+          />
+          }
 
         </View>}
         {!fullScreenHeight && <View style={{ flexDirection: 'row', justifyContent: 'center' }}>

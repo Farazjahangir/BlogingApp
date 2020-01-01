@@ -8,7 +8,9 @@ import {
   TouchableOpacity,
   FlatList,
   Text,
-  ScrollView
+  ScrollView,
+  Platform,
+  Dimensions
 } from 'react-native'
 import { SearchBar, Icon } from 'react-native-elements'
 import CustomInput from '../Component/Input'
@@ -16,69 +18,100 @@ import CustomButton from '../Component/Button'
 import CustomHeader from '../Component/header'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
+
 
 
 import { themeColor, pinkColor } from '../Constant'
+const dimensions = Dimensions.get('window')
+const windowHeight = dimensions.height
+
 class BlogDetail extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      follow: false
+      follow: false,
+      fullScreenHeight: null
     }
   }
   static navigationOptions = {
     header: null
   }
+  videoIsReady() {
+    console.log('videoIsReady');
+
+    this.setState({ hidePlayPause: false, hideSeekbar: false })
+  }
+
   _icon = (name, color) =>
     <TouchableOpacity >
       <Icon type={'font-awesome'} name={name} color={color} containerStyle={{ marginHorizontal: 12 }} />
     </TouchableOpacity>
 
   render() {
+    const { fullScreenHeight } = this.state
     const { navigation } = this.props
     const data = this.props.navigation.state.params.data
     console.log('data =======>', data)
     let { follow } = this.state
     return (
-      <ScrollView stickyHeaderIndices={[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
-        <CustomHeader title={'BLOG'} navigation={navigation} home={true} bookmark={true} />
-        <View style={styles.title}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image
-              source={require('../assets/avatar.png')}
-              style={styles.imageStyle}
-            />
-            <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
-              Jesicca DOE
+      <ScrollView style={{ backgroundColor: '#323643', flex: 1 }}>
+        {!fullScreenHeight && <View>
+          <CustomHeader title={'BLOG'} navigation={navigation} home={true} bookmark={true} />
+          <View style={styles.title}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Image
+                source={require('../assets/avatar.png')}
+                style={styles.imageStyle}
+              />
+              <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
+                Jesicca DOE
 </Text>
+            </View>
+            <CustomButton title={'Follow'}
+              buttonStyle={{ borderColor: '#ccc', borderWidth: 1, height: 40 }}
+              containerStyle={{ width: 120 }} backgroundColor={this.state.follow ? pinkColor : themeColor} />
           </View>
-          <CustomButton title={'Follow'}
-            buttonStyle={{ borderColor: '#ccc', borderWidth: 1, height: 40 }}
-            containerStyle={{ width: 120 }} backgroundColor={this.state.follow ? pinkColor : themeColor} />
-        </View>
+        </View>}
         {!!data.imageUrl && <Image source={{ uri: data.imageUrl }}
           style={{
             height: 200, width: '97%', alignSelf: 'center', marginVertical: 11,
             borderRadius: 12
           }} />}
         {!!data.videoUrl && <View style={{ display: 'flex', alignItems: 'center', marginVertical: 10 }}>
-          <Video
+          {/* <Video
             source={{ uri: data.videoUrl }}
             style={{ width: 250, height: 250, backgroundColor: 'black' }}
             paused={true}
             pictureInPicture={true}
             controls={true}
+          /> */}
+          <VideoPlayer
+            source={{ uri: data.videoUrl }}
+            videoStyle={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
+            style={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
+            disableVolume={true}
+            fullscreen={true}
+            paused={this.state.paused}
+            onLoad={() => this.videoIsReady()}
+            disablePlayPause={this.state.hidePlayPause}
+            disableSeekbar={this.state.hideSeekbar}
+            disableBack={true}
+            onEnterFullscreen={() => this.setState({ fullScreenHeight: windowHeight, })}
+            onExitFullscreen={() => this.setState({ fullScreenHeight: null, })}
           />
         </View>}
 
-        <Text style={{
-          color: '#fff', fontSize: 20, fontWeight: 'bold',
-          paddingLeft: 12, marginVertical: 12
-        }}> {data.blogTitle} </Text>
-        <Text style={{
-          color: '#fff', fontSize: 18,
-          paddingHorizontal: 12, marginVertical: 12
-        }}>{data.blog}  </Text>
+        {!fullScreenHeight && <View>
+          <Text style={{
+            color: '#fff', fontSize: 20, fontWeight: 'bold',
+            paddingLeft: 12, marginVertical: 12
+          }}> {data.blogTitle} </Text>
+          <Text style={{
+            color: '#fff', fontSize: 18,
+            paddingHorizontal: 12, marginVertical: 12
+          }}>{data.blog}  </Text>
+        </View>}
       </ScrollView>
     )
   }
