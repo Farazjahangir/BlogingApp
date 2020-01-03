@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react'
 import {
   createAppContainer,
@@ -30,6 +32,7 @@ import SelectBlog from './screens/SelectBlog';
 import BlogCategory from './screens/BlogCategory';
 import Privacy from './screens/Privacy';
 import Support from './screens/Support';
+import Shop from './screens/Shop';
 
 const AuthStack = createStackNavigator({
   Landing: {
@@ -193,11 +196,15 @@ const AppStack = createStackNavigator({
     screen: EditProfile,
     navigationOptions: {
       headerTitle: 'Feedback'
+    },
+  }, 
+  Shop: {
+    screen: Shop,
+    navigationOptions: {
+      headerTitle: 'Shop'
     }
-  },
-  
-  
-} , {initialRouteName : 'Feedback'})
+  } 
+} , {initialRouteName : 'Feedback', header: null})
 
 const App = createSwitchNavigator({
   Auth: {

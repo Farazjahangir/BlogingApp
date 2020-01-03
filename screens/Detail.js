@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Fragment } from 'react'
 import {
   StyleSheet,
@@ -36,6 +38,8 @@ class Detail extends React.Component {
 
   render () {
     const { navigation } = this.props
+    const { state: {params : { data }} } = navigation
+    console.log('Data ====>', data)
     let { follow } = this.state
     return (
       <ScrollView stickyHeaderIndices = {[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
@@ -50,14 +54,14 @@ class Detail extends React.Component {
             </TouchableOpacity>
             </View>
             <View>
-              <Text style = {styles.productName} >Product Name</Text>
+              <Text style = {styles.productName} >{data.productName}</Text>
               </View>
         </ImageBackground>
         <View style =  {[styles.borderBottom , {paddingTop : 8}]}>
         <View style = {styles.inputView}>
           <Input  placeholder = {'Select Color'} containerStyle = {{width : '70%'}} 
           inputContainerStyle = {styles.input} />
-          <CustomButton title = {'$300'} 
+          <CustomButton title = {data.price} 
   buttonStyle = {styles.borderButton} 
   containerStyle = {{width : 100}} backgroundColor = {this.state.follow ? pinkColor : themeColor} />
         </View>
@@ -65,14 +69,14 @@ class Detail extends React.Component {
         containerStyle = {[{width : '90%' , marginTop : 12}]} />
           </View>
         <View style = {{paddingVertical :  25}}>
-        {this.textViews('Description' , 'asdsadasdasdasd das das das das d asd as das ' )}
-        {this.textViews('Ships From' , 'Canada' )}
-        {this.textViews('Deliver From' , '15-30 days from italy' )}
+        {this.textViews('Description' , data.discription )}
+        {this.textViews('Ships From' , data.shipFrom )}
+        {this.textViews('Deliver Info' , data.deliverInfo )}
         <View style = {{minHeight : 80 ,
    justifyContent : 'space-around' , padding : 12 ,  paddingBottom : 15,
    borderBottomColor : '#454545' , borderBottomWidth : 8}}>
   <Text style = {{fontSize:  18, fontWeight : 'bold' , color : '#bbb'}}>Return Policy</Text>
-  <Text style = {{color : 'grey'}}>Vlaidad das da sd asd a sd asd ads das  da sad as d asd asd ad s das d asd a ds ad das d das d sa</Text>
+        <Text style = {{color : 'grey'}}>{data.returnPolicy}</Text>
   </View>
   <View style = {styles.borderBottom}>
   <View style={[styles.title , {marginVertical : 15 }]}>
