@@ -5,11 +5,13 @@ import { Text, View, ScrollView, StyleSheet, Image } from 'react-native'
 import { Icon, Input, Button } from 'react-native-elements'
 import ImagePicker from 'react-native-image-crop-picker';
 import { request, PERMISSIONS, RESULTS, check } from 'react-native-permissions';
+import { connect } from 'react-redux'
 
 import CustomButton from '../Component/Button'
 import { themeColor, pinkColor } from '../Constant';
+import firebase from '../utils/firebase'
 
-export default class AddProduct extends Component {
+class AddProduct extends Component {
     state = {
         path: '',
         productName: '',
@@ -27,18 +29,50 @@ export default class AddProduct extends Component {
     }
     async uploadMedia() {
         if (Platform.OS === 'android') {
-          const result = await this.galleryPermissionAndroid();
-          if (result !== RESULTS.GRANTED) return;
+            const result = await this.galleryPermissionAndroid();
+            if (result !== RESULTS.GRANTED) return;
         }
         const image = await ImagePicker.openPicker({
-          mediaType: 'photo',
-          width: 135,
-          height: 135,
-          includeBase64: true,
-          cropping: true
+            mediaType: 'photo',
+            width: 135,
+            height: 135,
+            includeBase64: true,
+            cropping: true
         })
         this.setState({ path: image.path, videoPath: '' })
-      }        
+    }
+    validateFields = () => {
+        const { path, productName, discription, price, shipFrom, deliverInfo, retrunPolicy } = this.state
+        if (!path || !productName || !discription || !price || !shipFrom || !deliverInfo || !retrunPolicy) {
+            alert('All Fileds are Required')
+            return true
+        }
+    }
+    async addProduct() {
+        const { path, productName, discription, price, shipFrom, deliverInfo, retrunPolicy } = this.state
+        const { userObj } = this.props
+
+        if (this.validateFields()) return
+        try{
+            const objToSend = {
+                productName,
+                discription,
+                price,
+                shipFrom,
+                deliverInfo,
+                retrunPolicy,
+                userId : userObj.userId
+            }
+            const imageUrl = await firebase.uploadImage(path , userObj.userId)
+            objToSend.imageUrl = imageUrl
+            await firebase.addDocument('Products' , objToSend)
+            alert('Posted')
+            this.setState({ productName: '', discription: '', price: '', shipFrom: '', deliverInfo: '', retrunPolicy: '', path: '' })
+        }
+        catch(e){
+            alert(e.message)
+        }
+    }
 
     render() {
         const { path, productName, discription, price, shipFrom, deliverInfo, retrunPolicy } = this.state
@@ -58,7 +92,7 @@ export default class AddProduct extends Component {
                     marginHorizontal: 12, marginVertical: 12
                 }}>
                     <CustomButton title={'Close'} buttonStyle={{ borderColor: '#ccc', borderWidth: 1 }} onPress={() => this.back()} />
-                    <CustomButton title={'Post Product'} backgroundColor={pinkColor} onPress={() => this.publishBlog()} />
+                    <CustomButton title={'Post Product'} backgroundColor={pinkColor} onPress={() => this.addProduct()} />
                 </View>
                 <>
                     <Input
@@ -67,10 +101,10 @@ export default class AddProduct extends Component {
                         placeholderTextColor={'#fff'}
                         inputContainerStyle={{ height: 80 }}
                         inputStyle={{
-                             color: '#fff',
+                            color: '#fff',
                             letterSpacing: 2
                         }}
-                    onChangeText={(text) => this.setState({ productName: text })}
+                        onChangeText={(text) => this.setState({ productName: text })}
                     />
                     <Input
                         placeholder={'Price'}
@@ -78,10 +112,10 @@ export default class AddProduct extends Component {
                         placeholderTextColor={'#fff'}
                         inputContainerStyle={{ height: 80 }}
                         inputStyle={{
-                             color: '#fff',
+                            color: '#fff',
                             letterSpacing: 2
                         }}
-                    onChangeText={(text) => this.setState({ price: text })}
+                        onChangeText={(text) => this.setState({ price: text })}
                     />
                     <Input
                         placeholder={'Ship From'}
@@ -89,10 +123,10 @@ export default class AddProduct extends Component {
                         placeholderTextColor={'#fff'}
                         inputContainerStyle={{ height: 80 }}
                         inputStyle={{
-                             color: '#fff',
+                            color: '#fff',
                             letterSpacing: 2
                         }}
-                    onChangeText={(text) => this.setState({ shipFrom: text })}
+                        onChangeText={(text) => this.setState({ shipFrom: text })}
                     />
                     <Input
                         placeholder={'Deliver Info'}
@@ -100,10 +134,10 @@ export default class AddProduct extends Component {
                         placeholderTextColor={'#fff'}
                         inputContainerStyle={{ height: 80 }}
                         inputStyle={{
-                             color: '#fff',
+                            color: '#fff',
                             letterSpacing: 2
                         }}
-                    onChangeText={(text) => this.setState({ deliverInfo: text })}
+                        onChangeText={(text) => this.setState({ deliverInfo: text })}
                     />
                     <Input
                         value={retrunPolicy}
@@ -136,6 +170,16 @@ export default class AddProduct extends Component {
         )
     }
 }
+const mapDispatchToProps = (dispatch) => {
+    return {}
+}
+const mapStateToProps = (state) => {
+    return {
+        userObj: state.auth.user
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AddProduct)
+
 
 const styles = StyleSheet.create({
     container: {
