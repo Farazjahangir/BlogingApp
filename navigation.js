@@ -33,6 +33,7 @@ import BlogCategory from './screens/BlogCategory';
 import Privacy from './screens/Privacy';
 import Support from './screens/Support';
 import Shop from './screens/Shop';
+import AddProduct from './screens/AddProduct'
 
 const AuthStack = createStackNavigator({
   Landing: {
@@ -200,6 +201,12 @@ const AppStack = createStackNavigator({
   }, 
   Shop: {
     screen: Shop,
+    navigationOptions: {
+      headerTitle: 'Shop'
+    },
+  },
+  AddProduct: {
+    screen: AddProduct,
     navigationOptions: {
       headerTitle: 'Shop'
     }
