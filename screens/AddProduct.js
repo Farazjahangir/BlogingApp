@@ -34,8 +34,8 @@ class AddProduct extends Component {
         }
         const image = await ImagePicker.openPicker({
             mediaType: 'photo',
-            width: 135,
-            height: 135,
+            width: 235,
+            height: 235,
             includeBase64: true,
             cropping: true
         })

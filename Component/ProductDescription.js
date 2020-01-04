@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react'
 import CustomButton from './Button'
 import { View , Image , StyleSheet , Text , TouchableOpacity} from 'react-native'
@@ -5,7 +7,7 @@ import {themeColor} from '../Constant/index'
 export default ProductDescription = ( props ) =>
 <TouchableOpacity  {...props} style = {styles.container}>
 <View style = {styles.row}> 
-<Image source = {{uri : props.url}} 
+<Image source = {{uri : props.imageUrl}} 
 style = {styles.imageStyle} />
 <View style = {styles.titleView}>
 <Text style = {styles.title}>{props.title}</Text>
