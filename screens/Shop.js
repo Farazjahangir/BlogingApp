@@ -2,65 +2,45 @@
 
 import React, { Component } from 'react'
 import { Text, View, ScrollView, Image } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import CustomButton from '../Component/Button'
 import CustomHeader from '../Component/header'
 import ProductContainer from '../Component/ProductContainer'
 
-const data = [
-    {
-        productName: 'Product1',
-        price: 100,
-        image: require('../assets/avatar.png'),
-        discription: 'this is the great product',
-        shipFrom: 'Canada',
-        deliverInfo: '15 tp 20 days',
-        returnPolicy: 'lorem ipsum lorem ipsum'
-    },
-    {
-        productName: 'Product2',
-        price: 100,
-        image: require('../assets/avatar.png'),
-        discription: 'this is the great product',
-        shipFrom: 'Canada',
-        deliverInfo: '15 tp 20 days',
-        returnPolicy: 'lorem ipsum lorem ipsum'
-    },
-    {
-        productName: 'Product3',
-        price: 100,
-        image: require('../assets/avatar.png'),
-        discription: 'this is the great product',
-        shipFrom: 'Canada',
-        deliverInfo: '15 tp 20 days',
-        returnPolicy: 'lorem ipsum lorem ipsum'
-    },
-    {
-        productName: 'Product4',
-        price: 100,
-        image: require('../assets/avatar.png'),
-        discription: 'this is the great product',
-        shipFrom: 'Canada',
-        deliverInfo: '15 tp 20 days',
-        returnPolicy: 'lorem ipsum lorem ipsum'
-    },
-    {
-        productName: 'Product5',
-        price: 100,
-        image: require('../assets/avatar.png'),
-        discription: 'this is the great product',
-        shipFrom: 'Canada',
-        deliverInfo: '15 tp 20 days',
-        returnPolicy: 'lorem ipsum lorem ipsum'
-    },
-]
 
 class Shop extends Component {
     static navigationOptions = {
         header: null
     }
+    state = {
+        products: [],
+        isProducts: false
+    }
+     componentDidMount() {
+        const db = firebase.firestore()
+         db.collection('Products').onSnapshot(snapShot => {
+            snapShot.docChanges.forEach((change) => {
+              if (change.type === "added") {
+                const { products } = this.state
+                products.unshift({ id: change.doc.id, ...change.doc.data() })
+                this.setState({ products: [...products], isProducts: true })
+      
+              }
+              if (change.type === "modified") {
+                console.log("Modified city: ", change.doc.data());
+              }
+              if (change.type === "removed") {
+                console.log("Removed city: ", change.doc.data());
+              }
+            })
+            // console.log('snapShot ====>' , snapShot);
+      
+          })  
+    }    
     render() {
         const { navigation } = this.props
+        const { products } = this.state
         return (
             <ScrollView stickyHeaderIndices={[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
                 <CustomHeader title={'SHOP'} navigation={navigation} />
@@ -72,7 +52,7 @@ class Shop extends Component {
                             <Text>200</Text>
                         </View>
                     </View> */}
-                    {data.map(val => 
+                    {products.map(val => 
                         <ProductContainer data={val} navigate={()=> navigation.navigate('Detail' , {data: val})} />
                     )}
                 </View>

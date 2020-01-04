@@ -7,10 +7,12 @@ import {withNavigation } from 'react-navigation'
 class ProductContainer extends Component {
     render() {
         const { data, navigate } = this.props
+        console.log('Data ====>', data.imageUrl);
+        
         return (
             <TouchableOpacity onPress={navigate}>
                 <View style={styles.productMainContainer}>
-                    <Image source={data.image} style={{ width: 135, height: 135 }} />
+                    <Image source={{uri : data.imageUrl}} style={{ width: 135, height: 135 }} />
                     <View style={styles.prodcutDetailContainer}>
                     <Text style={styles.productName}>{data.productName}</Text>
                     <Text style={styles.productPrice}>{data.price}</Text>
