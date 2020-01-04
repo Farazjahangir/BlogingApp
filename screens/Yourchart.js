@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Fragment } from 'react'
 import {
   StyleSheet,
@@ -15,6 +17,7 @@ import CustomHeader from '../Component/header'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import HorizontalList from '../Component/HorizontalList'
 import { themeColor, pinkColor } from '../Constant'
+import ChartContainer from '../Component/ChartContainer'
 class Yourchart extends React.Component {
   constructor (props) {
     super(props)
@@ -32,33 +35,10 @@ class Yourchart extends React.Component {
     return (
       <ScrollView stickyHeaderIndices = {[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
         <CustomHeader navigation = {navigation} title={'Your Chart'}  />
-
-    {
-        next ? 
-<View style = { styles.cartImage}>
-        <Icon type = {"font-awesome"} name = {'shopping-cart'} color = {'#fff'}  size = {50}/> 
-        </View>
-        : 
-<View style={[styles.title , {marginVertical : 15 }]}>
-<View style = {[{flexDirection : 'row'  , flex : 1} ,  next ? styles.cartImage : null]}>
-
-<Image
-  source={require('../assets/avatar.png')}
-  style={styles.imageStyle}
-  />
-  <View>
-<Text style={{ paddingTop:4 , color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
-  Product Name
-</Text>
-<Text style={styles.descriptionText}>
-  Lorem Spum dsajkhdakjdhsakjdh
-</Text>
-</View>
-  <Text style={[styles.descriptionText , {paddingTop:4 ,}]}>$24</Text>
-  </View>
-     </View>
-    }
-    <CustomButton onPress = {()=> this.setState({next : !next})} title = {next ? 'Continue'  :  'Next'} backgroundColor = {pinkColor} 
+        <ChartContainer />
+        <ChartContainer />
+        <ChartContainer />
+    <CustomButton title="Pay" backgroundColor = {pinkColor} 
         containerStyle = {[{width : '90%' , marginTop : 12}]} />
               <Text style = {styles.listHeading}>Last Viewed</Text>
           <HorizontalList  productInfo = {true} />
