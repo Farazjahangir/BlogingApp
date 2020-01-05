@@ -17,6 +17,9 @@ import CustomHeader from '../Component/header'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import HorizontalList from '../Component/HorizontalList'
 import { themeColor, pinkColor } from '../Constant'
+import { connect } from 'react-redux'
+import { addToChart } from '../redux/actions/chartActions'
+
 class Detail extends React.Component {
   constructor (props) {
     super(props)
@@ -36,6 +39,24 @@ class Detail extends React.Component {
   <Text style = {{color : 'grey' , }}>{description}</Text>
   </View>
 
+  addIntoChart(data){
+    const { addToChart, chart } = this.props
+    console.log('Chart', chart);
+    
+    const findObj = chart.some(item => item.id === data.id)
+    if(!findObj){
+      chart.push(data)
+      addToChart(chart)
+      console.log(this.props);
+      return
+    }
+      alert('You have already added this item in your chart')
+  }
+  componentDidMount() {
+    console.log('Props===========>', this.props);
+    
+  }
+  
   render () {
     const { navigation } = this.props
     const { state: {params : { data }} } = navigation
@@ -66,7 +87,7 @@ class Detail extends React.Component {
   containerStyle = {{width : 100}} backgroundColor = {this.state.follow ? pinkColor : themeColor} />
         </View>
         <CustomButton title = {'Buy'} backgroundColor = {pinkColor} 
-        containerStyle = {[{width : '90%' , marginTop : 12}]} />
+        containerStyle = {[{width : '90%' , marginTop : 12}]} onPress={()=> this.addIntoChart(data)} />
           </View>
         <View style = {{paddingVertical :  25}}>
         {this.textViews('Description' , data.discription )}
@@ -124,4 +145,16 @@ const styles = StyleSheet.create({
   justifyContent : 'center'  , alignItems : 'center' },
   productName : {margin: 12, color : '#fff' , fontSize : 28 , fontWeight : 'bold'},
 })
-export default Detail
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToChart: (data) => dispatch(addToChart(data))
+  }
+}
+const mapStateToProps = (state) => {
+  console.log(state);
+  
+  return {chart: state.chart.chart }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail)
+

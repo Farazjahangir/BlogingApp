@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React, { Component } from 'react'
-import { Text, View, ScrollView, Image } from 'react-native'
+import { Text, View, ScrollView, Image, AsyncStorage } from 'react-native'
 import firebase from 'react-native-firebase'
 
 import CustomButton from '../Component/Button'
@@ -19,7 +19,7 @@ class Shop extends Component {
     }
      componentDidMount() {
         const db = firebase.firestore()
-         db.collection('Products').onSnapshot(snapShot => {
+         db.collection('Products').orderBy('createdAt').onSnapshot(snapShot => {
             snapShot.docChanges.forEach((change) => {
               if (change.type === "added") {
                 const { products } = this.state

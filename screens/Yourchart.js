@@ -18,6 +18,8 @@ import { SwipeListView } from 'react-native-swipe-list-view'
 import HorizontalList from '../Component/HorizontalList'
 import { themeColor, pinkColor } from '../Constant'
 import ChartContainer from '../Component/ChartContainer'
+import { connect } from 'react-redux'
+
 class Yourchart extends React.Component {
   constructor (props) {
     super(props)
@@ -30,14 +32,20 @@ class Yourchart extends React.Component {
   }
 
   render () {
-    const { navigation } = this.props
+    const { navigation, chart } = this.props
+    console.log('Chart========>', this.props);
+    
     let { next } = this.state
     return (
       <ScrollView stickyHeaderIndices = {[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
         <CustomHeader navigation = {navigation} title={'Your Chart'}  />
-        <ChartContainer />
-        <ChartContainer />
-        <ChartContainer />
+        {!!chart.length ?
+            chart.map(val => (
+              <ChartContainer data={val} />
+            ))
+            :
+            <Text>You Don't Have Any Item In Your Chart</Text>
+      }
     <CustomButton title="Pay" backgroundColor = {pinkColor} 
         containerStyle = {[{width : '90%' , marginTop : 12}]} />
               <Text style = {styles.listHeading}>Last Viewed</Text>
@@ -73,4 +81,11 @@ const styles = StyleSheet.create({
   justifyContent : 'center'  , alignItems : 'center' },
   productName : {margin: 12, color : '#fff' , fontSize : 28 , fontWeight : 'bold'},
 })
-export default Yourchart
+const mapDispatchToProps = (dispatch) => {
+  return {}
+}
+const mapStateToProps = (state) => {  
+  return {chart: state.chart.chart }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Yourchart)

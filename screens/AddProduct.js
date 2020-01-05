@@ -57,17 +57,18 @@ class AddProduct extends Component {
             const objToSend = {
                 productName,
                 discription,
-                price,
+                price: parseInt(price),
                 shipFrom,
                 deliverInfo,
                 retrunPolicy,
-                userId : userObj.userId
+                userId : userObj.userId,
+                createdAt : Date.now()
             }
             const imageUrl = await firebase.uploadImage(path , userObj.userId)
             objToSend.imageUrl = imageUrl
             await firebase.addDocument('Products' , objToSend)
             alert('Posted')
-            this.setState({ productName: '', discription: '', price: '', shipFrom: '', deliverInfo: '', retrunPolicy: '', path: '' })
+            // this.setState({ productName: '', discription: '', price: '', shipFrom: '', deliverInfo: '', retrunPolicy: '', path: '' })
         }
         catch(e){
             alert(e.message)

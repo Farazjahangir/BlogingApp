@@ -5,22 +5,40 @@ import { Text, View, StyleSheet, Image } from 'react-native'
 
 class ChartContainer extends Component {
     render() {
+        const { data } = this.props
         return (
-            <View style={[styles.title, { marginVertical: 15 }]}>
-                <View style={[{ flexDirection: 'row', flex: 1 }, styles.cartImage]}>
+            <View style={styles.container}>
+                {/* <View style={[{ flexDirection: 'row', flex: 1 }, styles.cartImage]}>
                     <Image
-                        source={require('../assets/avatar.png')}
+                        source={{uri: data.imageUrl}}
                         style={styles.imageStyle}
                     />
                     <View>
                         <Text style={{ paddingTop: 4, color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
-                            Product Name
+                            {data.productName}
                         </Text>
                         <Text style={styles.descriptionText}>
-                            Lorem Spum dsajkhdakjdhsakjdh
+                            {data.discription}
                         </Text>
                     </View>
-                    <Text style={[styles.descriptionText, { paddingTop: 4, }]}>$24</Text>
+                    <Text style={[styles.descriptionText, { paddingTop: 4, }]}>{`$ ${data.price}`}</Text>
+                </View> */}
+                <View style={styles.detailContainer}>
+                    <Image
+                        source={{ uri: data.imageUrl }}
+                        style={styles.imageStyle}
+                    />
+                    <View style={styles.flexColumn}>
+                        <View style={styles.miniContainer}>
+                            <Text style={[styles.colorWhite]}>
+                                {data.productName}
+                            </Text>
+                            <Text style={[styles.colorWhite, styles.price]}>{`$ ${data.price}`}</Text>
+                        </View>
+                        <Text style={[styles.colorWhite]} >
+                            {data.discription}
+                        </Text>
+                    </View>
                 </View>
             </View>
         )
@@ -29,27 +47,52 @@ class ChartContainer extends Component {
 export default ChartContainer
 
 const styles = StyleSheet.create({
+    // container: {
+    //   flex: 1
+    // },
+    // title : { flexDirection: 'row', paddingHorizontal: 6, alignItems: 'center' },
+    // imageStyle: {
+    //   height: 111,
+    //   width: 111,
+    //   borderRadius: 12    ,
+    //   marginHorizontal: 12,
+    //   resizeMode: 'contain'
+    // },
+    // cartImage : { height : 150},
+    // descriptionText : { color: '#fff', fontSize: 13 , color : 'grey', flexWrap: 'wrap'},
+    // listHeading : {paddingLeft: 18 , fontSize : 16 , color : '#fff' ,
+    // fontWeight : 'bold' , marginVertical: 12,},
+    // input : {height : 45 , backgroundColor : '#fff' , borderRadius  : 5 , paddingLeft : 6},
+    // inputView : {flexDirection : 'row' , justifyContent : 'space-around' , marginVertical : 5 },
+    // borderButton : {borderColor : '#ccc' , borderWidth:  1, height : 40 },
+    // borderBottom : {borderBottomColor : '#454545' , borderBottomWidth : 8 , paddingBottom : 25},
+    // imageBtn : {height : 40 , width : 40 , backgroundColor :'#fff' , borderRadius : 25  ,
+    // justifyContent : 'center'  , alignItems : 'center' },
+    // productName : {margin: 12, color : '#fff' , fontSize : 28 , fontWeight : 'bold'},
     container: {
-      flex: 1
+        paddingHorizontal: 10,
+        marginVertical: 15
     },
-    title : { flexDirection: 'row', paddingHorizontal: 6, alignItems: 'center' , justifyContent : 'space-between' },
+    detailContainer: {
+        flexDirection: 'row',
+    },
     imageStyle: {
-      height: 111,
-      width: 111,
-      borderRadius: 12    ,
-      marginHorizontal: 12,
-      resizeMode: 'contain'
+        width: 120,
+        height: 120
     },
-    cartImage : {justifyContent : 'center'  ,alignItems : 'center' , height : 150},
-    descriptionText : { color: '#fff', fontSize: 13 , color : 'grey'},
-    listHeading : {paddingLeft: 18 , fontSize : 16 , color : '#fff' ,
-    fontWeight : 'bold' , marginVertical: 12,},
-    input : {height : 45 , backgroundColor : '#fff' , borderRadius  : 5 , paddingLeft : 6},
-    inputView : {flexDirection : 'row' , justifyContent : 'space-around' , marginVertical : 5 },
-    borderButton : {borderColor : '#ccc' , borderWidth:  1, height : 40 },
-    borderBottom : {borderBottomColor : '#454545' , borderBottomWidth : 8 , paddingBottom : 25},
-    imageBtn : {height : 40 , width : 40 , backgroundColor :'#fff' , borderRadius : 25  ,
-    justifyContent : 'center'  , alignItems : 'center' },
-    productName : {margin: 12, color : '#fff' , fontSize : 28 , fontWeight : 'bold'},
-  })
-  
+    miniContainer: {
+        flexDirection: 'row',
+        flex:0.3,
+    },
+    colorWhite: {
+        color: '#fff'
+    },
+    flexColumn: {
+        flexDirection: 'column',
+        flex: 1,
+        marginLeft: 10
+    },
+    price:{
+        marginLeft: 20
+    }
+})
