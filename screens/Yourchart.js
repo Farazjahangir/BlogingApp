@@ -30,10 +30,16 @@ class Yourchart extends React.Component {
   static navigationOptions = {
     header: null
   }
-
+  goforPay(amount){
+    this.props.navigation.navigate('ProductPay' , { amount })
+  }
   render () {
     const { navigation, chart } = this.props
     console.log('Chart========>', this.props);
+    let amount = 0
+    chart.map(item => amount = item.price + amount)
+    console.log('Amount', amount);
+    
     
     let { next } = this.state
     return (
@@ -47,7 +53,7 @@ class Yourchart extends React.Component {
             <Text>You Don't Have Any Item In Your Chart</Text>
       }
     <CustomButton title="Pay" backgroundColor = {pinkColor} 
-        containerStyle = {[{width : '90%' , marginTop : 12}]} />
+        containerStyle = {[{width : '90%' , marginTop : 12}]} onPress={()=> this.goforPay(amount)} />
               <Text style = {styles.listHeading}>Last Viewed</Text>
           <HorizontalList  productInfo = {true} />
           <Text style = {styles.listHeading}>Your Wish List</Text>

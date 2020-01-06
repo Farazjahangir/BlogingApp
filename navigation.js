@@ -34,6 +34,7 @@ import Privacy from './screens/Privacy';
 import Support from './screens/Support';
 import Shop from './screens/Shop';
 import AddProduct from './screens/AddProduct'
+import ProductPay from './screens/ProductPay'
 
 const AuthStack = createStackNavigator({
   Landing: {
@@ -210,7 +211,13 @@ const AppStack = createStackNavigator({
     navigationOptions: {
       headerTitle: 'Shop'
     }
-  } 
+  },
+  ProductPay: {
+    screen: ProductPay,
+    navigationOptions: {
+      headerTitle: 'Payment'
+    }
+  }
 } , {initialRouteName : 'Feedback', header: null})
 
 const App = createSwitchNavigator({
