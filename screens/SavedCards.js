@@ -1,16 +1,77 @@
 /* eslint-disable */
 
 import React, { Component } from 'react'
-import { Text, View, ScrollView, StyleSheet, Image } from 'react-native'
+import { Text, View, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { Icon, Input, Button } from 'react-native-elements'
+import { connect } from 'react-redux'
+import firebaseLib from 'react-native-firebase'
 
 import { themeColor, pinkColor } from '../Constant';
+import Dialogue from '../Component/Dialogue'
 
-export default class SavedCards extends Component {
+class SavedCards extends Component {
+    state = {
+        cards: [],
+        showDialogue: false
+    }
     static navigationOptions = {
         header: null,
     };
+
+    async componentDidMount() {
+        const db = firebaseLib.firestore()
+        const { userObj: { userId } } = this.props
+        const { cards } = this.state
+        try {
+            let cardsRes = await db.collection('Customers').doc(userId).collection('Cards').get()
+            cardsRes = cardsRes._docs.forEach(data => cards.push(data.data()))
+            this.setState({ cards })
+        }
+        catch (e) {
+            console.log('Eror ====>', e.message);
+
+        }
+    }
+    pay(val){
+        this.setState({ showDialogue: true })
+        this.setState({source: val.id});
+        
+    }
+    handleOk = async () => {
+        const data = this.props.navigation.state.params.data
+        this.setState({ showDialogue: false });        
+        const { source } = this.state
+        data.source = source
+        data.amount = data.amount * 100
+        try{
+            let chargeResponse = await fetch('https://9dea7825.ngrok.io/charge-customer', {
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+            chargeResponse = await chargeResponse.json()
+            // customerId = customerId.response.id
+            console.log('chargeResponse', chargeResponse);
+            if('errorMessage' in chargeResponse){
+                console.log('Error ======>')
+                return
+            }
+            alert('Success')
+        }
+        catch(e){
+            console.log('Error' , e.message);  
+        }
+      };
+      handleCancel = () => {
+        this.setState({ showDialogue: false });
+      };     
+
     render() {
+        const { cards, showDialogue } = this.state
+        console.log('Cards', !!cards.length);
+
         return (
             <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{
@@ -22,25 +83,73 @@ export default class SavedCards extends Component {
                         size={25} />
 
                 </View>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5, flexWrap: 'wrap', flex: 1}}>
-                    <View style={{ borderColor: '#fff', borderWidth: 1, padding: 15, backgroundColor: '#fff', width: '45%', borderRadius: 10 }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Image source={require('../assets/mastercard.png')} style={{ width: 40, height: 24 }} />
-                            <View style={{ marginLeft: 14 }}>
-                                <Text>Master Card</Text>
-                                <Text>444</Text>
-                            </View>
-                        </View>
-                    </View>
+                <View style={styles.mainContainer}>
+                    {!!cards.length &&
+                        cards.map((val) => {
+                            return (
+                                <TouchableOpacity style={styles.box} onPress={()=> this.pay(val)}>
+                                    <View style={styles.flexRow}>
+                                        <Image source={require('../assets/mastercard.png')} style={styles.cardImage} />
+                                        <View style={{ marginLeft: 14 }}>
+                                            <Text>{val.brand}</Text>
+                                            <Text>{`(${val.last4})`}</Text>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
                 </View>
+                {showDialogue && 
+                <Dialogue 
+                    title='Confirm Payment'
+                    description= 'Do you want to confirm payment'
+                    okButtonLabel="Confirm"
+                    dialogVisible={showDialogue} 
+                    handleCancel = {()=> this.handleCancel()}
+                    handleOk = {()=> this.handleOk()}
+                    />}
             </ScrollView>
         )
     }
 }
+
+const mapDispatchToProps = (dispatch) => {
+    return {}
+}
+const mapStateToProps = (state) => {
+    return {
+        userObj: state.auth.user
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SavedCards)
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: themeColor,
     },
+    mainContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 5,
+        flexWrap: 'wrap',
+    },
+    box: {
+        borderColor: '#fff',
+        borderWidth: 1,
+        padding: 15,
+        backgroundColor:
+            '#fff',
+        width: '45%',
+        borderRadius: 10,
+        marginTop: 10
+    },
+    flexRow: {
+        flexDirection: 'row'
+    },
+    cardImage: {
+        width: 40,
+        height: 24
+    }
 })
-

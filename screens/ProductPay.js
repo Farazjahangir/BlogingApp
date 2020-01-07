@@ -15,10 +15,10 @@ const stripe = require("stripe-client")(
 
 class ProductPay extends Component {
     state = {
-        cardNumber: '',
-        expMonth: '',
-        expYear: '',
-        cvcNumber: '',
+        cardNumber: '378282246310005',
+        expMonth: '05',
+        expYear: '2020',
+        cvcNumber: '222',
         email: '',
         customerId: ''
     }
@@ -35,7 +35,7 @@ class ProductPay extends Component {
 
     validateFields = () => {
         const { cardNumber, expMonth, expYear, cvcNumber } = this.state
-        if (!cardNumber || !expMonth || !expYear || !cvcNumber || !email) {
+        if (!cardNumber || !expMonth || !expYear || !cvcNumber) {
             alert('All Fileds are Required')
             return true
         }
@@ -43,6 +43,8 @@ class ProductPay extends Component {
 
     async pay() {
         const { cardNumber, expMonth, expYear, cvcNumber, email, customerId } = this.state
+        console.log('Email', email);
+        
         const { userObj } = this.props
         const { userId } = userObj
         if (this.validateFields()) return
@@ -58,7 +60,7 @@ class ProductPay extends Component {
 
         try {
             if (!customerId) {
-                let customerId = await fetch('https://09739a79.ngrok.io/customer-id', {
+                let customerId = await fetch('https://9dea7825.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -85,13 +87,15 @@ class ProductPay extends Component {
             }
             console.log('finger Body', body);
             
-            let fingerPrint = await fetch('https://09739a79.ngrok.io/customer-source', {
+            let fingerPrint = await fetch('https://9dea7825.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
                 method: 'POST',
                 body: JSON.stringify(body)
             })
+            console.log(fingerPrint);
+            
             fingerPrint = await fingerPrint.json()
             // customerId = customerId.response.id
             console.log('FingerPrint =====>', fingerPrint);
@@ -107,7 +111,7 @@ class ProductPay extends Component {
             }
             console.log('chargeBody', chargeBody);
             
-            let chargeResponse = await fetch('https://09739a79.ngrok.io/charge-customer', {
+            let chargeResponse = await fetch('https://9dea7825.ngrok.io/charge-customer', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -130,8 +134,14 @@ class ProductPay extends Component {
 
     }
     goToSavedCards(){
+        const amount = this.props.navigation.state.params.amount
+        const { customerId } = this.state
+        const data = {
+            amount,
+            customerId
+        }
         const { navigation } = this.props
-        navigation.navigate('SavedCards')
+        navigation.navigate('SavedCards', { data })
     }
 
     render() {
@@ -166,7 +176,6 @@ class ProductPay extends Component {
                             color: '#fff',
                             letterSpacing: 2
                         }}
-                        onChangeText={(text) => this.setState({ email: text })}
                         keyboardType='email-address'
                         editable={false}
                     />
@@ -192,6 +201,7 @@ class ProductPay extends Component {
                             letterSpacing: 2
                         }}
                         onChangeText={(text) => this.setState({ expMonth: text })}
+                        keyboardType='number-pad'
                     />
                     <Input
                         placeholder={'Expiration Year'}
