@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Fragment } from 'react'
 import {
   StyleSheet,
@@ -13,18 +15,39 @@ import CustomInput from '../Component/Input'
 import CustomButton from '../Component/Button'
 import CustomHeader from '../Component/header'
 import { SwipeListView } from 'react-native-swipe-list-view'
+import { connect } from 'react-redux'
 
 import { themeColor, pinkColor } from '../Constant'
+import firebaseLib from 'react-native-firebase'
+
 class Profile extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      comments: false
+      comments: false,
+      blogs: []
     }
   }
   static navigationOptions = {
     header: null
   }
+  async componentDidMount() {
+    const { userObj : { userId } } = this.props
+    const db = firebaseLib.firestore()
+    console.log('USerId' , userId);
+    const blogs = []
+    
+    try{
+      let userBlogs = await db.collection('Blog').where('userId' , '==', userId).get()
+      userBlogs = userBlogs.docs.forEach(doc => blogs.push(doc.data()))
+      this.setState({ blogs })
+    }
+    catch(e){
+      console.log('Error' , e.message);
+      
+    }
+  }
+  
 
   statsNumber = (heading , number)=> 
   <View>
@@ -32,8 +55,9 @@ class Profile extends React.Component {
              <Text style = {styles.number}>{number}</Text>
             </View>
   render () {
-    const { navigation } = this.props
-    let { comments } = this.state
+    const { navigation, userObj } = this.props
+    const { userName, followers, following } = userObj
+    let { comments, blogs } = this.state
     return (
       <ScrollView stickyHeaderIndices = {[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
         <CustomHeader title={'PROFILE'} rightIcon navigation = {navigation} />
@@ -44,13 +68,13 @@ class Profile extends React.Component {
               style={[styles.imageStyle , {borderRadius : 125}]}/>
           </View>
           <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>
-            Jesicca DOE
+            {userName}
           </Text>
           <Text style={{ color: '#ccc', margin: 12 }}>Graphic Designer</Text>
         </View>
         <View style = {styles.statsView}>
-           {this.statsNumber("FOLLOWING" , '375')}
-           {this.statsNumber("FOLLOWER" , '4276')}
+           {this.statsNumber("FOLLOWING" , following.length)}
+           {this.statsNumber("FOLLOWER" , followers.length)}
           </View>
           <View style = {{flexDirection : "row" , justifyContent : "space-around" ,
            marginHorizontal : "6%" , height : 50 , alignItems : "center"}}>
@@ -64,11 +88,10 @@ class Profile extends React.Component {
              <Icon  type = {"font-awesome"} name = {"edit"} color = {"#fff"} size = {25} />
              </TouchableOpacity>
            </View>
-           <View style = {{backgroundColor : themeColor , flexWrap : "wrap"  , flexDirection : "row" , 
-           justifyContent : "center" ,}}>
-             {
-               ['1' ,'1' ,'1','1','1','1','1','1','1'].map((data , index)=> 
-               <Image source = {require("../assets/avatar.png")} 
+           <View style = {{backgroundColor : themeColor , flexWrap : "wrap"  , flexDirection : "row"}}>
+             {!!blogs.length &&
+               blogs.map((data , index) => 
+               <Image source = {{uri : data.imageUrl}} 
                style = {{height : 110 , width : "32%" , margin : 1, 
                resizeMode : "stretch" ,}} /> )
              }
@@ -105,4 +128,13 @@ const styles = StyleSheet.create({
    heading : {color : "grey" , fontSize : 14 ,  fontWeight : "bold" , margin : 4},
    number : {color : "#fff" , fontSize : 16 , textAlign : "center"},
 })
-export default Profile
+const mapDispatchToProps = (dispatch) => {
+  return {}
+}
+const mapStateToProps = (state) => {
+  return {
+    userObj: state.auth.user
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+
