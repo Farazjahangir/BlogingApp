@@ -15,10 +15,10 @@ const stripe = require("stripe-client")(
 
 class ProductPay extends Component {
     state = {
-        cardNumber: '5555555555554444',
-        expMonth: '05',
-        expYear: '2020',
-        cvcNumber: '343',
+        cardNumber: '',
+        expMonth: '',
+        expYear: '',
+        cvcNumber: '',
         email: '',
         customerId: ''
     }
@@ -45,7 +45,7 @@ class ProductPay extends Component {
         const { cardNumber, expMonth, expYear, cvcNumber, email, customerId } = this.state
         const { userObj } = this.props
         const { userId } = userObj
-        // if (this.validateFields()) return
+        if (this.validateFields()) return
         const params = {
             card: {
                 number: cardNumber,
@@ -129,6 +129,10 @@ class ProductPay extends Component {
         }
 
     }
+    goToSavedCards(){
+        const { navigation } = this.props
+        navigation.navigate('SavedCards')
+    }
 
     render() {
         const { cardNumber, expMonth, expYear, cvcNumber, email } = this.state
@@ -150,7 +154,7 @@ class ProductPay extends Component {
                     marginHorizontal: 12, marginVertical: 12
                 }}>
                     <CustomButton title={'Back'} buttonStyle={{ borderColor: '#ccc', borderWidth: 1 }} onPress={() => this.back()} />
-                    <CustomButton title={'Pay'} backgroundColor={pinkColor} onPress={() => this.pay()} />
+                    <CustomButton title={'Pay By Saved Cards'} backgroundColor={pinkColor} onPress={() => this.goToSavedCards()} />
                 </View>
                 <>
                     <Input
@@ -214,6 +218,7 @@ class ProductPay extends Component {
                         keyboardType='number-pad'
                     />
                 </>
+                <CustomButton title={'Pay'} backgroundColor={pinkColor} onPress={() => this.pay()} containerStyle={{marginVertical: 20}} />
             </ScrollView>
         )
     }

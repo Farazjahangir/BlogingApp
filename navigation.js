@@ -35,6 +35,7 @@ import Support from './screens/Support';
 import Shop from './screens/Shop';
 import AddProduct from './screens/AddProduct'
 import ProductPay from './screens/ProductPay'
+import SavedCards from './screens/SavedCards'
 
 const AuthStack = createStackNavigator({
   Landing: {
@@ -216,6 +217,12 @@ const AppStack = createStackNavigator({
     screen: ProductPay,
     navigationOptions: {
       headerTitle: 'Payment'
+    }
+  },
+  SavedCards: {
+    screen: SavedCards,
+    navigationOptions: {
+      headerTitle: 'Saved Cards'
     }
   }
 } , {initialRouteName : 'Feedback', header: null})
