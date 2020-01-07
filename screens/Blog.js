@@ -109,7 +109,7 @@ class Blog extends React.Component {
           buttonStyle={{ borderColor: '#ccc', borderWidth: 1, height: 40 }}
           containerStyle={{ width: 120 }} backgroundColor={this.state.follow ? pinkColor : themeColor} />
       </View>}
-      {!!item.imageUrl && <Image source={{ uri: item.imageUrl }}
+      {!!item.imageUrl && !this.state.fullScreenHeight && <Image source={{ uri: item.imageUrl }}
         style={{
           height: 200, width: '100%', alignSelf: 'center', marginVertical: 11,
           borderRadius: 5
@@ -132,7 +132,7 @@ class Blog extends React.Component {
               videoStyle={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }}
               style={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250  }}
               disableVolume={true}
-              fullscreen={true}
+              fullscreen={false}
               paused={this.state.paused}
               onLoad={() => this.videoIsReady()}
               disablePlayPause={this.state.hidePlayPause}
@@ -142,10 +142,13 @@ class Blog extends React.Component {
               onExitFullscreen={() => this.setState({ fullScreenHeight: null })}
             />}
         </View>}
+        {!this.state.fullScreenHeight && 
       <TouchableOpacity onPress={() => this.navigateToDetail(item)}>
         <Text style={styles.blogHeading}>{item.blog}</Text>
-      </TouchableOpacity>
-      <Text style={styles.likes}>{item.likes} Likes         73 Comments</Text>
+      </TouchableOpacity>}
+      {!this.state.fullScreenHeight && 
+      <Text style={styles.likes}>{item.likes} Likes         73 Comments</Text> }
+      {!this.state.fullScreenHeight && 
       <View style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row' }}>
           {this._icon('heart-o', pinkColor)}
@@ -154,7 +157,7 @@ class Blog extends React.Component {
         </View>
         {this._icon('ellipsis-h', '#fff')}
 
-      </View>
+      </View>}
 
     </View>
   }
