@@ -118,4 +118,13 @@ firebaseFunctions.uploadImage = async (image , userId) => {
     }
 }
 
+firebaseFunctions.updateDoc = async (collection, docId, data) => {
+    try{
+        await db.collection(collection).doc(docId).update(data)
+        return 'Success'
+    }
+    catch(e){
+        return e
+    }
+}
 export default firebaseFunctions
