@@ -15,7 +15,7 @@ const stripe = require("stripe-client")(
 
 class ProductPay extends Component {
     state = {
-        cardNumber: '4000056655665556',
+        cardNumber: '5555555555554444',
         expMonth: '05',
         expYear: '2020',
         cvcNumber: '343',
@@ -58,7 +58,7 @@ class ProductPay extends Component {
 
         try {
             if (!customerId) {
-                let customerId = await fetch('https://6662c484.ngrok.io/customer-id', {
+                let customerId = await fetch('https://09739a79.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -83,7 +83,9 @@ class ProductPay extends Component {
                 token,
                 customerId
             }
-            let fingerPrint = await fetch('https://6662c484.ngrok.io/customer-source', {
+            console.log('finger Body', body);
+            
+            let fingerPrint = await fetch('https://09739a79.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -105,7 +107,7 @@ class ProductPay extends Component {
             }
             console.log('chargeBody', chargeBody);
             
-            let chargeResponse = await fetch('https://6662c484.ngrok.io/charge-customer', {
+            let chargeResponse = await fetch('https://09739a79.ngrok.io/charge-customer', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
