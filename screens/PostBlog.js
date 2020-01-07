@@ -12,7 +12,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { request, PERMISSIONS, RESULTS, check } from 'react-native-permissions';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { themeColor, pinkColor } from '../Constant';
 import CustomButton from '../Component/Button'
@@ -34,7 +34,8 @@ class PostBlog extends React.Component {
       hidePlayPause: true,
       hideSeekbar: true,
       fullScreenHeight: null,
-      fullScreenWidth: null
+      fullScreenWidth: null,
+      loading: false
     }
   }
   static navigationOptions = {
@@ -62,7 +63,8 @@ class PostBlog extends React.Component {
   async publishBlog() {
     const { blogTitle, blog, mime, data, path, videoPath } = this.state
     const { userObj } = this.props
-    console.log('UserObj', userObj);
+    if(!blogTitle || !blog || !path || !videoPath ) return alert('All Feilds are required')
+    this.setState({ loading: true })
 
     const blogData = {
       blogTitle,
@@ -89,6 +91,7 @@ class PostBlog extends React.Component {
     catch (e) {
       alert(e.message)
     }
+    this.setState({ loading: false })
   }
 
   savingDraft = async () => {
@@ -150,9 +153,14 @@ class PostBlog extends React.Component {
 
   render() {
     const { navigation } = this.props
-    const { blogTitle, blog, mime, data, path, videoPath, fullScreenHeight, fullScreenWidth } = this.state
+    const { blogTitle, blog, mime, data, path, videoPath, fullScreenHeight, fullScreenWidth, loading } = this.state
     return (
       <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#fff' }}
+        />
         {!fullScreenHeight && <View style={{
           height: 100, flexDirection: 'row', alignItems: 'center',
           justifyContent: 'space-between', marginHorizontal: 15,
@@ -194,28 +202,28 @@ class PostBlog extends React.Component {
           <Image source={{ uri: path }} style={{ width: 180, height: 180 }} />
         </View>}
         {!!videoPath && <View style={{ textAlign: 'center', alignItems: 'center', marginVertical: 10 }}>
-          {Platform.OS === 'ios' ?<Video
+          {Platform.OS === 'ios' ? <Video
             source={{ uri: videoPath }}
             style={{ width: 250, height: 250, backgroundColor: 'black' }}
             paused={true}
             pictureInPicture={true}
             controls={true}
           />
-          :
-          <VideoPlayer
-            source={{ uri: videoPath }}
-            videoStyle={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
-            style={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
-            disableVolume={true}
-            fullscreen={true}
-            paused={this.state.paused}
-            onLoad={() => this.videoIsReady()}
-            disablePlayPause={this.state.hidePlayPause}
-            disableSeekbar={this.state.hideSeekbar}
-            disableBack={true}
-            onEnterFullscreen={() => this.setState({ fullScreenHeight: windowHeight, fullScreenWidth: windowWidth })}
-            onExitFullscreen={() => this.setState({ fullScreenHeight: null, fullScreenWidth: null })}
-          />
+            :
+            <VideoPlayer
+              source={{ uri: videoPath }}
+              videoStyle={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
+              style={{ width: '100%', height: fullScreenHeight ? fullScreenHeight : 180, }}
+              disableVolume={true}
+              fullscreen={true}
+              paused={this.state.paused}
+              onLoad={() => this.videoIsReady()}
+              disablePlayPause={this.state.hidePlayPause}
+              disableSeekbar={this.state.hideSeekbar}
+              disableBack={true}
+              onEnterFullscreen={() => this.setState({ fullScreenHeight: windowHeight, fullScreenWidth: windowWidth })}
+              onExitFullscreen={() => this.setState({ fullScreenHeight: null, fullScreenWidth: null })}
+            />
           }
 
         </View>}

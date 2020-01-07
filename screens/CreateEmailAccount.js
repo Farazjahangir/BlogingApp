@@ -13,6 +13,8 @@ import CustomHeader from '../Component/header'
 import CustomButton from '../Component/Button'
 import firebase from '../utils/firebase'
 import { loginUser } from '../redux/actions/authActions'
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 
 class EmailAccount extends React.Component {
@@ -22,7 +24,8 @@ class EmailAccount extends React.Component {
       email: null,
       password: null,
       confirmPassword: null,
-      userName: null
+      userName: null,
+      loading: false
     }
   }
   static navigationOptions = {
@@ -46,28 +49,32 @@ class EmailAccount extends React.Component {
   }
 
   async signUp() {
-    const { userName , email, password } = this.state
+    const { userName, email, password } = this.state
     const { navigation } = this.props
 
     if (this.checkValidation()) return
 
     try {
+      this.setState({ loading: true })
       const response = await firebase.signUpWithEmail(email, password, userName)
       this.props.loginUser(response)
       this.props.navigation.navigate('App')
-
-      alert('Success')
     }
     catch (e) {
       alert(e.message)
     }
-
+    this.setState({ loading: false })
   }
   render() {
     const { navigation } = this.props
-    const { userName , email, password, confirmPassword } = this.state
+    const { userName, email, password, confirmPassword, loading } = this.state
     return (
       <View style={{ backgroundColor: '#323643', flex: 1 }}>
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#fff' }}
+        />
         <CustomHeader navigation={navigation} title={'Sign Up'} />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: "flex-end" }}>
           <Input placeholder={'Username'} placeholderTextColor={'#fff'}

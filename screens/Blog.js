@@ -20,6 +20,7 @@ import { SwipeListView } from 'react-native-swipe-list-view'
 import firebase from 'react-native-firebase'
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { themeColor, pinkColor } from '../Constant'
 import { NavigationEvents } from 'react-navigation'
@@ -37,7 +38,8 @@ class Blog extends React.Component {
       paused: true,
       hidePlayPause: true,
       hideSeekbar: true,
-      fullScreenHeight: null
+      fullScreenHeight: null,
+      loading: true
     }
   }
   static navigationOptions = {
@@ -64,6 +66,7 @@ class Blog extends React.Component {
         if (change.type === "removed") {
           console.log("Removed city: ", change.doc.data());
         }
+        this.setState({ loading: false })
       })
       // console.log('snapShot ====>' , snapShot);
 
@@ -127,7 +130,7 @@ class Blog extends React.Component {
             <VideoPlayer
               source={{ uri: item.videoUrl }}
               videoStyle={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }}
-              style={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }}
+              style={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250  }}
               disableVolume={true}
               fullscreen={true}
               paused={this.state.paused}
@@ -157,12 +160,17 @@ class Blog extends React.Component {
   }
   render() {
     const { navigation } = this.props
-    let { follow, blogs, isBlogs } = this.state
+    let { follow, blogs, isBlogs, loading } = this.state
     console.log('Blogs =====>', blogs);
 
     return (
       <ScrollView stickyHeaderIndices={[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
         {!this.state.fullScreenHeight && <CustomHeader title={'BLOG'} navigation={navigation} />}
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#fff' }}
+        />
 
         {isBlogs &&
           <FlatList

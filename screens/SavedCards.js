@@ -5,6 +5,7 @@ import { Text, View, ScrollView, StyleSheet, Image, TouchableOpacity } from 'rea
 import { Icon, Input, Button } from 'react-native-elements'
 import { connect } from 'react-redux'
 import firebaseLib from 'react-native-firebase'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { themeColor, pinkColor } from '../Constant';
 import Dialogue from '../Component/Dialogue'
@@ -12,7 +13,8 @@ import Dialogue from '../Component/Dialogue'
 class SavedCards extends Component {
     state = {
         cards: [],
-        showDialogue: false
+        showDialogue: false,
+        loading: true
     }
     static navigationOptions = {
         header: null,
@@ -26,25 +28,28 @@ class SavedCards extends Component {
             let cardsRes = await db.collection('Customers').doc(userId).collection('Cards').get()
             cardsRes = cardsRes._docs.forEach(data => cards.push(data.data()))
             this.setState({ cards })
+            console.log('Cards', cards);
         }
         catch (e) {
             console.log('Eror ====>', e.message);
-
         }
+        this.setState({ loading: false })
     }
-    pay(val){
+    pay(val) {
         this.setState({ showDialogue: true })
-        this.setState({source: val.id});
-        
+        this.setState({ source: val.id });
+
     }
     handleOk = async () => {
         const data = this.props.navigation.state.params.data
-        this.setState({ showDialogue: false });        
+        this.setState({ showDialogue: false });
         const { source } = this.state
         data.source = source
         data.amount = data.amount * 100
-        try{
-            let chargeResponse = await fetch('https://9dea7825.ngrok.io/charge-customer', {
+        console.log(data)
+        try {
+            this.setState({ loading: true })
+            let chargeResponse = await fetch('https://08a53661.ngrok.io/charge-customer', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -54,26 +59,30 @@ class SavedCards extends Component {
             chargeResponse = await chargeResponse.json()
             // customerId = customerId.response.id
             console.log('chargeResponse', chargeResponse);
-            if('errorMessage' in chargeResponse){
+            if ('errorMessage' in chargeResponse) {
                 console.log('Error ======>')
                 return
             }
             alert('Success')
         }
-        catch(e){
-            console.log('Error' , e.message);  
+        catch (e) {
+            console.log('Error', e.message);
         }
-      };
-      handleCancel = () => {
+        this.setState({ loading: false })
+    };
+    handleCancel = () => {
         this.setState({ showDialogue: false });
-      };     
+    };
 
     render() {
-        const { cards, showDialogue } = this.state
-        console.log('Cards', !!cards.length);
-
+        const { cards, showDialogue, loading } = this.state
         return (
             <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
+                <Spinner
+                    visible={loading}
+                    textContent={'Loading...'}
+                    textStyle={{ color: '#fff' }}
+                />
                 <View style={{
                     height: 100, flexDirection: 'row', alignItems: 'center',
                     justifyContent: 'space-between', marginHorizontal: 15,
@@ -87,7 +96,7 @@ class SavedCards extends Component {
                     {!!cards.length &&
                         cards.map((val) => {
                             return (
-                                <TouchableOpacity style={styles.box} onPress={()=> this.pay(val)}>
+                                <TouchableOpacity style={styles.box} onPress={() => this.pay(val)}>
                                     <View style={styles.flexRow}>
                                         <Image source={require('../assets/mastercard.png')} style={styles.cardImage} />
                                         <View style={{ marginLeft: 14 }}>
@@ -100,14 +109,14 @@ class SavedCards extends Component {
                         })
                     }
                 </View>
-                {showDialogue && 
-                <Dialogue 
-                    title='Confirm Payment'
-                    description= 'Do you want to confirm payment'
-                    okButtonLabel="Confirm"
-                    dialogVisible={showDialogue} 
-                    handleCancel = {()=> this.handleCancel()}
-                    handleOk = {()=> this.handleOk()}
+                {showDialogue &&
+                    <Dialogue
+                        title='Confirm Payment'
+                        description='Do you want to confirm payment'
+                        okButtonLabel="Confirm"
+                        dialogVisible={showDialogue}
+                        handleCancel={() => this.handleCancel()}
+                        handleOk={() => this.handleOk()}
                     />}
             </ScrollView>
         )

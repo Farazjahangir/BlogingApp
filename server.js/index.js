@@ -26,9 +26,9 @@ app.post('/customer-id' , async (req, res)=>{
 })
 
 app.post('/customer-source' , async (req, res)=>{
-    const { customerId, token } = req.body
+    const { customer, token } = req.body
     try{
-        const fingerPrint =  await stripe.customers.createSource(customerId, {
+        const fingerPrint =  await stripe.customers.createSource(customer, {
             source: token
           });
         res.status(200).json({
@@ -44,9 +44,9 @@ app.post('/customer-source' , async (req, res)=>{
     } 
 })
 app.post('/charge-customer' , async (req, res)=>{
-    const { customerId, amount, source } = req.body
+    const { customer, amount, source } = req.body
     const charge = {
-        customer : customerId,
+        customer : customer,
         amount,
         currency: 'usd',
         source

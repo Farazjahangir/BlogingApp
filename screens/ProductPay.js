@@ -5,10 +5,12 @@ import { Text, View, ScrollView, StyleSheet, Image } from 'react-native'
 import { Icon, Input, Button } from 'react-native-elements'
 import { connect } from 'react-redux'
 import firebaseLib from 'react-native-firebase'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import CustomButton from '../Component/Button'
 import { themeColor, pinkColor } from '../Constant';
 import firebase from '../utils/firebase'
+
 const stripe = require("stripe-client")(
     "pk_test_CoqYQbVZ6tJwY9dFWN7UTfin00QpVQsX20"
 );
@@ -20,7 +22,8 @@ class ProductPay extends Component {
         expYear: '2020',
         cvcNumber: '222',
         email: '',
-        customerId: ''
+        customerId: '',
+        loading: false
     }
     static navigationOptions = {
         header: null,
@@ -42,9 +45,9 @@ class ProductPay extends Component {
     }
 
     async pay() {
-        const { cardNumber, expMonth, expYear, cvcNumber, email, customerId } = this.state
+        let { cardNumber, expMonth, expYear, cvcNumber, email, customerId } = this.state
         console.log('Email', email);
-        
+
         const { userObj } = this.props
         const { userId } = userObj
         if (this.validateFields()) return
@@ -59,8 +62,10 @@ class ProductPay extends Component {
         console.log('params', params);
 
         try {
+            let customer = customerId;
+            this.setState({ loading: true })
             if (!customerId) {
-                let customerId = await fetch('https://9dea7825.ngrok.io/customer-id', {
+                let customerId = await fetch('https://08a53661.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -71,23 +76,25 @@ class ProductPay extends Component {
                 })
                 customerId = await customerId.json()
                 customerId = customerId.response.id
+                customer = customerId
                 await firebase.updateDoc('Users', userId, { customerId })
                 this.setState({ customerId })
-            }
+            }            
             let token = await stripe.createToken(params);
-            if('error' in token){
+            if ('error' in token) {
                 console.log('Error =====>')
+                this.setState({ loading: false })
                 return
             }
             token = token.id
-            console.log('Token',token);
+            console.log('Token', token);
             const body = {
                 token,
-                customerId
+                customer
             }
             console.log('finger Body', body);
-            
-            let fingerPrint = await fetch('https://9dea7825.ngrok.io/customer-source', {
+
+            let fingerPrint = await fetch('https://08a53661.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -95,23 +102,23 @@ class ProductPay extends Component {
                 body: JSON.stringify(body)
             })
             console.log(fingerPrint);
-            
+
             fingerPrint = await fingerPrint.json()
             // customerId = customerId.response.id
             console.log('FingerPrint =====>', fingerPrint);
-            const dbLib =  firebaseLib.firestore()
+            const dbLib = firebaseLib.firestore()
             await dbLib.collection('Customers').doc(userId).collection('Cards').add(fingerPrint.response)
 
             const amount = this.props.navigation.state.params.amount
             const chargeBody = {
-                customerId,
+                customer,
                 amount: amount * 100,
-                source : fingerPrint.response.id
+                source: fingerPrint.response.id
 
             }
             console.log('chargeBody', chargeBody);
-            
-            let chargeResponse = await fetch('https://9dea7825.ngrok.io/charge-customer', {
+
+            let chargeResponse = await fetch('https://08a53661.ngrok.io/charge-customer', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -121,35 +128,41 @@ class ProductPay extends Component {
             chargeResponse = await chargeResponse.json()
             // customerId = customerId.response.id
             console.log('chargeResponse', chargeResponse);
-            if('errorMessage' in chargeResponse){
+            if ('errorMessage' in chargeResponse) {
                 console.log('Error ======>')
+                this.setState({ loading: false })
                 return
             }
             alert('Success')
         }
         catch (e) {
             console.log('Error ====>', e.message);
-
         }
+        this.setState({ loading: false })
 
     }
-    goToSavedCards(){
+    goToSavedCards() {
         const amount = this.props.navigation.state.params.amount
         const { customerId } = this.state
         const data = {
             amount,
-            customerId
+            customer : customerId
         }
         const { navigation } = this.props
         navigation.navigate('SavedCards', { data })
     }
 
     render() {
-        const { cardNumber, expMonth, expYear, cvcNumber, email } = this.state
+        const { cardNumber, expMonth, expYear, cvcNumber, email, loading } = this.state
         console.log('cardNumber', cardNumber);
 
         return (
             <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
+                <Spinner
+                    visible={loading}
+                    textContent={'Loading...'}
+                    textStyle={{ color: '#fff' }}
+                />
                 <View style={{
                     height: 100, flexDirection: 'row', alignItems: 'center',
                     justifyContent: 'space-between', marginHorizontal: 15,
@@ -228,7 +241,7 @@ class ProductPay extends Component {
                         keyboardType='number-pad'
                     />
                 </>
-                <CustomButton title={'Pay'} backgroundColor={pinkColor} onPress={() => this.pay()} containerStyle={{marginVertical: 20}} />
+                <CustomButton title={'Pay'} backgroundColor={pinkColor} onPress={() => this.pay()} containerStyle={{ marginVertical: 20 }} />
             </ScrollView>
         )
     }

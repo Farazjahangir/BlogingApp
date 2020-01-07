@@ -16,6 +16,7 @@ import ControlPanel from '../screens/ControlPanel'
 import CustomButton from '../Component/Button'
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import CustomHeader from '../Component/header'
 import { SwipeListView } from 'react-native-swipe-list-view'
@@ -28,15 +29,22 @@ class Feedback extends React.Component {
     super(props)
     this.state = {
       comments: false,
-      users: []
+      users: [],
+      loading: true
     }
   }
   static navigationOptions = {
     header: null
   }
   async componentDidMount() {
-    const users = await firebase.getCollection('Users')
-    this.setState({ users })
+    try {
+      const users = await firebase.getCollection('Users')
+      this.setState({ users })
+    }
+    catch (e) {
+      console.log('Error', e.message);
+    }
+    this.setState({ loading: false })
   }
 
   closeControlPanel = () => {
@@ -73,29 +81,29 @@ class Feedback extends React.Component {
     </View>
   )
 
-  feedBackListItem = (item, index) => 
-  this.props.userObj.userId  !== item.userId &&
+  feedBackListItem = (item, index) =>
+    this.props.userObj.userId !== item.userId &&
     <View style={styles.itemContainer}>
-    <View>
-      <Image
-        source={require('../assets/avatar.png')}
-        style={styles.imageStyle}
-      />
-      <Icon
-        type={'font-awesome'}
-        name={index % 2 !== 1 ? 'heart-o' : 'user-plus'}
-        color={'#fff'}
-        size={10}
-        containerStyle={[
-          styles.iconContainer,
-          {
-            backgroundColor:
-              index % 2 !== 1 ? pinkColor : '#72CEBA'
-          }
-        ]}
-      />
-    </View>
-    {/* <View>
+      <View>
+        <Image
+          source={require('../assets/avatar.png')}
+          style={styles.imageStyle}
+        />
+        <Icon
+          type={'font-awesome'}
+          name={index % 2 !== 1 ? 'heart-o' : 'user-plus'}
+          color={'#fff'}
+          size={10}
+          containerStyle={[
+            styles.iconContainer,
+            {
+              backgroundColor:
+                index % 2 !== 1 ? pinkColor : '#72CEBA'
+            }
+          ]}
+        />
+      </View>
+      {/* <View>
       <Text
         style={{ color: '#fff', fontSize: 15, fontWeight: 'bold' }}
       >
@@ -113,22 +121,22 @@ class Feedback extends React.Component {
         4 Hrs ago
     </Text>
     </View> */}
-    <View style={styles.userContainer}>
-      <Text style={styles.userName}>{item.userName}</Text>
-      <TouchableOpacity style={styles.chatBtnContainer} onPress={() => this.startChat(`${item.userId}`)}>
-        <Text style={styles.chatBtn}>Chat</Text>
-      </TouchableOpacity>
+      <View style={styles.userContainer}>
+        <Text style={styles.userName}>{item.userName}</Text>
+        <TouchableOpacity style={styles.chatBtnContainer} onPress={() => this.startChat(`${item.userId}`)}>
+          <Text style={styles.chatBtn}>Chat</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-  </View>
 
   startChat(otherUserId) {
-    this.props.navigation.navigate('Chat' , {otherUserId})
-    
+    this.props.navigation.navigate('Chat', { otherUserId })
+
   }
 
   render() {
     const { navigation } = this.props
-    let { comments, users } = this.state
+    let { comments, users, loading } = this.state
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
@@ -143,6 +151,11 @@ class Feedback extends React.Component {
         })}
         content={<ControlPanel />}
       >
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#fff' }}
+        />
         <NavigationEvents onDidFocus={() => this.closeControlPanel()} />
         <View style={{ backgroundColor: '#323643', flex: 1 }}>
           <CustomHeader home title={comments ? 'Comments' : 'Feedback'} onPress={() => this.openControlPanel()} />

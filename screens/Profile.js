@@ -16,86 +16,96 @@ import CustomButton from '../Component/Button'
 import CustomHeader from '../Component/header'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import { connect } from 'react-redux'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { themeColor, pinkColor } from '../Constant'
 import firebaseLib from 'react-native-firebase'
 
 class Profile extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       comments: false,
-      blogs: []
+      blogs: [],
+      loading: true
     }
   }
   static navigationOptions = {
     header: null
   }
   async componentDidMount() {
-    const { userObj : { userId } } = this.props
+    const { userObj: { userId } } = this.props
     const db = firebaseLib.firestore()
-    console.log('USerId' , userId);
+    console.log('USerId', userId);
     const blogs = []
-    
-    try{
-      let userBlogs = await db.collection('Blog').where('userId' , '==', userId).get()
+
+    try {
+      let userBlogs = await db.collection('Blog').where('userId', '==', userId).get()
       userBlogs = userBlogs.docs.forEach(doc => blogs.push(doc.data()))
-      this.setState({ blogs })
+      this.setState({ blogs, loading: false })
     }
-    catch(e){
-      console.log('Error' , e.message);
-      
+    catch (e) {
+      console.log('Error', e.message);
     }
   }
-  
 
-  statsNumber = (heading , number)=> 
-  <View>
-             <Text style = {styles.heading}>{heading}</Text>
-             <Text style = {styles.number}>{number}</Text>
-            </View>
-  render () {
+
+  statsNumber = (heading, number) =>
+    <View>
+      <Text style={styles.heading}>{heading}</Text>
+      <Text style={styles.number}>{number}</Text>
+    </View>
+  render() {
     const { navigation, userObj } = this.props
     const { userName, followers, following } = userObj
-    let { comments, blogs } = this.state
+    let { comments, blogs, loading } = this.state
     return (
-      <ScrollView stickyHeaderIndices = {[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
-        <CustomHeader title={'PROFILE'} rightIcon navigation = {navigation} />
+      <ScrollView stickyHeaderIndices={[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle= {{color: '#fff'}}
+        />
+        <CustomHeader title={'PROFILE'} rightIcon navigation={navigation} />
         <View style={{ alignSelf: 'center', width: '60%', alignItems: 'center' }} >
           <View style={styles.imageWrapper} >
             <Image
               source={require('../assets/avatar.png')}
-              style={[styles.imageStyle , {borderRadius : 125}]}/>
+              style={[styles.imageStyle, { borderRadius: 125 }]} />
           </View>
           <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>
             {userName}
           </Text>
           <Text style={{ color: '#ccc', margin: 12 }}>Graphic Designer</Text>
         </View>
-        <View style = {styles.statsView}>
-           {this.statsNumber("FOLLOWING" , following.length)}
-           {this.statsNumber("FOLLOWER" , followers.length)}
-          </View>
-          <View style = {{flexDirection : "row" , justifyContent : "space-around" ,
-           marginHorizontal : "6%" , height : 50 , alignItems : "center"}}>
-             <TouchableOpacity onPress = {()=> this.props.navigation.navigate("EditProfile")}> 
-             <Icon  type = {"font-awesome"} name = {"edit"} color = {"#fff"} size = {25} />
-             </TouchableOpacity>
-             <TouchableOpacity> 
-             <Icon  type = {"font-awesome"} name = {"image"} color = {"#fff"} size = {25} />
-             </TouchableOpacity>
-             <TouchableOpacity> 
-             <Icon  type = {"font-awesome"} name = {"edit"} color = {"#fff"} size = {25} />
-             </TouchableOpacity>
-           </View>
-           <View style = {{backgroundColor : themeColor , flexWrap : "wrap"  , flexDirection : "row"}}>
-             {!!blogs.length &&
-               blogs.map((data , index) => 
-               <Image source = {{uri : data.imageUrl}} 
-               style = {{height : 110 , width : "32%" , margin : 1, 
-               resizeMode : "stretch" ,}} /> )
-             }
-             </View>
+        <View style={styles.statsView}>
+          {this.statsNumber("FOLLOWING", following.length)}
+          {this.statsNumber("FOLLOWER", followers.length)}
+        </View>
+        <View style={{
+          flexDirection: "row", justifyContent: "space-around",
+          marginHorizontal: "6%", height: 50, alignItems: "center"
+        }}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate("EditProfile")}>
+            <Icon type={"font-awesome"} name={"edit"} color={"#fff"} size={25} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon type={"font-awesome"} name={"image"} color={"#fff"} size={25} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon type={"font-awesome"} name={"edit"} color={"#fff"} size={25} />
+          </TouchableOpacity>
+        </View>
+        <View style={{ backgroundColor: themeColor, flexWrap: "wrap", flexDirection: "row" }}>
+          {!!blogs.length &&
+            blogs.map((data, index) =>
+              <Image source={{ uri: data.imageUrl }}
+                style={{
+                  height: 110, width: "32%", margin: 1,
+                  resizeMode: "stretch",
+                }} />)
+          }
+        </View>
       </ScrollView>
     )
   }
@@ -112,7 +122,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     resizeMode: 'contain'
   },
-  imageWrapper : {
+  imageWrapper: {
     height: 100,
     width: 100,
     borderRadius: 125,
@@ -122,11 +132,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  statsView : {flexDirection : "row" , justifyContent : "space-around" , 
-  alignItems : 'center' , height : 100 ,
-   borderTopColor : "#ccc" , borderBottomColor : "#BBB" , borderWidth : 0.5},
-   heading : {color : "grey" , fontSize : 14 ,  fontWeight : "bold" , margin : 4},
-   number : {color : "#fff" , fontSize : 16 , textAlign : "center"},
+  statsView: {
+    flexDirection: "row", justifyContent: "space-around",
+    alignItems: 'center', height: 100,
+    borderTopColor: "#ccc", borderBottomColor: "#BBB", borderWidth: 0.5
+  },
+  heading: { color: "grey", fontSize: 14, fontWeight: "bold", margin: 4 },
+  number: { color: "#fff", fontSize: 16, textAlign: "center" },
 })
 const mapDispatchToProps = (dispatch) => {
   return {}
