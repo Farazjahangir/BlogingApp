@@ -65,7 +65,7 @@ class ProductPay extends Component {
             let customer = customerId;
             this.setState({ loading: true })
             if (!customerId) {
-                let customerId = await fetch('https://08a53661.ngrok.io/customer-id', {
+                let customerId = await fetch('https://0a3d7547.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -94,7 +94,7 @@ class ProductPay extends Component {
             }
             console.log('finger Body', body);
 
-            let fingerPrint = await fetch('https://08a53661.ngrok.io/customer-source', {
+            let fingerPrint = await fetch('https://0a3d7547.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -107,7 +107,6 @@ class ProductPay extends Component {
             // customerId = customerId.response.id
             console.log('FingerPrint =====>', fingerPrint);
             const dbLib = firebaseLib.firestore()
-            await dbLib.collection('Customers').doc(userId).collection('Cards').add(fingerPrint.response)
 
             const amount = this.props.navigation.state.params.amount
             const chargeBody = {
@@ -118,7 +117,7 @@ class ProductPay extends Component {
             }
             console.log('chargeBody', chargeBody);
 
-            let chargeResponse = await fetch('https://08a53661.ngrok.io/charge-customer', {
+            let chargeResponse = await fetch('https://0a3d7547.ngrok.io/charge-customer', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -133,6 +132,7 @@ class ProductPay extends Component {
                 this.setState({ loading: false })
                 return
             }
+            await dbLib.collection('Customers').doc(userId).collection('Cards').add(fingerPrint.response)
             alert('Success')
         }
         catch (e) {
