@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React, { Component } from 'react'
-import { Text, View, ScrollView, StyleSheet, Image } from 'react-native'
+import { Text, View, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { Icon, Input, Button } from 'react-native-elements'
 import { connect } from 'react-redux'
 import firebaseLib from 'react-native-firebase'
@@ -10,6 +10,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CustomButton from '../Component/Button'
 import { themeColor, pinkColor } from '../Constant';
 import firebase from '../utils/firebase'
+import { emptyChart } from '../redux/actions/chartActions'
 
 const stripe = require("stripe-client")(
     "pk_test_CoqYQbVZ6tJwY9dFWN7UTfin00QpVQsX20"
@@ -17,7 +18,7 @@ const stripe = require("stripe-client")(
 
 class ProductPay extends Component {
     state = {
-        cardNumber: '378282246310005',
+        cardNumber: '5105105105105100',
         expMonth: '05',
         expYear: '2020',
         cvcNumber: '222',
@@ -48,7 +49,7 @@ class ProductPay extends Component {
         let { cardNumber, expMonth, expYear, cvcNumber, email, customerId } = this.state
         console.log('Email', email);
 
-        const { userObj } = this.props
+        const { userObj, emptyChart, navigation } = this.props
         const { userId } = userObj
         if (this.validateFields()) return
         const params = {
@@ -65,7 +66,7 @@ class ProductPay extends Component {
             let customer = customerId;
             this.setState({ loading: true })
             if (!customerId) {
-                let customerId = await fetch('https://0a3d7547.ngrok.io/customer-id', {
+                let customerId = await fetch('https://af172d5a.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -79,7 +80,7 @@ class ProductPay extends Component {
                 customer = customerId
                 await firebase.updateDoc('Users', userId, { customerId })
                 this.setState({ customerId })
-            }            
+            }
             let token = await stripe.createToken(params);
             if ('error' in token) {
                 console.log('Error =====>')
@@ -94,7 +95,7 @@ class ProductPay extends Component {
             }
             console.log('finger Body', body);
 
-            let fingerPrint = await fetch('https://0a3d7547.ngrok.io/customer-source', {
+            let fingerPrint = await fetch('https://af172d5a.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -111,13 +112,13 @@ class ProductPay extends Component {
             const amount = this.props.navigation.state.params.amount
             const chargeBody = {
                 customer,
-                amount: amount * 100,
+                amount,
                 source: fingerPrint.response.id
 
             }
             console.log('chargeBody', chargeBody);
 
-            let chargeResponse = await fetch('https://0a3d7547.ngrok.io/charge-customer', {
+            let chargeResponse = await fetch('https://af172d5a.ngrok.io/charge-customer', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -133,7 +134,9 @@ class ProductPay extends Component {
                 return
             }
             await dbLib.collection('Customers').doc(userId).collection('Cards').add(fingerPrint.response)
+            emptyChart()
             alert('Success')
+            navigation.replace('Feedback')
         }
         catch (e) {
             console.log('Error ====>', e.message);
@@ -146,7 +149,7 @@ class ProductPay extends Component {
         const { customerId } = this.state
         const data = {
             amount,
-            customer : customerId
+            customer: customerId
         }
         const { navigation } = this.props
         navigation.navigate('SavedCards', { data })
@@ -154,6 +157,7 @@ class ProductPay extends Component {
 
     render() {
         const { cardNumber, expMonth, expYear, cvcNumber, email, loading } = this.state
+        const amount = this.props.navigation.state.params.amount
         console.log('cardNumber', cardNumber);
 
         return (
@@ -241,13 +245,18 @@ class ProductPay extends Component {
                         keyboardType='number-pad'
                     />
                 </>
-                <CustomButton title={'Pay'} backgroundColor={pinkColor} onPress={() => this.pay()} containerStyle={{ marginVertical: 20 }} />
+                <TouchableOpacity style={styles.btnContainer} onPress={() => this.pay()}>
+                    <Text style={styles.payText}>Pay</Text>
+                    <Text style={styles.amount}>{`${amount}$`}</Text>
+                </TouchableOpacity>
             </ScrollView>
         )
     }
 }
 const mapDispatchToProps = (dispatch) => {
-    return {}
+    return {
+        emptyChart: (userData) => dispatch(emptyChart(userData))
+    }
 }
 const mapStateToProps = (state) => {
     return {
@@ -262,4 +271,22 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: themeColor,
     },
+    btnContainer: {
+        flexDirection: 'row',
+        width: '90%',
+        marginTop: 12,
+        backgroundColor: pinkColor,
+        justifyContent: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        padding: 15,
+        borderRadius: 100,
+    },
+    payText: {
+        color: '#fff',
+        marginRight: 10
+    },
+    amount: {
+        color: '#fff'
+    }
 })  

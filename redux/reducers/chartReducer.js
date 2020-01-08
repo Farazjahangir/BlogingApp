@@ -9,6 +9,9 @@ const initialState = {
         case "ADD_CHART": {
             return {...state, chart:[ ...action.data]}
         }
+        case "EMPTY_CHART": {
+            return { ...state, chart:[] }
+        }
         default: {
             return state;
         }

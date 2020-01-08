@@ -9,6 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 import { themeColor, pinkColor } from '../Constant';
 import Dialogue from '../Component/Dialogue'
+import { emptyChart } from '../redux/actions/chartActions'
 
 class SavedCards extends Component {
     state = {
@@ -44,12 +45,12 @@ class SavedCards extends Component {
         const data = this.props.navigation.state.params.data
         this.setState({ showDialogue: false });
         const { source } = this.state
+        const { emptyChart , navigation } = this.props
         data.source = source
-        data.amount = data.amount * 100
         console.log(data)
         try {
             this.setState({ loading: true })
-            let chargeResponse = await fetch('https://08a53661.ngrok.io/charge-customer', {
+            let chargeResponse = await fetch('https://af172d5a.ngrok.io/charge-customer', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -63,6 +64,8 @@ class SavedCards extends Component {
                 console.log('Error ======>')
                 return
             }
+            emptyChart()
+            navigation.replace('Feedback')
             alert('Success')
         }
         catch (e) {
@@ -124,7 +127,9 @@ class SavedCards extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {}
+    return {
+        emptyChart: (userData) => dispatch(emptyChart(userData))
+    }
 }
 const mapStateToProps = (state) => {
     return {
