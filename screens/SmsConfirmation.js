@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Fragment } from 'react'
 import {
   StyleSheet,
@@ -10,6 +12,11 @@ import { Icon, Input, Button } from 'react-native-elements'
 import CustomButton from '../Component/Button'
 import { themeColor, pinkColor } from '../Constant/index'
 import { Picker } from 'native-base'
+import firebase from '../utils/firebase'
+import firebaseLib from "react-native-firebase";
+const auth = firebaseLib.auth()
+
+
 class CodeConfirmation extends React.Component {
   constructor (props) {
     super(props)
@@ -35,7 +42,35 @@ class CodeConfirmation extends React.Component {
       }
   </TouchableOpacity>
 
+  async confirmSmsCode(){
+    // const phoneAuthSnapshot = this.props.navigation.state.params.phoneAuthSnapshot
+    // console.log('phoneAuthSnapshot', phoneAuthSnapshot);
+    
+    // auth.onAuthStateChanged(user => {
+    //   console.log('USER', user)
+    //   if(user){
+    //     console.log('USer ========> IFFFF' , user)
+    //   }
+    // })
+    
+    // const { code } = this.state
+    // console.log('Code', code)
+    // try{
+    //   const confirmation = await response.confirm(code)
+    //   console.log('confirmation', confirmation);
+    // }
+    // catch(e){
+    //   alert(e.message)
+    //   console.log('Errror ====>', e)
+    // }
+    
+    // this.props.navigation.navigate('CodeConfirmation')
 
+  }
+  async resend(){
+    // const phoneNumber = this.props.navigation.state.params.phoneNumber
+    // await firebase.loginWithPhoneNumber(phoneNumber)
+  }
   render () {
     const { navigation } = this.props
     return (
@@ -49,21 +84,21 @@ class CodeConfirmation extends React.Component {
             Please enter the verification code from the sms we just sent you.
           </Text>
         </View>   
-        <Input placeholder = {'Phone Number'}
+        <Input placeholder = {'Code'}
          keyboardType = {'numeric'} placeholderTextColor = {'#fff'} 
-         inputContainerStyle = {styles.inputContainer} inputStyle = {{fontWeight : 'bold' , fontSize :14}} />
+         inputContainerStyle = {styles.inputContainer} inputStyle = {{fontWeight : 'bold' , fontSize :14}} onChangeText={(text)=> this.setState({ code: text })} />
          <View style = {{marginVertical  : 12}}>
              <CustomButton
-                  onPress = {()=> this.props.navigation.navigate('CodeConfirmation')}
+                  onPress = {()=> this.confirmSmsCode()}
                   containerStyle = {{width : '90%'}}
                   title = {'Confirm'} backgroundColor = {pinkColor} 
                   />
          </View>
-         <TouchableOpacity style = {{flexDirection : 'row'}}>
+         <TouchableOpacity style = {{flexDirection : 'row'}} onPress={()=> this.resend()}>
            <Text style = {{color : '#ccc' , paddingLeft : 25}}>Don't get it ?<Text style = {{color : pinkColor}}> Resend Code</Text></Text>
          </TouchableOpacity>
                   </ScrollView>
-                  <View style = {{justifyContent : 'flex-end' , backgroundColor : '#000'}}>
+                  {/* <View style = {{justifyContent : 'flex-end' , backgroundColor : '#000'}}>
                     <View style = {{flexDirection : 'row'  , marginTop : 5, justifyContent : 'space-around'}}>
                       {this.keyboardButton('1' , '')}
                       {this.keyboardButton('2' , 'ABC')}
@@ -81,7 +116,7 @@ class CodeConfirmation extends React.Component {
                        </View>
                        <View style = {{flexDirection : 'row'  , marginTop : 5, justifyContent : 'space-around'}}>
                       {/* {this.keyboardButton('' , '')} */}
-                      <View style = {{width : '31%'}} />
+                      {/* <View style = {{width : '31%'}} />
                       {this.keyboardButton('0' , '')}
                       <TouchableOpacity style = {{height : 42 , borderRadius : 7 ,  width : '31%' , justifyContent : 'center' , alignItems : 'center'}}>
                        <Icon type = {"font-awesome5"} name = {'backspace'} color = {'#fff'} />
@@ -90,7 +125,7 @@ class CodeConfirmation extends React.Component {
                        <TouchableOpacity style = {{height : 42 ,  marginTop:   18, alignSelf : "flex-end" , marginRight : 25}}>
                        <Icon type = {"font-awesome"} name = {'microphone'} color = {'#fff'} size = {30} />
                       </TouchableOpacity>
-                    </View>
+                    </View> */} 
       </View>
     )
   }

@@ -127,4 +127,14 @@ firebaseFunctions.updateDoc = async (collection, docId, data) => {
         return e
     }
 }
+
+firebaseFunctions.loginWithPhoneNumber = async (phoneNumber) => {
+    try{
+        const response = await auth.signInWithPhoneNumber(phoneNumber)
+        return response
+    }
+    catch(e){
+        console.log('Error', e.message)
+    }
+}
 export default firebaseFunctions

@@ -11,6 +11,8 @@ import { pinkColor } from '../Constant';
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from 'react-redux'
 import { logoutUser } from '../redux/actions/authActions'
+import { AccessToken, LoginManager } from 'react-native-fbsdk';
+
 
 class ControlPanel extends React.Component {
   constructor (props) {
@@ -21,9 +23,13 @@ class ControlPanel extends React.Component {
   static navigationOptions = {
     header: null
   }
-  logout(){
+  async logout(){
+    LoginManager.logOut()
     this.props.logoutUser()
     this.props.navigation.navigate('Auth')
+    const data = await AccessToken.getCurrentAccessToken()
+    console.log('AccessToken.getCurrentAccessToken()', data);
+    
   }
 
 
