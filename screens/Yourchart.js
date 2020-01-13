@@ -19,6 +19,8 @@ import HorizontalList from '../Component/HorizontalList'
 import { themeColor, pinkColor } from '../Constant'
 import ChartContainer from '../Component/ChartContainer'
 import { connect } from 'react-redux'
+import { addToChart } from '../redux/actions/chartActions'
+
 
 class Yourchart extends React.Component {
   constructor(props) {
@@ -32,6 +34,13 @@ class Yourchart extends React.Component {
   }
   goforPay(amount) {
     this.props.navigation.navigate('ProductPay', { amount })
+  }
+
+  removeFromCart = (data) => {
+    const { chart, addToChart } = this.props
+    const findedIndex = chart.findIndex(item => item.id === data.id)
+    chart.splice(findedIndex , 1)
+    addToChart(chart)
   }
   render() {
     const { navigation, chart } = this.props
@@ -47,7 +56,7 @@ class Yourchart extends React.Component {
         <CustomHeader navigation={navigation} title={'Your Chart'} />
         {!!chart.length ?
           chart.map(val => (
-            <ChartContainer data={val} />
+            <ChartContainer data={val} removeFromCart={this.removeFromCart} />
           ))
           :
           <Text>You Don't Have Any Item In Your Chart</Text>
@@ -113,7 +122,9 @@ const styles = StyleSheet.create({
   }
 })
 const mapDispatchToProps = (dispatch) => {
-  return {}
+  return {
+    addToChart: (data) => dispatch(addToChart(data))
+  }
 }
 const mapStateToProps = (state) => {
   return { chart: state.chart.chart }

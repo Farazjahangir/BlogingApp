@@ -1,11 +1,11 @@
 /* eslint-disable */
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Image } from 'react-native'
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 
 class ChartContainer extends Component {
     render() {
-        const { data } = this.props
+        const { data, removeFromCart } = this.props
         return (
             <View style={styles.container}>
                 {/* <View style={[{ flexDirection: 'row', flex: 1 }, styles.cartImage]}>
@@ -34,6 +34,9 @@ class ChartContainer extends Component {
                                 {data.productName}
                             </Text>
                             <Text style={[styles.colorWhite, styles.price]}>{`$ ${data.price}`}</Text>
+                            <TouchableOpacity style={styles.closeIconBox} onPress={() => removeFromCart(data)}>
+                                <Image source={require('../assets/close.png')} style={styles.closeIcon} />
+                            </TouchableOpacity>
                         </View>
                         <Text style={[styles.colorWhite]} >
                             {data.discription}
@@ -94,5 +97,14 @@ const styles = StyleSheet.create({
     },
     price:{
         marginLeft: 20
+    },
+    closeIconBox: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-end'
+    },
+    closeIcon: {
+        width: 14,
+        height: 14
     }
 })
