@@ -75,10 +75,10 @@ class Login extends React.Component {
       const credential = FirebaseLib.auth.FacebookAuthProvider.credential(data.accessToken);
       const firebaseUserCredential = await FirebaseLib.auth().signInWithCredential(credential);
       const fbUid = firebaseUserCredential.user.uid
-      // const response = await firebase.getDocument('Users' , fbUid)
+      const response = await firebase.getDocument('Users' , fbUid)
       let userObj = {}
-      // response.exists
-      if (false) {
+      response.exists
+      if (response.exists) {
         userObj = response.data();
       }
       else {

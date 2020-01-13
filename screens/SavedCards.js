@@ -101,9 +101,11 @@ class SavedCards extends Component {
                             return (
                                 <TouchableOpacity style={styles.box} onPress={() => this.pay(val)}>
                                     <View style={styles.flexRow}>
-                                        <Image source={require('../assets/mastercard.png')} style={styles.cardImage} />
+                                        {val.brand === 'MasterCard' && <Image source={require('../assets/mastercard.png')} style={styles.cardImage} />}
+                                        {val.brand === 'Visa' && <Image source={require('../assets/visa.png')} style={styles.cardImage} />}
+                                        {val.brand === 'American Express' && <Image source={require('../assets/american-express.png')} style={styles.americanExpress} />}
                                         <View style={{ marginLeft: 14 }}>
-                                            <Text>{val.brand}</Text>
+                                            <Text style={styles.brandName}>{val.brand}</Text>
                                             <Text>{`(${val.last4})`}</Text>
                                         </View>
                                     </View>
@@ -153,9 +155,8 @@ const styles = StyleSheet.create({
         borderColor: '#fff',
         borderWidth: 1,
         padding: 15,
-        backgroundColor:
-            '#fff',
-        width: '45%',
+        backgroundColor:'#fff',
+        width: '49%',
         borderRadius: 10,
         marginTop: 10
     },
@@ -165,5 +166,13 @@ const styles = StyleSheet.create({
     cardImage: {
         width: 40,
         height: 24
+    },
+    americanExpress: {
+        width: 55,
+        height: 24
+    },
+    brandName: {
+        fontSize: 12,
+        width: '90%'
     }
 })

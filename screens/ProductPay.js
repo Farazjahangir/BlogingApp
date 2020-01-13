@@ -18,7 +18,7 @@ const stripe = require("stripe-client")(
 
 class ProductPay extends Component {
     state = {
-        cardNumber: '5105105105105100',
+        cardNumber: '4000056655665556',
         expMonth: '05',
         expYear: '2020',
         cvcNumber: '222',
@@ -47,8 +47,7 @@ class ProductPay extends Component {
 
     async pay() {
         let { cardNumber, expMonth, expYear, cvcNumber, email, customerId } = this.state
-        console.log('Email', email);
-
+        const subscription = this.props.navigation.state.params.subscription
         const { userObj, emptyChart, navigation } = this.props
         const { userId } = userObj
         if (this.validateFields()) return
@@ -60,13 +59,14 @@ class ProductPay extends Component {
                 cvc: cvcNumber
             }
         }
-        console.log('params', params);
-
         try {
             let customer = customerId;
             this.setState({ loading: true })
+
             if (!customerId) {
-                let customerId = await fetch('https://af172d5a.ngrok.io/customer-id', {
+                console.log('Ifff')
+                // Creating stripe customer id if not found in database
+                let customerId = await fetch('https://e2a9139d.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -81,6 +81,8 @@ class ProductPay extends Component {
                 await firebase.updateDoc('Users', userId, { customerId })
                 this.setState({ customerId })
             }
+
+            // generating token for stripe customer payment source
             let token = await stripe.createToken(params);
             if ('error' in token) {
                 console.log('Error =====>')
@@ -88,51 +90,70 @@ class ProductPay extends Component {
                 return
             }
             token = token.id
-            console.log('Token', token);
+
+            // Generating customer payment source
             const body = {
                 token,
                 customer
             }
-            console.log('finger Body', body);
-
-            let fingerPrint = await fetch('https://af172d5a.ngrok.io/customer-source', {
+            let fingerPrint = await fetch('https://e2a9139d.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
                 method: 'POST',
                 body: JSON.stringify(body)
             })
-            console.log(fingerPrint);
-
             fingerPrint = await fingerPrint.json()
             // customerId = customerId.response.id
-            console.log('FingerPrint =====>', fingerPrint);
             const dbLib = firebaseLib.firestore()
 
-            const amount = this.props.navigation.state.params.amount
-            const chargeBody = {
-                customer,
-                amount,
-                source: fingerPrint.response.id
+            if (!subscription) {
+                // One time Pay
+                const amount = this.props.navigation.state.params.amount
+                const chargeBody = {
+                    customer,
+                    amount,
+                    source: fingerPrint.response.id
+                }
+                let chargeResponse = await fetch('https://e2a9139d.ngrok.io/charge-customer', {
+                    headers: {
+                        "Content-Type": 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(chargeBody)
+                })
+                chargeResponse = await chargeResponse.json()
+                // customerId = customerId.response.id
+                if ('errorMessage' in chargeResponse) {
+                    console.log('Error ======>')
+                    this.setState({ loading: false })
+                    return
+                }
+            }
+
+            else {
+                // Start Subscription
+                const subscriptionBody = {
+                    customerId,
+                    source: fingerPrint.response.id
+                }
+                let chargeSubscription = await fetch('https://e2a9139d.ngrok.io/subscription', {
+                    headers: {
+                        "Content-Type": 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(subscriptionBody)
+                })
+                chargeSubscription = await chargeSubscription.json()
+                if ('errorMessage' in chargeSubscription) {
+                    console.log('Error ======>')
+                    this.setState({ loading: false })
+                    return
+                }
 
             }
-            console.log('chargeBody', chargeBody);
-
-            let chargeResponse = await fetch('https://af172d5a.ngrok.io/charge-customer', {
-                headers: {
-                    "Content-Type": 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(chargeBody)
-            })
-            chargeResponse = await chargeResponse.json()
-            // customerId = customerId.response.id
-            console.log('chargeResponse', chargeResponse);
-            if ('errorMessage' in chargeResponse) {
-                console.log('Error ======>')
-                this.setState({ loading: false })
-                return
-            }
+            
+            // Saving user card in db
             await dbLib.collection('Customers').doc(userId).collection('Cards').add(fingerPrint.response)
             emptyChart()
             alert('Success')
