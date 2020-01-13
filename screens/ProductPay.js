@@ -18,8 +18,8 @@ const stripe = require("stripe-client")(
 
 class ProductPay extends Component {
     state = {
-        cardNumber: '4000056655665556',
-        expMonth: '05',
+        cardNumber: '4242424242424242',
+        expMonth: '01',
         expYear: '2020',
         cvcNumber: '222',
         email: '',
@@ -85,7 +85,7 @@ class ProductPay extends Component {
             // generating token for stripe customer payment source
             let token = await stripe.createToken(params);
             if ('error' in token) {
-                console.log('Error =====>')
+                alert(token.error.message)
                 this.setState({ loading: false })
                 return
             }
@@ -96,6 +96,8 @@ class ProductPay extends Component {
                 token,
                 customer
             }
+            console.log('SourceBody', body);
+
             let fingerPrint = await fetch('https://5aded62f.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
@@ -104,6 +106,12 @@ class ProductPay extends Component {
                 body: JSON.stringify(body)
             })
             fingerPrint = await fingerPrint.json()
+            if ('errorMessage' in fingerPrint) {
+                const { errorMessage: { raw: { message } } } = fingerPrint
+                alert(message)
+                this.setState({ loading: false })
+                return
+            }
             // customerId = customerId.response.id
             const dbLib = firebaseLib.firestore()
 
@@ -114,7 +122,7 @@ class ProductPay extends Component {
                     customer,
                     amount,
                     source: fingerPrint.response.id
-                }                
+                }
                 let chargeResponse = await fetch('https://5aded62f.ngrok.io/charge-customer', {
                     headers: {
                         "Content-Type": 'application/json'
@@ -125,7 +133,8 @@ class ProductPay extends Component {
                 chargeResponse = await chargeResponse.json()
                 // customerId = customerId.response.id
                 if ('errorMessage' in chargeResponse) {
-                    console.log('Error ======>')
+                    const { errorMessage: { raw: { message } } } = chargeResponse
+                    alert(message)
                     this.setState({ loading: false })
                     return
                 }
@@ -146,13 +155,13 @@ class ProductPay extends Component {
                 })
                 chargeSubscription = await chargeSubscription.json()
                 if ('errorMessage' in chargeSubscription) {
-                    console.log('Error ======>')
+                    alert('Something went wrong try again later')
                     this.setState({ loading: false })
                     return
                 }
 
             }
-            
+
             // Saving user card in db
             await dbLib.collection('Customers').doc(userId).collection('Cards').add(fingerPrint.response)
             emptyChart()

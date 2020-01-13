@@ -64,10 +64,10 @@ class SavedCards extends Component {
                     body: JSON.stringify(data)
                 })
                 chargeResponse = await chargeResponse.json()
-                // customerId = customerId.response.id
-                console.log('chargeResponse', chargeResponse);
                 if ('errorMessage' in chargeResponse) {
-                    console.log('Error ======>')
+                    const { errorMessage: { raw: { message } } } = chargeResponse
+                    alert(message)
+                    this.setState({ loading: false })
                     return
                 }
             }
@@ -86,7 +86,7 @@ class SavedCards extends Component {
                 })
                 chargeSubscription = await chargeSubscription.json()
                 if ('errorMessage' in chargeSubscription) {
-                    console.log('Error ======>', chargeSubscription)
+                    alert('Something went wrong try again later')
                     this.setState({ loading: false })
                     return
                 }

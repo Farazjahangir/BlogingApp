@@ -53,10 +53,6 @@ class Detail extends React.Component {
     }
       alert('You have already added this item in your chart')
   }
-  componentDidMount() {
-    console.log('Props===========>', this.props);
-    
-  }
   
   render () {
     const { navigation } = this.props
