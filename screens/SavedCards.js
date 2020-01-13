@@ -23,8 +23,11 @@ class SavedCards extends Component {
 
     async componentDidMount() {
         const db = firebaseLib.firestore()
+        const subscription = this.props.navigation.state.params.subscription
+        console.log('subscription', subscription);
         const { userObj: { userId } } = this.props
         const { cards } = this.state
+
         try {
             let cardsRes = await db.collection('Customers').doc(userId).collection('Cards').get()
             cardsRes = cardsRes._docs.forEach(data => cards.push(data.data()))
@@ -43,26 +46,51 @@ class SavedCards extends Component {
     }
     handleOk = async () => {
         const data = this.props.navigation.state.params.data
+        const subscription = this.props.navigation.state.params.subscription
         this.setState({ showDialogue: false });
         const { source } = this.state
-        const { emptyChart , navigation } = this.props
+        const { emptyChart, navigation } = this.props
         data.source = source
         console.log(data)
         try {
             this.setState({ loading: true })
-            let chargeResponse = await fetch('https://af172d5a.ngrok.io/charge-customer', {
-                headers: {
-                    "Content-Type": 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(data)
-            })
-            chargeResponse = await chargeResponse.json()
-            // customerId = customerId.response.id
-            console.log('chargeResponse', chargeResponse);
-            if ('errorMessage' in chargeResponse) {
-                console.log('Error ======>')
-                return
+            if (!subscription) {
+                // One Time Pay
+                let chargeResponse = await fetch('https://5aded62f.ngrok.io/charge-customer', {
+                    headers: {
+                        "Content-Type": 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                })
+                chargeResponse = await chargeResponse.json()
+                // customerId = customerId.response.id
+                console.log('chargeResponse', chargeResponse);
+                if ('errorMessage' in chargeResponse) {
+                    console.log('Error ======>')
+                    return
+                }
+            }
+            else {
+                // Start Subscription
+                const subscriptionBody = {
+                    customerId : data.customer,
+                    source: data.source
+                }
+                let chargeSubscription = await fetch('https://5aded62f.ngrok.io/subscription', {
+                    headers: {
+                        "Content-Type": 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(subscriptionBody)
+                })
+                chargeSubscription = await chargeSubscription.json()
+                if ('errorMessage' in chargeSubscription) {
+                    console.log('Error ======>', chargeSubscription)
+                    this.setState({ loading: false })
+                    return
+                }
+
             }
             emptyChart()
             navigation.replace('Feedback')
@@ -96,7 +124,7 @@ class SavedCards extends Component {
 
                 </View>
                 <View style={styles.mainContainer}>
-                    {!!cards.length &&
+                    {!!cards.length ?
                         cards.map((val) => {
                             return (
                                 <TouchableOpacity style={styles.box} onPress={() => this.pay(val)}>
@@ -112,6 +140,8 @@ class SavedCards extends Component {
                                 </TouchableOpacity>
                             )
                         })
+                        :
+                        <Text style={styles.error}>You Don't have any saved cards</Text>
                     }
                 </View>
                 {showDialogue &&
@@ -155,7 +185,7 @@ const styles = StyleSheet.create({
         borderColor: '#fff',
         borderWidth: 1,
         padding: 15,
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         width: '49%',
         borderRadius: 10,
         marginTop: 10
@@ -174,5 +204,11 @@ const styles = StyleSheet.create({
     brandName: {
         fontSize: 12,
         width: '90%'
+    },
+    error: {
+        textAlign: 'center',
+        color: '#fff',
+        fontSize: 19,
+        marginTop: 20
     }
 })

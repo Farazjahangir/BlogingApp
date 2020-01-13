@@ -66,7 +66,7 @@ class ProductPay extends Component {
             if (!customerId) {
                 console.log('Ifff')
                 // Creating stripe customer id if not found in database
-                let customerId = await fetch('https://e2a9139d.ngrok.io/customer-id', {
+                let customerId = await fetch('https://5aded62f.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -96,7 +96,7 @@ class ProductPay extends Component {
                 token,
                 customer
             }
-            let fingerPrint = await fetch('https://e2a9139d.ngrok.io/customer-source', {
+            let fingerPrint = await fetch('https://5aded62f.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -114,8 +114,8 @@ class ProductPay extends Component {
                     customer,
                     amount,
                     source: fingerPrint.response.id
-                }
-                let chargeResponse = await fetch('https://e2a9139d.ngrok.io/charge-customer', {
+                }                
+                let chargeResponse = await fetch('https://5aded62f.ngrok.io/charge-customer', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -137,7 +137,7 @@ class ProductPay extends Component {
                     customerId,
                     source: fingerPrint.response.id
                 }
-                let chargeSubscription = await fetch('https://e2a9139d.ngrok.io/subscription', {
+                let chargeSubscription = await fetch('https://5aded62f.ngrok.io/subscription', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -167,13 +167,14 @@ class ProductPay extends Component {
     }
     goToSavedCards() {
         const amount = this.props.navigation.state.params.amount
+        const subscription = this.props.navigation.state.params.subscription
         const { customerId } = this.state
         const data = {
             amount,
             customer: customerId
         }
         const { navigation } = this.props
-        navigation.navigate('SavedCards', { data })
+        navigation.navigate('SavedCards', { data, subscription })
     }
 
     render() {

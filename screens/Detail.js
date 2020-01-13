@@ -47,6 +47,7 @@ class Detail extends React.Component {
     if(!findObj){
       chart.push(data)
       addToChart(chart)
+      alert('Added in chart')
       console.log(this.props);
       return
     }
