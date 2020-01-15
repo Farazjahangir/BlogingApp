@@ -38,6 +38,8 @@ class Feedback extends React.Component {
     header: null
   }
   async componentDidMount() {
+    console.log('componentDidMount ====================>')
+    Linking.addEventListener('url', this.handleDeepLink);
     const { navigation } = this.props      
       // if (url) {
       //   Linking.openURL(url);
@@ -45,7 +47,9 @@ class Feedback extends React.Component {
 
     try {
       const url  = await Linking.getInitialURL()
+      console.log('getInitialURL=====>', url)
       if(url){
+        console.log('URL======>', url)
         const extractPath = url.split('/')
         const path = extractPath[3]
         console.log('PAth =========>', path);
@@ -59,6 +63,11 @@ class Feedback extends React.Component {
       console.log('Error', e.message);
     }
     this.setState({ loading: false })
+  }
+  handleDeepLink(e) {
+    // const route = e.url.replace(/.*?:\/\//g, "");
+    // this._navigator.replace(this.state.routes[route]);
+    console.log('handleDeepLink', e)
   }
 
   closeControlPanel = () => {
