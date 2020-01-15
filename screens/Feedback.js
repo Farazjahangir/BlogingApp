@@ -38,7 +38,20 @@ class Feedback extends React.Component {
     header: null
   }
   async componentDidMount() {
+    const { navigation } = this.props      
+      // if (url) {
+      //   Linking.openURL(url);
+      // }
+
     try {
+      const url  = await Linking.getInitialURL()
+      if(url){
+        const extractPath = url.split('/')
+        const path = extractPath[3]
+        console.log('PAth =========>', path);
+        navigation.navigate(path)
+      }
+
       const users = await firebase.getCollection('Users')
       this.setState({ users })
     }

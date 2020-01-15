@@ -62,6 +62,7 @@ export const ENTRIES1 = [
     console.log('this.props',this.props);
     
     if (this.props.userObj) this.props.navigation.navigate('App')
+    
   }
   _renderItem ({item, index}, parallaxProps) {
     return (

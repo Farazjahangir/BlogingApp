@@ -17,7 +17,7 @@ export default class App extends Component {
 
   componentDidMount() {
     console.log('componentDidMount');
-    
+    console.log('PRops =========>', this.props)
 
     // DeepLinking.addScheme('example://');
     // Linking.addEventListener('url', this.handleUrl);
@@ -27,13 +27,6 @@ export default class App extends Component {
     //   this.setState({ response });
     // });
 
-    Linking.getInitialURL().then((url) => {
-      console.log('getInitialURL', url);
-
-      // if (url) {
-      //   Linking.openURL(url);
-      // }
-    }).catch(err => console.error('An error occurred', err));
   }
   // componentWillUnmount() {
   //   Linking.removeEventListener('url', this.handleUrl);
