@@ -1,18 +1,57 @@
 /* eslint-disable */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, ScrollView , StatusBar } from 'react-native';
+import { Platform, StyleSheet, Text, View, ScrollView, StatusBar, Linking } from 'react-native';
 import Routes from './navigation'
-import {themeColor} from './Constant/index'
+import { themeColor } from './Constant/index'
 import { store, persistor } from './redux/store'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+// import DeepLinking from 'react-native-deep-linking';
 
 export default class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     console.disableYellowBox = true;
   }
+
+  componentDidMount() {
+    console.log('componentDidMount');
+    
+
+    // DeepLinking.addScheme('example://');
+    // Linking.addEventListener('url', this.handleUrl);
+    // DeepLinking.addRoute('/Blog', (response) => {
+      // example://test
+    //   console.log('response', response)
+    //   this.setState({ response });
+    // });
+
+    Linking.getInitialURL().then((url) => {
+      console.log('getInitialURL', url);
+
+      // if (url) {
+      //   Linking.openURL(url);
+      // }
+    }).catch(err => console.error('An error occurred', err));
+  }
+  // componentWillUnmount() {
+  //   Linking.removeEventListener('url', this.handleUrl);
+  // }
+
+  // handleUrl = ({ url }) => {
+  //   console.log('URL', url);
+
+  //   Linking.canOpenURL(url).then((supported) => {
+  //     console.log('supported', supported);
+
+  //     if (supported) {
+  //       // this.props.navigation.navigate(ur)
+  //       DeepLinking.evaluateUrl(url);
+  //     }
+  //   });
+  // };
+
 
   render() {
     return (

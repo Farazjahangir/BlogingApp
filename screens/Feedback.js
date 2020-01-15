@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   FlatList,
   Text,
-  ScrollView
+  ScrollView,
+  Linking
 } from 'react-native'
 import { SearchBar, Icon } from 'react-native-elements'
 import CustomInput from '../Component/Input'
@@ -183,10 +184,11 @@ class Feedback extends React.Component {
               backgroundColor={comments ? pinkColor : themeColor}
             />
             <CustomButton
-              onPress={() => this.setState({ comments: false })}
+              // onPress={() => this.setState({ comments: false })}
               buttonStyle={styles.commentButton}
               backgroundColor={!comments ? pinkColor : themeColor}
               title={'Feedback'}
+              // onPress={() => Linking.openURL('example://blog')}
             />
           </View>
 

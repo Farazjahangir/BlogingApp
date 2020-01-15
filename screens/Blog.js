@@ -130,7 +130,7 @@ class Blog extends React.Component {
             <VideoPlayer
               source={{ uri: item.videoUrl }}
               videoStyle={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }}
-              style={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250  }}
+              style={{ width: '100%', height: this.state.fullScreenHeight ? this.state.fullScreenHeight : 250 }}
               disableVolume={true}
               fullscreen={false}
               paused={this.state.paused}
@@ -142,22 +142,25 @@ class Blog extends React.Component {
               onExitFullscreen={() => this.setState({ fullScreenHeight: null })}
             />}
         </View>}
-        {!this.state.fullScreenHeight && 
-      <TouchableOpacity onPress={() => this.navigateToDetail(item)}>
-        <Text style={styles.blogHeading}>{item.blog}</Text>
-      </TouchableOpacity>}
-      {!this.state.fullScreenHeight && 
-      <Text style={styles.likes}>{item.likes} Likes         73 Comments</Text> }
-      {!this.state.fullScreenHeight && 
-      <View style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <View style={{ flexDirection: 'row' }}>
-          {this._icon('heart-o', pinkColor)}
-          {this._icon('bookmark-o', '#fff')}
-          {this._icon('comment-o', '#fff')}
-        </View>
-        {this._icon('ellipsis-h', '#fff')}
+      {!this.state.fullScreenHeight &&
+        <TouchableOpacity onPress={() => this.navigateToDetail(item)}>
+          <Text style={styles.blogHeading}>{item.blog}</Text>
+        </TouchableOpacity>}
+      {!this.state.fullScreenHeight &&
+        <TouchableOpacity>
+          <Text style={styles.likes}>{item.likes} Likes         73 Comments</Text>
+        </TouchableOpacity>
+      }
+      {!this.state.fullScreenHeight &&
+        <View style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
+            {this._icon('heart-o', pinkColor)}
+            {this._icon('bookmark-o', '#fff')}
+            {this._icon('comment-o', '#fff')}
+          </View>
+          {this._icon('ellipsis-h', '#fff')}
 
-      </View>}
+        </View>}
 
     </View>
   }
