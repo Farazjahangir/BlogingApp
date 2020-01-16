@@ -83,7 +83,7 @@ class Login extends React.Component {
       }
       else {
         userObj = {
-          userName: firebaseUserCredential.user.displayName,
+          userName: firebaseUserCredential.user.displayName.toLowerCase(),
           email: firebaseUserCredential.user.email,
           photoUrl: firebaseUserCredential.user.photoURL,
           userId: fbUid,

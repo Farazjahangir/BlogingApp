@@ -23,6 +23,8 @@ import firebase from 'react-native-firebase'
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { connect } from 'react-redux'
+
 
 import { themeColor, pinkColor } from '../Constant'
 import { NavigationEvents } from 'react-navigation'
@@ -95,11 +97,12 @@ class Blog extends React.Component {
         if (change.type === "removed") {
           console.log("Removed city: ", change.doc.data());
         }
-        this.setState({ loading: false })
       })
       // console.log('snapShot ====>' , snapShot);
-
+      this.setState({ loading: false })
+      console.log('Response' , snapShot);
     })
+    
     // const snapShot = await response.forEach((doc)=> console.log('Response =====>' , doc.data()))
     // const snapShot = response.docChanges().forEach(() => (
     //     console.log('Response =====>', change.doc.data())))
@@ -143,7 +146,9 @@ class Blog extends React.Component {
     </TouchableOpacity>
 
   blog = (item, index) => {
-    return <View style={{ width: '100%', marginBottom: 25, }}>
+    console.log('this.props.userObj.userId !== item.userId', this.props.userObj.userId !== item.userId);
+    
+    return this.props.userObj.userId !== item.userId && <View style={{ width: '100%', marginBottom: 25, }}>
       {console.log('this.state.controls', this.state.controls)}
       {!this.state.fullScreenHeight && <View style={styles.title}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -258,4 +263,13 @@ const styles = StyleSheet.create({
   },
   likes: { color: '#ccc', paddingLeft: 12, paddingBottom: 4, borderBottomColor: '#ccc', borderBottomWidth: 0.5, },
 })
-export default Blog
+const mapDispatchToProps = (dispatch) => {
+  return {}
+}
+const mapStateToProps = (state) => {
+  return {
+    userObj: state.auth.user
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Blog)
+

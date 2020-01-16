@@ -56,7 +56,7 @@ class EmailAccount extends React.Component {
 
     try {
       this.setState({ loading: true })
-      const response = await firebase.signUpWithEmail(email, password, userName)
+      const response = await firebase.signUpWithEmail(email, password, userName.toLowerCase())
       this.props.loginUser(response)
       this.props.navigation.navigate('App')
     }

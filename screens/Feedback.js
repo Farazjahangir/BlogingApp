@@ -55,9 +55,6 @@ class Feedback extends React.Component {
         console.log('PAth =========>', path);
         navigation.navigate(path)
       }
-
-      const users = await firebase.getCollection('Users')
-      this.setState({ users })
     }
     catch (e) {
       console.log('Error', e.message);
@@ -126,7 +123,7 @@ class Feedback extends React.Component {
           ]}
         />
       </View>
-      {/* <View>
+      <View>
       <Text
         style={{ color: '#fff', fontSize: 15, fontWeight: 'bold' }}
       >
@@ -143,19 +140,9 @@ class Feedback extends React.Component {
         {' '}
         4 Hrs ago
     </Text>
-    </View> */}
-      <View style={styles.userContainer}>
-        <Text style={styles.userName}>{item.userName}</Text>
-        <TouchableOpacity style={styles.chatBtnContainer} onPress={() => this.startChat(`${item.userId}`)}>
-          <Text style={styles.chatBtn}>Chat</Text>
-        </TouchableOpacity>
-      </View>
+    </View> 
     </View>
 
-  startChat(otherUserId) {
-    this.props.navigation.navigate('Chat', { otherUserId })
-
-  }
 
   render() {
     const { navigation } = this.props
@@ -174,11 +161,11 @@ class Feedback extends React.Component {
         })}
         content={<ControlPanel />}
       >
-        <Spinner
+        {/* <Spinner
           visible={loading}
           textContent={'Loading...'}
           textStyle={{ color: '#fff' }}
-        />
+        /> */}
         <NavigationEvents onDidFocus={() => this.closeControlPanel()} />
         <View style={{ backgroundColor: '#323643', flex: 1 }}>
           <CustomHeader home title={comments ? 'Comments' : 'Feedback'} onPress={() => this.openControlPanel()} />
@@ -214,7 +201,7 @@ class Feedback extends React.Component {
             />
           </View>
 
-          {/* {comments ? (
+          {comments ? (
             <SwipeListView
               data={['1', '2', '3', '4', '5', '6', '7']}
               renderItem={(data, rowMap) => this.swipListItem(data, rowMap)}
@@ -243,14 +230,7 @@ class Feedback extends React.Component {
                 keyExtractor={item => item}
                 renderItem={({ item, index }) => this.feedBackListItem(item, index)}
               />
-            )} */}
-          {users &&
-            <FlatList
-              data={users}
-              keyExtractor={item => item}
-              renderItem={({ item, index }) => this.feedBackListItem(item, index)}
-            />
-          }
+            )}
         </View>
       </Drawer>
     )

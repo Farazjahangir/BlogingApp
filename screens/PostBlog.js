@@ -63,7 +63,11 @@ class PostBlog extends React.Component {
   async publishBlog() {
     const { blogTitle, blog, mime, data, path, videoPath } = this.state
     const { userObj } = this.props
-    if(!blogTitle || !blog || !path || !videoPath ) return alert('All Feilds are required')
+    // if(!blogTitle || !blog || (!path || !videoPath) ) return alert('All Feilds are required')
+    if(!blogTitle) return alert('All Feilds are required')
+    if(!blog) return alert('All Feilds are required')
+    if(!videoPath && !path) return alert('All Feilds are required')
+
     this.setState({ loading: true })
 
     const blogData = {

@@ -36,6 +36,8 @@ import Shop from './screens/Shop';
 import AddProduct from './screens/AddProduct'
 import ProductPay from './screens/ProductPay'
 import SavedCards from './screens/SavedCards'
+import SearchUsers from './screens/SearchUsers'
+
 
 const AuthStack = createStackNavigator({
   Landing: {
@@ -79,7 +81,7 @@ const AuthStack = createStackNavigator({
     navigationOptions: {
       headerTitle: 'Forgot Password'
     }
-  }
+  },
 })
 
 const AppStack = createStackNavigator({
@@ -224,7 +226,14 @@ const AppStack = createStackNavigator({
     navigationOptions: {
       headerTitle: 'Saved Cards'
     }
+  },
+  SearchUsers: {
+    screen: SearchUsers,
+    navigationOptions: {
+      headerTitle: 'Search Users'
+    }
   }
+
 } , {initialRouteName : 'Feedback', header: null})
 
 const App = createSwitchNavigator({

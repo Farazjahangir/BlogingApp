@@ -34,13 +34,19 @@ class Profile extends React.Component {
     header: null
   }
   async componentDidMount() {
-    const { userObj: { userId } } = this.props
+    let { userObj: { userId } } = this.props
+    if(this.props.navigation.state.params.otherUser){
+      userId = this.props.navigation.state.params.otherUser.userId
+    }
+    
     const db = firebaseLib.firestore()
     console.log('USerId', userId);
     const blogs = []
 
     try {
       let userBlogs = await db.collection('Blog').where('userId', '==', userId).get()
+      console.log('UserBlogs ====>', userId);
+      
       userBlogs = userBlogs.docs.forEach(doc => blogs.push(doc.data()))
       this.setState({ blogs, loading: false })
     }
@@ -57,8 +63,17 @@ class Profile extends React.Component {
     </View>
   render() {
     const { navigation, userObj } = this.props
-    const { userName, followers, following } = userObj
+    let userdata = ''
+    if(navigation.state.params.otherUser){
+        userdata = navigation.state.params.otherUser
+    }
+    else{
+      userdata = userObj
+    }
+    const { userName, followers, following } = userdata
     let { comments, blogs, loading } = this.state
+    console.log('BLogs ====>', blogs);
+    
     return (
       <ScrollView stickyHeaderIndices={[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
         <Spinner
