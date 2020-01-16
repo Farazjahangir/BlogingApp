@@ -10,7 +10,9 @@ import {
   Text,
   ScrollView,
   Dimensions,
-  Platform
+  Platform,
+  Share,
+  Linking
 } from 'react-native'
 import { SearchBar, Icon } from 'react-native-elements'
 import CustomInput from '../Component/Input'
@@ -48,9 +50,36 @@ class Blog extends React.Component {
 
   async componentDidMount() {
     const db = firebase.firestore()
+    console.log('PRops', this.props);
+    let link = ''
+    if(this.props.navigation.state.params){
+      link = this.props.navigation.state.params.link
+    }
+    
     // setTimeout(()=>{
     //   this.videoRef.presentFullscreenPlayer()
     // }, 5000)
+
+    try {
+      const url  = await Linking.getInitialURL()
+      console.log('getInitialURL=====>', url)
+      console.log('getInitialLink=====>', link)
+      if(!link && url){
+        console.log('URL======>', url)
+        const extractId = url.split('/')
+        const id = extractId[4]
+        const dbResponse = await db.collection('Blog').doc(id).get()
+        console.log('DB_RESPONSE', dbResponse.data())
+        const { blogs } = this.state
+        blogs.push(dbResponse.data())
+        this.setState({ blogs, isBlogs: true, loading: false })
+        return
+        // navigation.navigate(path)
+      }
+    }
+    catch (e) {
+      console.log('Error', e.message);
+    }
 
     const response = await db.collection('Blog').onSnapshot(snapShot => {
       snapShot.docChanges.forEach((change) => {
@@ -86,9 +115,30 @@ class Blog extends React.Component {
     this.props.navigation.navigate('BlogDetail', { data: item })
   }
 
+  async share(item){
+    try {
+      const result = await Share.share({
+        message:`http://blogster.android.com/Blog/${item.id}`
+      });
 
-  _icon = (name, color) =>
-    <TouchableOpacity >
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+    
+  }
+
+
+  _icon = (name, color, onPress) =>
+    <TouchableOpacity onPress={onPress ? ()=> onPress() : ''}>
       <Icon type={'font-awesome'} name={name} color={color} containerStyle={{ marginHorizontal: 12 }} />
     </TouchableOpacity>
 
@@ -156,7 +206,7 @@ class Blog extends React.Component {
           <View style={{ flexDirection: 'row' }}>
             {this._icon('heart-o', pinkColor)}
             {this._icon('bookmark-o', '#fff')}
-            {this._icon('comment-o', '#fff')}
+            {this._icon('comment-o', '#fff', () => this.share(item))}
           </View>
           {this._icon('ellipsis-h', '#fff')}
 

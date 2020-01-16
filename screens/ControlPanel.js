@@ -33,9 +33,9 @@ class ControlPanel extends React.Component {
   }
 
 
-  menuButtons = (name , route)=><TouchableOpacity style = {{height : 40 , borderBottomColor : '#bbb' ,
+  menuButtons = (name , route, link)=><TouchableOpacity style = {{height : 40 , borderBottomColor : '#bbb' ,
   borderBottomWidth : 0.5 , margin : 2 , justifyContent : 'center'}}
-  onPress = {()=> this.props.navigation.navigate(route)}
+  onPress = {()=> this.props.navigation.navigate(route , { link })}
   >
      <Text style = {{color : '#fff' , fontWeight : 'bold' , paddingLeft: 12,}}>{name}</Text>
  </TouchableOpacity>
@@ -50,7 +50,7 @@ class ControlPanel extends React.Component {
             <Image source = {require('../assets/logo.jpeg')}
              style = {{height : 300 , width : 300 , resizeMode : "contain"}} />
             {this.menuButtons('PROFILE' , 'Profile')}
-            {this.menuButtons('BLOG' , 'Blog')}
+            {this.menuButtons('BLOG' , 'Blog' , true)}
             {this.menuButtons('MESSAGES' , 'Messages')}
             {this.menuButtons('MY ADDRESSES' , 'MyAddress')}
             {this.menuButtons('ADD PHOTO' , 'AddPhoto')}
