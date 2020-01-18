@@ -52,9 +52,10 @@ class Blog extends React.Component {
 
   async componentDidMount() {
     const db = firebase.firestore()
+    const { userObj: { following }, navigation } = this.props
     console.log('PRops', this.props);
     let link = ''
-    if(this.props.navigation.state.params){
+    if(navigation.state.params){
       link = this.props.navigation.state.params.link
     }
     
@@ -87,7 +88,12 @@ class Blog extends React.Component {
       snapShot.docChanges.forEach((change) => {
         if (change.type === "added") {
           const { blogs } = this.state
-          blogs.unshift({ id: change.doc.id, ...change.doc.data() })
+          console.log('IFFFFFFFFFFFFFFFFF Outside', following);
+
+          if(following.indexOf(change.doc.data().userId) !== -1){
+            console.log('IFFFFFFFFFFFFFFFFF');
+            blogs.unshift({ id: change.doc.id, ...change.doc.data() })
+          }
           this.setState({ blogs: [...blogs], isBlogs: true })
 
         }
@@ -157,7 +163,7 @@ class Blog extends React.Component {
             style={styles.imageStyle}
           />
           <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
-            Jesicca DOE
+            {item.userName}
 </Text>
         </View>
         <CustomButton title={'Follow'}
