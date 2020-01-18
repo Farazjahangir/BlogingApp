@@ -18,11 +18,14 @@ import CustomButton from '../Component/Button'
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux'
 import Spinner from 'react-native-loading-spinner-overlay';
+import firebaseLib from 'react-native-firebase';
 
 import CustomHeader from '../Component/header'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import Drawer from 'react-native-drawer'
 import firebase from '../utils/firebase'
+import { loginUser } from '../redux/actions/authActions'
+
 
 import { themeColor, pinkColor } from '../Constant'
 class Feedback extends React.Component {
@@ -38,13 +41,9 @@ class Feedback extends React.Component {
     header: null
   }
   async componentDidMount() {
-    console.log('componentDidMount ====================>')
+    const db = firebaseLib.firestore()
     Linking.addEventListener('url', this.handleDeepLink);
-    const { navigation } = this.props      
-      // if (url) {
-      //   Linking.openURL(url);
-      // }
-
+    const { navigation, userObj : { userId } } = this.props      
     try {
       const url  = await Linking.getInitialURL()
       console.log('getInitialURL=====>', url)
@@ -55,6 +54,10 @@ class Feedback extends React.Component {
         console.log('PAth =========>', path);
         navigation.navigate(path)
       }
+      db.collection('Users').doc(userId).onSnapshot(snapshot => {
+        this.props.loginUser(snapshot.data())
+      })
+      
     }
     catch (e) {
       console.log('Error', e.message);
@@ -311,7 +314,9 @@ const styles = StyleSheet.create({
   }
 })
 const mapDispatchToProps = (dispatch) => {
-  return {}
+  return {
+    loginUser: (userData) => dispatch(loginUser(userData))
+  }
 }
 const mapStateToProps = (state) => {
   return {
