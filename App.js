@@ -1,32 +1,61 @@
 /* eslint-disable */
 
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, ScrollView, StatusBar, Linking } from 'react-native';
-import Routes from './navigation'
-import { themeColor } from './Constant/index'
-import { store, persistor } from './redux/store'
-import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
+import React, {Component} from 'react';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  StatusBar,
+  Linking,
+} from 'react-native';
+import Routes from './navigation';
+import {themeColor} from './Constant/index';
+import {store, persistor} from './redux/store';
+import { withNavigation } from 'react-navigation'
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import firebase from 'react-native-firebase'
+import { NotificationOpen } from 'react-native-firebase';
+
 // import DeepLinking from 'react-native-deep-linking';
 
-export default class App extends Component {
+class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     console.disableYellowBox = true;
   }
 
-  componentDidMount() {
-    console.log('componentDidMount');
-    console.log('PRops =========>', this.props)
+  async componentDidMount() {
+    
+    firebase.notifications().onNotification((notification) => {
+      console.log('notification =====>', notification);
+      
+  });
+  firebase.notifications().onNotificationOpened((notificationOpen) => {
+    // Get the action triggered by the notification being opened
+    const action = notificationOpen.action;
+    console.log('notificationOpen=======>', notificationOpen);
+    // navigation.navigate('Messages')
+    
+    // Get information about the notification that was opened
+    // const notification: Notification = notificationOpen.notification;
+});
+    const notification = await firebase.notifications().getInitialNotification();
+    // if(notification){
+    //   navigation.navigate('Messages')
+    // }
 
+    console.log('componentDidMount');
+    console.log('PRops =========>', this.props);
     // DeepLinking.addScheme('example://');
     // Linking.addEventListener('url', this.handleUrl);
     // DeepLinking.addRoute('/Blog', (response) => {
-      // example://test
+    // example://test
     //   console.log('response', response)
     //   this.setState({ response });
     // });
-
   }
   // componentWillUnmount() {
   //   Linking.removeEventListener('url', this.handleUrl);
@@ -45,7 +74,6 @@ export default class App extends Component {
   //   });
   // };
 
-
   render() {
     return (
       <Provider store={store}>
@@ -57,8 +85,7 @@ export default class App extends Component {
   }
 }
 
-
-
+export default App
 
 const styles = StyleSheet.create({
   container: {

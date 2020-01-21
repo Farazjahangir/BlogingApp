@@ -72,7 +72,7 @@ class Chat extends React.Component {
   }
   async sendMessage(){
     const { otherUserId } = this.props.navigation.state.params
-    const { userId } = this.props.userObj
+    const { userId, userName } = this.props.userObj
     const { roomId, message } = this.state
     const db = firebaseLib.firestore()
     if(!message) return alert('Write a message')
@@ -80,8 +80,9 @@ class Chat extends React.Component {
       message: message,
       senderId: userId,
       recieverId: otherUserId,
-      createdAt: Date.now()
-    }
+      createdAt: Date.now(),
+      senderName: userName
+    } 
     await db.collection('Rooms').doc(roomId).collection('Messages').add(msgObj)
     this.setState({ message: '' })
   }
