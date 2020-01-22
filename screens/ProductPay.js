@@ -30,7 +30,7 @@ class ProductPay extends Component {
         header: null,
     };
     async componentDidMount() {
-        const { userObj } = this.props
+        const { userObj } = this.props        
         const { email, userId } = userObj
         const userData = await firebase.getDocument('Users', userId)
         const customerId = userData.data().customerId
@@ -48,7 +48,7 @@ class ProductPay extends Component {
     async pay() {
         let { cardNumber, expMonth, expYear, cvcNumber, email, customerId } = this.state
         const subscription = this.props.navigation.state.params.subscription
-        const { userObj, emptyChart, navigation } = this.props
+        const { userObj, emptyChart, navigation, chart } = this.props
         const { userId } = userObj
         if (this.validateFields()) return
         const params = {
@@ -66,7 +66,7 @@ class ProductPay extends Component {
             if (!customerId) {
                 console.log('Ifff')
                 // Creating stripe customer id if not found in database
-                let customerId = await fetch('https://5aded62f.ngrok.io/customer-id', {
+                let customerId = await fetch('https://77398f25.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -98,7 +98,7 @@ class ProductPay extends Component {
             }
             console.log('SourceBody', body);
 
-            let fingerPrint = await fetch('https://5aded62f.ngrok.io/customer-source', {
+            let fingerPrint = await fetch('https://77398f25.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -123,7 +123,7 @@ class ProductPay extends Component {
                     amount,
                     source: fingerPrint.response.id
                 }
-                let chargeResponse = await fetch('https://5aded62f.ngrok.io/charge-customer', {
+                let chargeResponse = await fetch('https://77398f25.ngrok.io/charge-customer', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -138,6 +138,21 @@ class ProductPay extends Component {
                     this.setState({ loading: false })
                     return
                 }
+                console.log('Charge Response ========>', chargeResponse);
+                const productDetails = {
+                    userId,
+                    products: [],
+                    chargeDetails : chargeResponse,
+                    amount,
+                    createdAt: Date.now()
+                }
+                chart.map((item, index) => {
+                    chart[index].sellerId = chart[index].userId
+                    delete chart[index].userId
+                    delete chart[index].createdAt
+                    productDetails.products.push(chart[index])
+                })
+                await firebase.addDocument('orders', productDetails)
             }
 
             else {
@@ -146,7 +161,7 @@ class ProductPay extends Component {
                     customerId,
                     source: fingerPrint.response.id
                 }
-                let chargeSubscription = await fetch('https://5aded62f.ngrok.io/subscription', {
+                let chargeSubscription = await fetch('https://77398f25.ngrok.io/subscription', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -163,7 +178,9 @@ class ProductPay extends Component {
             }
 
             // Saving user card in db
+            
             await dbLib.collection('Customers').doc(userId).collection('Cards').add(fingerPrint.response)
+            
             emptyChart()
             alert('Success')
             navigation.replace('Feedback')
@@ -291,7 +308,8 @@ const mapDispatchToProps = (dispatch) => {
 }
 const mapStateToProps = (state) => {
     return {
-        userObj: state.auth.user
+        userObj: state.auth.user,
+        chart: state.chart.chart
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProductPay)
