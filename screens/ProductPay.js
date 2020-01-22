@@ -31,7 +31,7 @@ class ProductPay extends Component {
     };
     async componentDidMount() {
         const { userObj } = this.props        
-        const { email, userId } = userObj
+        const { email, userId } = userObj                
         const userData = await firebase.getDocument('Users', userId)
         const customerId = userData.data().customerId
         this.setState({ email, customerId })
@@ -146,13 +146,16 @@ class ProductPay extends Component {
                     amount,
                     createdAt: Date.now()
                 }
+                console.log('productDetails', productDetails);
+                
                 chart.map((item, index) => {
-                    chart[index].sellerId = chart[index].userId
-                    delete chart[index].userId
-                    delete chart[index].createdAt
-                    productDetails.products.push(chart[index])
+                    const c = {...item};
+                    c.sellerId = chart[index].userId;
+                    delete c.userId;
+                    delete c.createdAt
+                    productDetails.products.push(c)
                 })
-                await firebase.addDocument('orders', productDetails)
+                await firebase.addDocument('Orders', productDetails)
             }
 
             else {

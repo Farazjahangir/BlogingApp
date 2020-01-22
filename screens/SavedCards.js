@@ -10,6 +10,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { themeColor, pinkColor } from '../Constant';
 import Dialogue from '../Component/Dialogue'
 import { emptyChart } from '../redux/actions/chartActions'
+import firebase from '../utils/firebase'
 
 class SavedCards extends Component {
     state = {
@@ -49,7 +50,7 @@ class SavedCards extends Component {
         const subscription = this.props.navigation.state.params.subscription
         this.setState({ showDialogue: false });
         const { source } = this.state
-        const { emptyChart, navigation } = this.props
+        const { emptyChart, navigation, chart, userObj: { userId } } = this.props
         data.source = source
         console.log(data)
         try {
@@ -70,6 +71,21 @@ class SavedCards extends Component {
                     this.setState({ loading: false })
                     return
                 }
+                const productDetails = {
+                    userId,
+                    products: [],
+                    chargeDetails : chargeResponse,
+                    amount: data.amount,
+                    createdAt: Date.now()
+                }
+                chart.map((item, index) => {
+                    const c = {...item};
+                    c.sellerId = chart[index].userId;
+                    delete c.userId;
+                    delete c.createdAt
+                    productDetails.products.push(c)
+                })
+                await firebase.addDocument('Orders', productDetails)
             }
             else {
                 // Start Subscription
@@ -166,6 +182,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
     return {
         userObj: state.auth.user,
+        chart: state.chart.chart
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SavedCards)
