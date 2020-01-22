@@ -44,12 +44,11 @@ class Feedback extends React.Component {
       navigation,
       userObj: {userId},
     } = this.props;
-    firebaseLib.notifications().onNotification(notification => {
-      console.log('notification =====>', notification);
-    });
+    // firebaseLib.notifications().onNotification(notification => {
+    //   console.log('notification =====>', notification);
+    // });
     firebaseLib.notifications().onNotificationOpened(notificationOpen => {
-      // Get the action triggered by the notification being opened
-      const action = notificationOpen.action;
+      // const action = notificationOpen.action;
       console.log('notificationOpen=======>', notificationOpen);
       navigation.navigate('Messages');
 
