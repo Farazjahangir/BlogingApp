@@ -18,7 +18,7 @@ const stripe = require("stripe-client")(
 
 class ProductPay extends Component {
     state = {
-        cardNumber: '4242424242424242',
+        cardNumber: '4000056655665556',
         expMonth: '01',
         expYear: '2020',
         cvcNumber: '222',
@@ -30,7 +30,7 @@ class ProductPay extends Component {
         header: null,
     };
     async componentDidMount() {
-        const { userObj } = this.props        
+        const { userObj } = this.props  
         const { email, userId } = userObj                
         const userData = await firebase.getDocument('Users', userId)
         const customerId = userData.data().customerId
@@ -48,6 +48,7 @@ class ProductPay extends Component {
     async pay() {
         let { cardNumber, expMonth, expYear, cvcNumber, email, customerId } = this.state
         const subscription = this.props.navigation.state.params.subscription
+        const type = this.props.navigation.state.params.type
         const { userObj, emptyChart, navigation, chart } = this.props
         const { userId } = userObj
         if (this.validateFields()) return
@@ -66,7 +67,7 @@ class ProductPay extends Component {
             if (!customerId) {
                 console.log('Ifff')
                 // Creating stripe customer id if not found in database
-                let customerId = await fetch('https://77398f25.ngrok.io/customer-id', {
+                let customerId = await fetch('https://5d95dca2.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -98,7 +99,7 @@ class ProductPay extends Component {
             }
             console.log('SourceBody', body);
 
-            let fingerPrint = await fetch('https://77398f25.ngrok.io/customer-source', {
+            let fingerPrint = await fetch('https://5d95dca2.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -112,6 +113,10 @@ class ProductPay extends Component {
                 this.setState({ loading: false })
                 return
             }
+
+            console.log('fingerPrint ====>', fingerPrint);
+            console.log('customerId', customerId);
+            
             // customerId = customerId.response.id
             const dbLib = firebaseLib.firestore()
 
@@ -123,7 +128,7 @@ class ProductPay extends Component {
                     amount,
                     source: fingerPrint.response.id
                 }
-                let chargeResponse = await fetch('https://77398f25.ngrok.io/charge-customer', {
+                let chargeResponse = await fetch('https://5d95dca2.ngrok.io/charge-customer', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -162,9 +167,10 @@ class ProductPay extends Component {
                 // Start Subscription
                 const subscriptionBody = {
                     customerId,
-                    source: fingerPrint.response.id
+                    source: fingerPrint.response.id,
+                    type
                 }
-                let chargeSubscription = await fetch('https://77398f25.ngrok.io/subscription', {
+                let chargeSubscription = await fetch('https://5d95dca2.ngrok.io/subscription', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -177,6 +183,11 @@ class ProductPay extends Component {
                     this.setState({ loading: false })
                     return
                 }
+                const updateUserDoc = {
+                    userType: 'paid',
+                    packgae: type
+                }
+                await firebase.updateDoc('Users', userId , updateUserDoc)
 
             }
 
@@ -185,6 +196,7 @@ class ProductPay extends Component {
             await dbLib.collection('Customers').doc(userId).collection('Cards').add(fingerPrint.response)
             
             emptyChart()
+            this.setState({ loading: false })
             alert('Success')
             navigation.replace('Feedback')
         }

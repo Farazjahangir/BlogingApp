@@ -130,8 +130,8 @@ class Payment extends React.Component {
     // catch(e){
     //   console.log('Error', e);
     // }
-
-    navigation.navigate('ProductPay' , { subscription: true })
+    item.type = item.type.toLowerCase()          
+    navigation.navigate('ProductPay' , { subscription: true, type: item.type, amount: item.rate })
     
   }
   render() {
