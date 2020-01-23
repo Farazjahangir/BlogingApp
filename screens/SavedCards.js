@@ -48,6 +48,8 @@ class SavedCards extends Component {
     handleOk = async () => {
         const data = this.props.navigation.state.params.data
         const subscription = this.props.navigation.state.params.subscription
+        const type = this.props.navigation.state.params.type
+
         this.setState({ showDialogue: false });
         const { source } = this.state
         const { emptyChart, navigation, chart, userObj: { userId } } = this.props
@@ -91,7 +93,8 @@ class SavedCards extends Component {
                 // Start Subscription
                 const subscriptionBody = {
                     customerId : data.customer,
-                    source: data.source
+                    source: data.source,
+                    type,
                 }
                 let chargeSubscription = await fetch('https://5d95dca2.ngrok.io/subscription', {
                     headers: {
@@ -106,6 +109,12 @@ class SavedCards extends Component {
                     this.setState({ loading: false })
                     return
                 }
+                const updateUserDoc = {
+                    userType: 'paid',
+                    userPackage: type,
+                    subscriptionId: chargeSubscription.subscription.id
+                }
+                await firebase.updateDoc('Users', userId , updateUserDoc)
 
             }
             emptyChart()

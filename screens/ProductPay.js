@@ -18,7 +18,7 @@ const stripe = require("stripe-client")(
 
 class ProductPay extends Component {
     state = {
-        cardNumber: '4000056655665556',
+        cardNumber: '6200000000000005',
         expMonth: '01',
         expYear: '2020',
         cvcNumber: '222',
@@ -183,9 +183,12 @@ class ProductPay extends Component {
                     this.setState({ loading: false })
                     return
                 }
+                console.log('chargeSubscription', chargeSubscription);
+                
                 const updateUserDoc = {
                     userType: 'paid',
-                    packgae: type
+                    userPackage: type,
+                    subscriptionId: chargeSubscription.subscription.id
                 }
                 await firebase.updateDoc('Users', userId , updateUserDoc)
 
@@ -209,13 +212,15 @@ class ProductPay extends Component {
     goToSavedCards() {
         const amount = this.props.navigation.state.params.amount
         const subscription = this.props.navigation.state.params.subscription
+        const type = this.props.navigation.state.params.type
+
         const { customerId } = this.state
         const data = {
             amount,
             customer: customerId
         }
         const { navigation } = this.props
-        navigation.navigate('SavedCards', { data, subscription })
+        navigation.navigate('SavedCards', { data, subscription, type })
     }
 
     render() {
