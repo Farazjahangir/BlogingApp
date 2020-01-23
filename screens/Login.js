@@ -88,7 +88,9 @@ class Login extends React.Component {
           photoUrl: firebaseUserCredential.user.photoURL,
           userId: fbUid,
           followers: [],
-          following: []
+          following: [],
+          userPackage: 'none',
+          userType: 'free'
         }
         await firebase.setDocument('Users', fbUid, userObj)
       }

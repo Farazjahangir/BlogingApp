@@ -17,7 +17,9 @@ firebaseFunctions.signUpWithEmail = async (email , password , userName) => {
             userId,
             email,
             followers: [],
-            following: []
+            following: [],
+            userPackage: 'none',
+            userType: 'free'
         }
        await firebaseFunctions.setDocument('Users' , userId , userObj)
        userObj.userId = userId
