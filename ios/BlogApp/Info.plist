@@ -84,13 +84,13 @@
 		<string>Editor</string>
 		<key>CFBundleURLSchemes</key>
 		<array>
-		<string>fb2640982312656619</string>
+		<string>fb528453661121654</string>
 		<string>blogster</string>
 		</array>
 	</dict>
 	</array>
 	<key>FacebookAppID</key>
-	<string>2640982312656619</string>
+	<string>528453661121654</string>
 	<key>FacebookDisplayName</key>
 	<string>Blogster</string>
 	<key>LSApplicationQueriesSchemes</key>
