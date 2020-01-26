@@ -1,78 +1,35 @@
 {
   "project_info": {
-    "project_number": "115488808417",
-    "firebase_url": "https://hopeup-11.firebaseio.com",
-    "project_id": "hopeup-11",
-    "storage_bucket": "hopeup-11.appspot.com"
+    "project_number": "1030461806167",
+    "firebase_url": "https://blogster-20b9d.firebaseio.com",
+    "project_id": "blogster-20b9d",
+    "storage_bucket": "blogster-20b9d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:115488808417:android:64758aa1fd3d0cbc5006a0",
+        "mobilesdk_app_id": "1:1030461806167:android:81777b433f974d26983512",
         "android_client_info": {
           "package_name": "com.blogapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "115488808417-8vhn6su87iuiptg6nvit2km2buhps8m3.apps.googleusercontent.com",
+          "client_id": "1030461806167-rt41rc3og2qq2i4sn22vk0psn0apbscv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCz5onwZme7xlAZ9GYTZt-6jQmAEcGL1sc"
+          "current_key": "AIzaSyCFjNUCNd4D1I635NT9iYnnlGYFteNx7xU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "115488808417-8vhn6su87iuiptg6nvit2km2buhps8m3.apps.googleusercontent.com",
+              "client_id": "1030461806167-rt41rc3og2qq2i4sn22vk0psn0apbscv.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "115488808417-ohfqlchc050200adbe98ib69om6saepb.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "org.reactjs.native.example.rnFirebase"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:115488808417:android:6f3050e2a8dad80e5006a0",
-        "android_client_info": {
-          "package_name": "com.transaction"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "115488808417-8vhn6su87iuiptg6nvit2km2buhps8m3.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCz5onwZme7xlAZ9GYTZt-6jQmAEcGL1sc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "115488808417-8vhn6su87iuiptg6nvit2km2buhps8m3.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "115488808417-ohfqlchc050200adbe98ib69om6saepb.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "org.reactjs.native.example.rnFirebase"
-              }
             }
           ]
         }

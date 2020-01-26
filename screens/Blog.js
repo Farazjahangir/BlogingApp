@@ -210,7 +210,7 @@ class Blog extends React.Component {
               {Platform.OS === 'ios' ? (
                 <Video
                   source={{uri: item.videoUrl}}
-                  style={{width: '100%', height: 250, backgroundColor: 'black'}}
+                  style={{width: '100%', height: 250}}
                   paused={true}
                   pictureInPicture={true}
                   controls={true}
