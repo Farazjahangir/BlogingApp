@@ -230,13 +230,14 @@ class Feedback extends React.Component {
               // onPress={() => this.setState({ comments: true })}
               buttonStyle={styles.commentButton}
               title={'Comments'}
-              backgroundColor={comments ? pinkColor : themeColor}
+              backgroundColor={comments ? themeColor :pinkColor }
             />
             <CustomButton
               // onPress={() => this.setState({ comments: false })}
               buttonStyle={styles.commentButton}
-              backgroundColor={!comments ? pinkColor : themeColor}
+              backgroundColor={!comments ? '#000000'  : pinkColor}
               title={'Feedback'}
+              titleStyle={styles.textPink}
               // onPress={() => Linking.openURL('example://blog')}
             />
           </View>
@@ -298,6 +299,9 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     alignItems: 'center',
   },
+  textPink: {
+    color: pinkColor
+  },
   iconContainer: {
     height: 18,
     width: 18,
@@ -308,7 +312,7 @@ const styles = StyleSheet.create({
     marginTop: -12,
     marginLeft: 8,
   },
-  commentButton: {borderColor: pinkColor, borderWidth: 1, width: 150},
+  commentButton: {borderColor: '#000000', borderWidth: 1, width: 150, color: pinkColor},
   rowFront: {
     alignItems: 'center',
     backgroundColor: '#CCC',

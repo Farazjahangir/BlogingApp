@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     width: 140, height: 45, borderRadius: 25,
-    backgroundColor: '#323643', borderColor: "#fff", borderWidth: 0.5, marginHorizontal: 6
+    backgroundColor: '#000000', borderColor: "#000000", borderWidth: 0.5, marginHorizontal: 6
   },
   bottomLink: { fontSize: 14, fontWeight: "bold", color: "#ccc" },
   line: { flex: 1, height: 0.5, borderWidth: 0.3, borderColor: "#ccc" }

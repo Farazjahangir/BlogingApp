@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, {Component} from 'react';
 import {Button, Icon} from 'react-native-elements';
 import {themeColor} from '../Constant/index';
