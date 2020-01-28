@@ -74,6 +74,7 @@ class PostBlog extends React.Component {
       blogTitle,
       blog,
       userId: userObj.userId,
+      userName: userObj.userName,
       imageUrl: '',
       videoUrl: ''
     }
@@ -112,6 +113,8 @@ class PostBlog extends React.Component {
       mime: '',
       data: ''
     }
+    console.log('blogData', blogData);
+    
 
     const response = await firebase.setDocument('Drafts', userObj.userId, blogData)
     alert('Saved To Draft')

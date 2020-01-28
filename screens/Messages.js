@@ -49,6 +49,7 @@ class Messages extends React.Component {
       true,
     );
     console.log('idsArray', idsArray);
+    if(!idsArray.length) return this.setState({ loading: false })
 
     for (var i = 0; i < idsArray.length; i++) {
       if (idsArray[i] !== userId) {

@@ -163,7 +163,6 @@ class Blog extends React.Component {
       'this.props.userObj.userId !== item.userId',
       this.props.userObj.userId !== item.userId,
     );
-
     return (
       this.props.userObj.userId !== item.userId && (
         <View style={{width: '100%', marginBottom: 25}}>
@@ -315,7 +314,8 @@ class Blog extends React.Component {
       userObj: {following},
     } = this.props;
     let {follow, blogs, isBlogs, loading} = this.state;
-
+    console.log('blogs',blogs);
+    
     return (
       <ScrollView
         stickyHeaderIndices={[0]}

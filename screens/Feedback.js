@@ -77,10 +77,14 @@ class Feedback extends React.Component {
         console.log('PAth =========>', path);
         navigation.navigate(path);
       }
+      
       db.collection('Users')
         .doc(userId)
         .onSnapshot(snapshot => {
+          console.log('REl Time USerID', userId);
           this.props.loginUser(snapshot.data());
+          console.log('Time_snapshot', snapshot.data());
+          
         });
       console.log('LAst Console');
     } catch (e) {

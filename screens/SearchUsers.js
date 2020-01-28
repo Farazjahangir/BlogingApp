@@ -48,7 +48,9 @@ class SearchUsers extends Component {
     try{
       this.setState({ loading: true })
       const userData = await db.collection('Users').where('userName' , '==' , user.toLowerCase()).get()
+      
       userData.docs.forEach(item => users.push(item.data()))
+      console.log('userData',users);
       if(!users.length) alert('No User Found')
       this.setState({ users })   
     }
@@ -103,8 +105,11 @@ class SearchUsers extends Component {
   };
 
   render() {
-    const {navigation} = this.props;
+    const {navigation , userObj} = this.props;
     const {users, loading, user} = this.state;
+    console.log('USerObj', userObj);
+    console.log('users', users);
+    
 
     return (
       <ScrollView

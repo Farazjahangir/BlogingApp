@@ -131,9 +131,13 @@ class Profile extends React.Component {
   }
 
   decideUser = () => {
+    console.log('decideUser');
+    
     const {navigation, userObj} = this.props;
     let userData = '';
     if (navigation.state.params.otherUser) {
+      console.log('Other USer ==============>');
+      
       userData = navigation.state.params.otherUser;
     } else {
       userData = userObj;
@@ -145,7 +149,7 @@ class Profile extends React.Component {
     const {navigation, userObj} = this.props;
     let {comments, blogs, loading, isFollowed, userData} = this.state;
     const {userName, followers, following, userId} = userData;
-    console.log('userData ====>', userData);
+    console.log('userData ====>', blogs);
 
     return (
       <ScrollView
