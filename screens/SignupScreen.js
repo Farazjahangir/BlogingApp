@@ -53,12 +53,12 @@ class SignUp extends React.Component {
               justifyContent: 'space-around',
               marginVertical: 12,
             }}>
-            <CustomButton
+            {/* <CustomButton
               onPress={() => this.props.navigation.navigate('CreateAccount')}
               containerStyle={{width: 160}}
               title={'Facebook'}
               backgroundColor={'#3b5998'}
-            />
+            /> */}
             <CustomButton
               onPress={() => this.props.navigation.navigate('SmsCode')}
               containerStyle={{width: 160}}

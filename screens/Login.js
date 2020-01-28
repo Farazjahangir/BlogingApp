@@ -141,7 +141,7 @@ class Login extends React.Component {
             <View style={styles.line} />
           </View>
           <Button title={'Facebook'}
-            buttonStyle={{ width: 300, height: 50, borderRadius: 25 }} onPress={() => this.facebookLogin()} />
+            buttonStyle={{ width: 300, height: 50, borderRadius: 25, backgroundColor: '#3b5998' }} onPress={() => this.facebookLogin()} />
         </View>
         <View style={{ paddingLeft: 12 }}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate("CreateAccount")} style={{ height: 30, justifyContent: "center" }}>

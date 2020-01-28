@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Fragment } from 'react';
 import {
     StyleSheet,
@@ -40,8 +42,8 @@ import {Icon , Input , Button} from 'react-native-elements'
                           <Text style = {{marginHorizontal : 12 , color : "#ccc" , fontSize : 18}}>OR</Text>
                           <View style = {styles.line} />
                           </View>
-                         <Button title = {'Facebook'} 
-                         buttonStyle = {{width : 300 , height : 50 , borderRadius : 25}} />
+                         {/* <Button title = {'Facebook'} 
+                         buttonStyle = {{width : 300 , height : 50 , borderRadius : 25}} /> */}
                      </View>
                      <View style = {{paddingLeft : 12 , marginTop : 15}}>
                          <Text style = {styles.bottomLink}>Need An Account ?<Text style = {{color : '#FD7496' }}>  Sign Up</Text></Text>
