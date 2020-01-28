@@ -29,23 +29,23 @@ class Profile extends React.Component {
       blogs: [],
       loading: true,
       isFollowed: false,
-      userData: ''
+      userData: '',
     };
   }
   static navigationOptions = {
     header: null,
   };
   async componentDidMount() {
-    this.decideUser()
+    this.decideUser();
     const {userObj} = this.props;
     let {userId} = userObj;
     if (this.props.navigation.state.params.otherUser) {
       userId = this.props.navigation.state.params.otherUser.userId;
       console.log('userId========>', userId);
-      
+
       if (userObj.following.indexOf(userId) !== -1) {
         console.log('IFffffffffffff');
-        
+
         this.setState({isFollowed: true});
       }
     }
@@ -75,80 +75,97 @@ class Profile extends React.Component {
     </View>
   );
 
-  async follow(otherUserId){
-    const db = firebaseLib.firestore()
-    const FieldValue = firebaseLib.firestore.FieldValue
-    
-    const { userObj : { userId }, navigation } = this.props
-    const { userData } = this.state
-    try{
-      this.setState({ loading: true })
-      await db.collection('Users').doc(userId).update({
-        "following": FieldValue.arrayUnion(otherUserId)
-      })
-      await db.collection('Users').doc(otherUserId).update({
-        "followers": FieldValue.arrayUnion(userId)
-      })
-      if(navigation.state.params.otherUser){
-        userData.followers.push(userId)
-        this.setState({ userData })
-      }
-      this.setState({ isFollowed: true })
-    }
-    catch(e){
-      alert(e.message)
-      
-    }
-    this.setState({ loading: false })
+  async follow(otherUserId) {
+    const db = firebaseLib.firestore();
+    const FieldValue = firebaseLib.firestore.FieldValue;
 
+    const {
+      userObj: {userId},
+      navigation,
+    } = this.props;
+    const {userData} = this.state;
+    try {
+      this.setState({loading: true});
+      await db
+        .collection('Users')
+        .doc(userId)
+        .update({
+          following: FieldValue.arrayUnion(otherUserId),
+        });
+      await db
+        .collection('Users')
+        .doc(otherUserId)
+        .update({
+          followers: FieldValue.arrayUnion(userId),
+        });
+      if (navigation.state.params.otherUser) {
+        userData.followers.push(userId);
+        this.setState({userData});
+      }
+      this.setState({isFollowed: true});
+    } catch (e) {
+      alert(e.message);
+    }
+    this.setState({loading: false});
   }
 
-  async unFollow(otherUserId){
-    const db = firebaseLib.firestore()
-    const FieldValue = firebaseLib.firestore.FieldValue
-    
-    const { userObj : { userId }, navigation } = this.props
-    const { userData } = this.state
-    try{
-      this.setState({ loading: true })
-      await db.collection('Users').doc(userId).update({
-        "following": FieldValue.arrayRemove(otherUserId)
-      })
-      await db.collection('Users').doc(otherUserId).update({
-        "followers": FieldValue.arrayRemove(userId)
-      })
-      if(navigation.state.params.otherUser){
-        userData.followers.splice(0,1)
-        this.setState({ userData })
-      }
-      this.setState({ isFollowed: false })
-    }
-    catch(e){
-      alert(e.message)      
-    }
-    this.setState({ loading: false })
+  async unFollow(otherUserId) {
+    const db = firebaseLib.firestore();
+    const FieldValue = firebaseLib.firestore.FieldValue;
 
+    const {
+      userObj: {userId},
+      navigation,
+    } = this.props;
+    const {userData} = this.state;
+    try {
+      this.setState({loading: true});
+      await db
+        .collection('Users')
+        .doc(userId)
+        .update({
+          following: FieldValue.arrayRemove(otherUserId),
+        });
+      await db
+        .collection('Users')
+        .doc(otherUserId)
+        .update({
+          followers: FieldValue.arrayRemove(userId),
+        });
+      if (navigation.state.params.otherUser) {
+        userData.followers.splice(0, 1);
+        this.setState({userData});
+      }
+      this.setState({isFollowed: false});
+    } catch (e) {
+      alert(e.message);
+    }
+    this.setState({loading: false});
   }
 
-  decideUser = () => {
+  decideUser = (newData) => {
     console.log('decideUser');
-    
+
     const {navigation, userObj} = this.props;
     let userData = '';
     if (navigation.state.params.otherUser) {
       console.log('Other USer ==============>');
-      
+
       userData = navigation.state.params.otherUser;
     } else {
-      userData = userObj;
+      userData = newData ? newData : userObj;
     }
-    this.setState({ userData })
+    this.setState({userData});
+  };
+
+  componentWillReceiveProps(nextProps){
+    this.decideUser(nextProps.userObj)
   }
 
   render() {
     const {navigation, userObj} = this.props;
     let {comments, blogs, loading, isFollowed, userData} = this.state;
-    const {userName, followers, following, userId} = userData;
+    const {userName, followers, following, userId, photoUrl} = userData;
     console.log('userData ====>', blogs);
 
     return (
@@ -163,10 +180,17 @@ class Profile extends React.Component {
         <CustomHeader title={'PROFILE'} rightIcon navigation={navigation} />
         <View style={{alignSelf: 'center', width: '60%', alignItems: 'center'}}>
           <View style={styles.imageWrapper}>
-            <Image
-              source={require('../assets/avatar.png')}
-              style={[styles.imageStyle, {borderRadius: 125}]}
-            />
+            {photoUrl ? (
+              <Image
+                source={{uri: photoUrl}}
+                style={[styles.imageStyle, {borderRadius: 125}]}
+              />
+            ) : (
+              <Image
+                source={require('../assets/avatar.png')}
+                style={[styles.imageStyle, {borderRadius: 125}]}
+              />
+            )}
           </View>
           <Text style={{color: '#fff', fontSize: 18, fontWeight: 'bold'}}>
             {userName}
@@ -194,40 +218,42 @@ class Profile extends React.Component {
             </View>
           )}
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            marginHorizontal: '6%',
-            height: 50,
-            alignItems: 'center',
-          }}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('EditProfile')}>
-            <Icon
-              type={'font-awesome'}
-              name={'edit'}
-              color={'#fff'}
-              size={25}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Icon
-              type={'font-awesome'}
-              name={'image'}
-              color={'#fff'}
-              size={25}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Icon
-              type={'font-awesome'}
-              name={'edit'}
-              color={'#fff'}
-              size={25}
-            />
-          </TouchableOpacity>
-        </View>
+        {userObj.userId === userId && (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              marginHorizontal: '6%',
+              height: 50,
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('EditProfile')}>
+              <Icon
+                type={'font-awesome'}
+                name={'edit'}
+                color={'#fff'}
+                size={25}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Icon
+                type={'font-awesome'}
+                name={'image'}
+                color={'#fff'}
+                size={25}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Icon
+                type={'font-awesome'}
+                name={'edit'}
+                color={'#fff'}
+                size={25}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
         <View
           style={{
             backgroundColor: themeColor,
