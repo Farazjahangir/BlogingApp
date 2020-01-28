@@ -13,10 +13,10 @@ import {
 import {SearchBar, Icon} from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {connect} from 'react-redux';
-import firebaseLib from 'react-native-firebase'
+import firebaseLib from 'react-native-firebase';
 
 import CustomHeader from '../Component/header';
-import CustomButton from '../Component/Button'
+import CustomButton from '../Component/Button';
 import firebase from '../utils/firebase';
 import {themeColor, pinkColor} from '../Constant';
 
@@ -24,7 +24,7 @@ class SearchUsers extends Component {
   state = {
     users: [],
     loading: false,
-    user: ''
+    user: '',
   };
   static navigationOptions = {
     header: null,
@@ -39,30 +39,31 @@ class SearchUsers extends Component {
   //   }
   // }
 
-  search = async() => {
-    let { user, users } = this.state
-    if(!user) return alert('Field is required')
-    users = []
-    const db = firebaseLib.firestore()
-    console.log('user======>', user.toLowerCase());    
-    try{
-      this.setState({ loading: true })
-      const userData = await db.collection('Users').where('userName' , '==' , user.toLowerCase()).get()
-      
-      userData.docs.forEach(item => users.push(item.data()))
-      console.log('userData',users);
-      if(!users.length) alert('No User Found')
-      this.setState({ users })   
-    }
-    catch(e){
-      alert(e.message)
-    }
-    this.setState({ loading: false })
-  }
-  startChat(otherUserId) {
-    this.props.navigation.navigate('Chat', { otherUserId })
-  }
+  search = async () => {
+    let {user, users} = this.state;
+    if (!user) return alert('Field is required');
+    users = [];
+    const db = firebaseLib.firestore();
+    console.log('user======>', user.toLowerCase());
+    try {
+      this.setState({loading: true});
+      const userData = await db
+        .collection('Users')
+        .where('userName', '==', user.toLowerCase())
+        .get();
 
+      userData.docs.forEach(item => users.push(item.data()));
+      console.log('userData', users);
+      if (!users.length) alert('No User Found');
+      this.setState({users});
+    } catch (e) {
+      alert(e.message);
+    }
+    this.setState({loading: false});
+  };
+  startChat(otherUserId) {
+    this.props.navigation.navigate('Chat', {otherUserId});
+  }
 
   feedBackListItem = (item, index) => {
     const {navigation} = this.props;
@@ -71,10 +72,17 @@ class SearchUsers extends Component {
       this.props.userObj.userId !== item.userId && (
         <View style={styles.itemContainer}>
           <View>
-            <Image
-              source={require('../assets/avatar.png')}
-              style={styles.imageStyle}
-            />
+            {item.photoUrl ? (
+              <Image
+                source={{uri: item.photoUrl}}
+                style={styles.imageStyle}
+              />
+            ) : (
+              <Image
+                source={require('../assets/avatar.png')}
+                style={styles.imageStyle}
+              />
+            )}
             <Icon
               type={'font-awesome'}
               name={index % 2 !== 1 ? 'heart-o' : 'user-plus'}
@@ -105,11 +113,10 @@ class SearchUsers extends Component {
   };
 
   render() {
-    const {navigation , userObj} = this.props;
+    const {navigation, userObj} = this.props;
     const {users, loading, user} = this.state;
     console.log('USerObj', userObj);
     console.log('users', users);
-    
 
     return (
       <ScrollView
@@ -131,9 +138,13 @@ class SearchUsers extends Component {
           value={user}
           placeholder={'Search'}
           inputContainerStyle={{backgroundColor: '#fff'}}
-          onChangeText={(user)=> this.setState({ user: user })}
+          onChangeText={user => this.setState({user: user})}
         />
-        <CustomButton title="Search"  backgroundColor={pinkColor} onPress={this.search} />
+        <CustomButton
+          title="Search"
+          backgroundColor={pinkColor}
+          onPress={this.search}
+        />
 
         {!!users.length && (
           <FlatList
