@@ -22,10 +22,22 @@ export default CustomHeader = props => (
       }}
       centerComponent={{
         text: props.title,
-        style: {color: '#fff', fontSize: 25, fontWeight: 'bold', fontFamily: 'Myriad Pro Bold SemiExtended'},
+        style: {
+          color: '#fff',
+          fontSize: 15,
+          fontWeight: 'bold',
+          fontFamily: 'Myriad Pro Bold SemiExtended',
+        },
       }}
       rightComponent={
-        props.home && props.bookmark ? (
+        props.shop ? (
+          <TouchableOpacity onPress={()=> props.navigation.navigate('Yourchart')}>
+            <Image
+              source={require('../assets/cart.png')}
+              style={{width: 30, height: 30}}
+            />
+          </TouchableOpacity>
+        ) : props.home && props.bookmark ? (
           <Icon
             type={'font-awesome'}
             name={'bookmark-o'}

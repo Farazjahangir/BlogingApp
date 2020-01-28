@@ -43,7 +43,7 @@ class Shop extends Component {
         const { products } = this.state
         return (
             <ScrollView stickyHeaderIndices={[0]} style={{ backgroundColor: '#323643', flex: 1 }}>
-                <CustomHeader title={'SHOP'} navigation={navigation} />
+                <CustomHeader title={'SHOP'} navigation={navigation} shop />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, flexWrap: 'wrap' }}>
                     {/* <View>
                         <Image source={require('../assets/avatar.png')} style={{width: 135, height: 135}} />

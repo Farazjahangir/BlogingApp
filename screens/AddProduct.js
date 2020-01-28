@@ -113,6 +113,7 @@ class AddProduct extends Component {
       retrunPolicy,
       loading,
     } = this.state;
+    const { navigation } = this.props
     return (
       <ScrollView
         style={styles.container}
@@ -158,7 +159,7 @@ class AddProduct extends Component {
           <CustomButton
             title={'Close'}
             buttonStyle={{borderColor: '#ccc', borderWidth: 1}}
-            onPress={() => this.back()}
+            onPress={() => navigation.goBack()}
           />
           <CustomButton
             title={'Post Product'}
