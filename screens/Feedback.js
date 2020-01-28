@@ -49,21 +49,21 @@ class Feedback extends React.Component {
     // });
 
     // UnCommit This
-    // firebaseLib.notifications().onNotificationOpened(notificationOpen => {
-    //   console.log('notificationOpen=======>', notificationOpen);
-    //   navigation.navigate('Messages');
+    firebaseLib.notifications().onNotificationOpened(notificationOpen => {
+      console.log('notificationOpen=======>', notificationOpen);
+      navigation.navigate('Messages');
 
       // Get information about the notification that was opened
       // const notification: Notification = notificationOpen.notification;
-    // });
-    // const notification = await firebaseLib
-    //   .notifications()
-    //   .getInitialNotification();
-    // if (notification) {
-    //   navigation.navigate('Messages');
-    // }
+    });
+    const notification = await firebaseLib
+      .notifications()
+      .getInitialNotification();
+    if (notification) {
+      navigation.navigate('Messages');
+    }
 
-    // this.fcmToken();
+    this.fcmToken();
     // ******************************************
     const db = firebaseLib.firestore();
     Linking.addEventListener('url', this.handleDeepLink);
@@ -89,23 +89,23 @@ class Feedback extends React.Component {
     this.setState({loading: false});
   }
 
-  // fcmToken = async () => {
-  //   const fcm = firebaseLib.messaging();
-  //   const db = firebaseLib.firestore();
-  //   const {
-  //     userObj: {userId},
-  //   } = this.props;
-  //   const fcmToken = await fcm.getToken();
-  //   const per = await fcm.hasPermission();
-  //   console.log('PEr =========>', per);
+  fcmToken = async () => {
+    const fcm = firebaseLib.messaging();
+    const db = firebaseLib.firestore();
+    const {
+      userObj: {userId},
+    } = this.props;
+    const fcmToken = await fcm.getToken();
+    const per = await fcm.hasPermission();
+    console.log('PEr =========>', per);
 
-  //   await fcm.requestPermission();
-  //   if (fcmToken) {
-  //     await firebase.updateDoc('Users', userId, {token: fcmToken});
-  //   } else {
-  //     console.log('fcmToken Error', fcmToken);
-  //   }
-  // };
+    await fcm.requestPermission();
+    if (fcmToken) {
+      await firebase.updateDoc('Users', userId, {token: fcmToken});
+    } else {
+      console.log('fcmToken Error', fcmToken);
+    }
+  };
   handleDeepLink(e) {
     // const route = e.url.replace(/.*?:\/\//g, "");
     // this._navigator.replace(this.state.routes[route]);

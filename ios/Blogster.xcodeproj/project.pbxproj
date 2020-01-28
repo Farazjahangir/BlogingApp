@@ -40,6 +40,9 @@
 		F0082BBCB58246A4ADFC3E24 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A6BEC16F111345E88952FC6A /* FontAwesome5_Solid.ttf */; };
 		F1252E1123B6995E00B6FCFC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1252E1023B6995E00B6FCFC /* GoogleService-Info.plist */; };
 		FCCAB7BF1FB344BFB84DDFE5 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 643500A266DF494C8ACD0FDC /* Feather.ttf */; };
+		66A63820445B4E2BA748080D /* MyriadPro-BlackSemiCn.otf in Resources */ = {isa = PBXBuildFile; fileRef = AF5F916516E44982A474E207 /* MyriadPro-BlackSemiCn.otf */; };
+		E8E80664CCB0436EB7623E38 /* Myriad Pro Bold SemiExtended.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1070FD88D3C341ABB9B033DE /* Myriad Pro Bold SemiExtended.ttf */; };
+		A81106ED32434FB1A1470372 /* ryder_dirty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E79E8C54EC345A5B2858FFE /* ryder_dirty.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +118,9 @@
 		F1252E1023B6995E00B6FCFC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F6B8BBBC1A624717ACA7CBF8 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		F9D5C36C03F6BE4BAB871A73 /* libPods-Blogster.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Blogster.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF5F916516E44982A474E207 /* MyriadPro-BlackSemiCn.otf */ = {isa = PBXFileReference; name = "MyriadPro-BlackSemiCn.otf"; path = "../assets/fonts/MyriadPro-BlackSemiCn.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1070FD88D3C341ABB9B033DE /* Myriad Pro Bold SemiExtended.ttf */ = {isa = PBXFileReference; name = "Myriad Pro Bold SemiExtended.ttf"; path = "../assets/fonts/Myriad Pro Bold SemiExtended.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0E79E8C54EC345A5B2858FFE /* ryder_dirty.ttf */ = {isa = PBXFileReference; name = "ryder_dirty.ttf"; path = "../assets/fonts/ryder_dirty.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +226,9 @@
 				E6F6AE2EDB4144B8A2C76C96 /* rubicon-icon-font.ttf */,
 				3666186FB18646628AF360D5 /* SimpleLineIcons.ttf */,
 				D18E4D46541C466690BD8AD9 /* Zocial.ttf */,
+				AF5F916516E44982A474E207 /* MyriadPro-BlackSemiCn.otf */,
+				1070FD88D3C341ABB9B033DE /* Myriad Pro Bold SemiExtended.ttf */,
+				0E79E8C54EC345A5B2858FFE /* ryder_dirty.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -445,6 +454,9 @@
 				F1252E1123B6995E00B6FCFC /* GoogleService-Info.plist in Resources */,
 				5564DD93F53E46A49074F702 /* SimpleLineIcons.ttf in Resources */,
 				738CC26C02FB498E932D4B52 /* Zocial.ttf in Resources */,
+				66A63820445B4E2BA748080D /* MyriadPro-BlackSemiCn.otf in Resources */,
+				E8E80664CCB0436EB7623E38 /* Myriad Pro Bold SemiExtended.ttf in Resources */,
+				A81106ED32434FB1A1470372 /* ryder_dirty.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
