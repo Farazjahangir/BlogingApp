@@ -82,6 +82,12 @@ const AuthStack = createStackNavigator({
       headerTitle: 'Forgot Password'
     }
   },
+  BlogCategory : {
+    screen: BlogCategory,
+    navigationOptions: {
+      headerTitle: 'Feedback'
+    }
+  },
 })
 
 const AppStack = createStackNavigator({
@@ -94,12 +100,6 @@ const AppStack = createStackNavigator({
   },
   Support : {
     screen: Support,
-    navigationOptions: {
-      headerTitle: 'Feedback'
-    }
-  },
-  BlogCategory : {
-    screen: BlogCategory,
     navigationOptions: {
       headerTitle: 'Feedback'
     }

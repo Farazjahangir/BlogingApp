@@ -54,7 +54,7 @@ class Login extends React.Component {
       const dbResponse = await firebase.getDocument('Users', uid)
       const userData = dbResponse._data
       this.props.loginUser(userData)
-      this.props.navigation.navigate('App')
+      this.props.navigation.navigate('BlogCategory')
     }
     catch (e) {
       alert(e.message)
@@ -80,6 +80,8 @@ class Login extends React.Component {
       response.exists
       if (response.exists) {
         userObj = response.data();
+        this.props.loginUser(userObj)
+        this.props.navigation.navigate('App')  
       }
       else {
         userObj = {
@@ -93,9 +95,9 @@ class Login extends React.Component {
           userType: 'free'
         }
         await firebase.setDocument('Users', fbUid, userObj)
+        this.props.loginUser(userObj)
+        this.props.navigation.navigate('BlogCategory')
       }
-      this.props.loginUser(userObj)
-      this.props.navigation.navigate('App')
     }
     catch (e) {
       alert(e.message);

@@ -62,7 +62,7 @@ class EmailAccount extends React.Component {
         userName.toLowerCase(),
       );
       this.props.loginUser(response);
-      this.props.navigation.navigate('App');
+      this.props.navigation.navigate('BlogCategory');
     } catch (e) {
       alert(e.message);
     }

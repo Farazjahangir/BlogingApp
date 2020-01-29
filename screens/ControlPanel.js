@@ -60,7 +60,6 @@ class ControlPanel extends React.Component {
             {this.menuButtons('Search users' , 'SearchUsers')}
             {this.menuButtons('AddProduct' , 'AddProduct')}
             {this.menuButtons('Select Blog' , 'SelectBlog')}
-            {this.menuButtons('Blog Category' , 'BlogCategory')}
             {this.menuButtons('Privacy' , 'Privacy')}
             {this.menuButtons('Payment' , 'Payment')}
             {this.menuButtons('Support' , 'Support')}

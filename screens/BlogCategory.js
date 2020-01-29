@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, {Fragment} from 'react';
 import {
   StyleSheet,
@@ -13,9 +15,12 @@ import CustomInput from '../Component/Input';
 import ControlPanel from '../screens/ControlPanel';
 import CustomButton from '../Component/Button';
 import {NavigationEvents} from 'react-navigation';
+import {connect} from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import CustomHeader from '../Component/header';
 import Drawer from 'react-native-drawer';
+import firebase from '../utils/firebase';
 
 import {themeColor, pinkColor} from '../Constant';
 class BlogCategory extends React.Component {
@@ -23,6 +28,8 @@ class BlogCategory extends React.Component {
     super(props);
     this.state = {
       category: 0,
+      categoryList: ['Photography', 'Technology', 'Design'],
+      loading: false
     };
   }
   static navigationOptions = {
@@ -31,13 +38,37 @@ class BlogCategory extends React.Component {
   getRandomInt = () => {
     return Math.floor(Math.random() * Math.floor(4));
   };
+
+  async selectBlogCategory(category) {
+    console.log('selectBlogCategory', category);
+    
+    const {
+      userObj: {userId},
+      navigation,
+    } = this.props;
+    
+    try {
+      this.setState({laoding: true});
+      await firebase.updateDoc('Users', userId, {blogCategory: category});
+      navigation.navigate('App');
+    } catch (e) {
+      alert(e.message);
+    }
+    this.setState({laoding: false});
+  }
+
   render() {
     const color = ['#f78da7', '#abb8c3', '#00d084', '#03a9f4', '#ff5722   '];
     const {navigation} = this.props;
-    let {category} = this.state;
+    let {category, categoryList, loading} = this.state;
     return (
       <ScrollView style={{backgroundColor: '#323643', flex: 1}}>
         <CustomHeader navigation={navigation} title={'BLOG CATEGORY'} />
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{color: '#fff'}}
+        />
         <View style={{height: 60, marginHorizontal: 15, padding: 4}}>
           <Text
             style={{
@@ -58,9 +89,9 @@ class BlogCategory extends React.Component {
             marginTop: 41,
             flexDirection: 'row',
             flexWrap: 'wrap',
-            justifyContent: 'center',
+            justifyContent: 'space-between',
           }}>
-          {['1', '2', '3', '4', '5', '6'].map((data, index) => (
+          {categoryList.map((data, index) => (
             <TouchableOpacity
               style={{
                 height: 150,
@@ -73,17 +104,9 @@ class BlogCategory extends React.Component {
                 alignItems: 'center',
                 backgroundColor:
                   index !== 0 ? color[this.getRandomInt()] : themeColor,
-              }}>
-              {index === 0 ? (
-                <Icon
-                  type={'font-awesome'}
-                  name={'plus'}
-                  color={'#fff'}
-                  size={41}
-                />
-              ) : (
-                <Text style={{color: '#fff', fontSize: 15}}>Select Your </Text>
-              )}
+              }}
+              onPress={() => this.selectBlogCategory(data)}>
+              <Text style={{color: '#fff', fontSize: 15}}>{data}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -97,4 +120,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-export default BlogCategory;
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+const mapStateToProps = state => {
+  return {
+    userObj: state.auth.user,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BlogCategory);
