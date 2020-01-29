@@ -59,7 +59,7 @@ class SavedCards extends Component {
             this.setState({ loading: true })
             if (!subscription) {
                 // One Time Pay
-                let chargeResponse = await fetch('https://5d95dca2.ngrok.io/charge-customer', {
+                let chargeResponse = await fetch('https://7fca4201.ngrok.io/charge-customer', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -96,7 +96,7 @@ class SavedCards extends Component {
                     source: data.source,
                     type,
                 }
-                let chargeSubscription = await fetch('https://5d95dca2.ngrok.io/subscription', {
+                let chargeSubscription = await fetch('https://7fca4201.ngrok.io/subscription', {
                     headers: {
                         "Content-Type": 'application/json'
                     },

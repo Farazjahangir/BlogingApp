@@ -18,7 +18,7 @@ const stripe = require("stripe-client")(
 
 class ProductPay extends Component {
     state = {
-        cardNumber: '6200000000000005',
+        cardNumber: '4242424242424242',
         expMonth: '01',
         expYear: '2020',
         cvcNumber: '222',
@@ -67,7 +67,7 @@ class ProductPay extends Component {
             if (!customerId) {
                 console.log('Ifff')
                 // Creating stripe customer id if not found in database
-                let customerId = await fetch('https://5d95dca2.ngrok.io/customer-id', {
+                let customerId = await fetch('https://7fca4201.ngrok.io/customer-id', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -99,7 +99,7 @@ class ProductPay extends Component {
             }
             console.log('SourceBody', body);
 
-            let fingerPrint = await fetch('https://5d95dca2.ngrok.io/customer-source', {
+            let fingerPrint = await fetch('https://7fca4201.ngrok.io/customer-source', {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -128,7 +128,7 @@ class ProductPay extends Component {
                     amount,
                     source: fingerPrint.response.id
                 }
-                let chargeResponse = await fetch('https://5d95dca2.ngrok.io/charge-customer', {
+                let chargeResponse = await fetch('https://7fca4201.ngrok.io/charge-customer', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -170,7 +170,7 @@ class ProductPay extends Component {
                     source: fingerPrint.response.id,
                     type
                 }
-                let chargeSubscription = await fetch('https://5d95dca2.ngrok.io/subscription', {
+                let chargeSubscription = await fetch('https://7fca4201.ngrok.io/subscription', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
