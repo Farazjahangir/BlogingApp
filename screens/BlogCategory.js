@@ -49,7 +49,7 @@ class BlogCategory extends React.Component {
     
     try {
       this.setState({laoding: true});
-      await firebase.updateDoc('Users', userId, {blogCategory: category});
+      await firebase.updateDoc('Users', userId, {blogCategory: category.toLowerCase()});
       navigation.navigate('App');
     } catch (e) {
       alert(e.message);
