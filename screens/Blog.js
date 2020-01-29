@@ -53,7 +53,7 @@ class Blog extends React.Component {
   async componentDidMount() {
     const db = firebase.firestore();
     const {
-      userObj: {following},
+      userObj: {following, blogCategory},
       navigation,
     } = this.props;
     console.log('PRops', this.props);
@@ -89,13 +89,14 @@ class Blog extends React.Component {
       console.log('Error', e.message);
     }
 
-    const response = await db.collection('Blog').onSnapshot(snapShot => {
+    const response = await db.collection('Blog').where('category', '==', blogCategory).onSnapshot(snapShot => {
       snapShot.docChanges.forEach(change => {
         if (change.type === 'added') {
           const {blogs} = this.state;
           console.log('IFFFFFFFFFFFFFFFFF Outside', following);
 
-          if (following.indexOf(change.doc.data().userId) !== -1) {
+          if (
+            following.indexOf(change.doc.data().userId) !== -1) {
             console.log('IFFFFFFFFFFFFFFFFF');
             blogs.unshift({id: change.doc.id, ...change.doc.data()});
           }
@@ -314,8 +315,8 @@ class Blog extends React.Component {
       userObj: {following},
     } = this.props;
     let {follow, blogs, isBlogs, loading} = this.state;
-    console.log('blogs',blogs);
-    
+    console.log('blogs', blogs);
+
     return (
       <ScrollView
         stickyHeaderIndices={[0]}

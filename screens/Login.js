@@ -54,7 +54,7 @@ class Login extends React.Component {
       const dbResponse = await firebase.getDocument('Users', uid)
       const userData = dbResponse._data
       this.props.loginUser(userData)
-      this.props.navigation.navigate('BlogCategory')
+      this.props.navigation.navigate('App')
     }
     catch (e) {
       alert(e.message)
