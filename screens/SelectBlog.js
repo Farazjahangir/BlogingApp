@@ -16,6 +16,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Drawer from 'react-native-drawer';
 import firebaseLib from 'react-native-firebase';
 import {connect} from 'react-redux';
+import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
 
 import CustomInput from '../Component/Input';
 import ControlPanel from '../screens/ControlPanel';
@@ -31,7 +33,11 @@ class SelectBlog extends React.Component {
       blogsArr: [],
       errMessage: '',
       loading: true,
-      selectedIndex: 0
+      selectedIndex: 0,
+      controls: false,
+      paused: true,
+      hidePlayPause: true,
+      hideSeekbar: true,
     };
   }
   static navigationOptions = {
@@ -39,49 +45,65 @@ class SelectBlog extends React.Component {
   };
 
   componentDidMount() {
-    const { selectedIndex } = this.state
+    const {selectedIndex} = this.state;
     this.getBlog('photography', selectedIndex);
   }
 
   getBlog(item, index) {
-    this.setState({blogsArr: [], loading: true, selectedIndex: index}, async () => {
-      const {
-        userObj: {following},
-      } = this.props;
-      const {blogsArr, errMessage} = this.state;
-      const db = firebaseLib.firestore();
-      try {
-        console.log('******8 BLogsArr *********8', blogsArr);
+    this.setState(
+      {blogsArr: [], loading: true, selectedIndex: index},
+      async () => {
+        const {
+          userObj: {following},
+        } = this.props;
+        const {blogsArr, errMessage} = this.state;
+        const db = firebaseLib.firestore();
+        try {
+          console.log('******8 BLogsArr *********8', blogsArr);
 
-        const blogs = await db
-          .collection('Blog')
-          .where('category', '==', item.toLowerCase())
-          .get();
-          if(blogs.empty){
-            this.setState({errMessage: 'Sorry no Blogs found', blogsArr: []})
+          const blogs = await db
+            .collection('Blog')
+            .where('category', '==', item.toLowerCase())
+            .get();
+          if (blogs.empty) {
+            this.setState({errMessage: 'Sorry no Blogs found', blogsArr: []});
           }
-          
-        blogs.docs.forEach(blog => {
-          if (following.indexOf(blog.data().userId) !== -1) {
-            console.log(blog.data());
-            blogsArr.push(blog.data());
-          } else {
-            console.log('Else');        
-            this.setState({blogsArr: []});
-            return;
-          }
-          this.setState({blogsArr: [...blogsArr]});
-        });
-      } catch (e) {
-        alert(e.message);
-      }
-      this.setState({ loading: false })
-    });
+
+          blogs.docs.forEach(blog => {
+            console.log('BLog', blog);
+
+            if (following.indexOf(blog.data().userId) !== -1) {
+              console.log(blog.data());
+              blogsArr.push(blog.data());
+            } else {
+              console.log('Else');
+              this.setState({blogsArr: []});
+              return;
+            }
+            this.setState({blogsArr: [...blogsArr]});
+          });
+        } catch (e) {
+          alert(e.message);
+        }
+        this.setState({loading: false});
+      },
+    );
+  }
+  videoIsReady() {
+    console.log('videoIsReady');
+
+    this.setState({hidePlayPause: false, hideSeekbar: false});
   }
 
   render() {
     const {navigation} = this.props;
-    let {category, blogsArr, errMessage, loading, selectedIndex} = this.state;
+    let {
+      category,
+      blogsArr,
+      errMessage,
+      loading,
+      selectedIndex,
+    } = this.state;
     console.log('errMessage', errMessage);
 
     return (
@@ -123,14 +145,55 @@ class SelectBlog extends React.Component {
             numColumns={2}
             renderItem={({item, index}) => (
               <View style={styles.imageContainer}>
-                <Image source={{uri: item.imageUrl}} style={styles.image} />
+                {!!item.imageUrl && (
+                  <Image source={{uri: item.imageUrl}} style={styles.image} />
+                )}
+                {!!item.videoUrl && (
+                  <View
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginVertical: 10,
+                    }}>
+                    {Platform.OS === 'ios' ? (
+                      <Video
+                        source={{uri: item.videoUrl}}
+                        style={{width: '100%', height: 250}}
+                        paused={true}
+                        pictureInPicture={true}
+                        controls={true}
+                        onLoad={() => this.videoIsReady()}
+                        ref={ref => (this.videoRef = ref)}
+                      />
+                    ) : (
+                      <VideoPlayer
+                        source={{uri: item.videoUrl}}
+                        videoStyle={{
+                          width: '100%',
+                          height: 160,
+                        }}
+                        style={{
+                          width: '100%',
+                          height: 160,
+                        }}
+                        disableVolume={true}
+                        fullscreen={false}
+                        paused={this.state.paused}
+                        onLoad={() => this.videoIsReady()}
+                        disablePlayPause={this.state.hidePlayPause}
+                        disableSeekbar={this.state.hideSeekbar}
+                        disableBack={true}
+                      />
+                    )}
+                  </View>
+                )}
                 <Text style={styles.textHeading}>{item.blog}</Text>
                 <Text style={{color: '#ccc'}}>73 Comments</Text>
               </View>
             )}
           />
         ) : (
-        <Text style={styles.errMessage}>{errMessage}</Text>
+          <Text style={styles.errMessage}>{errMessage}</Text>
         )}
       </View>
     );
