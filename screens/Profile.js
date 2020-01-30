@@ -9,6 +9,7 @@ import {
   FlatList,
   Text,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {SearchBar, Icon} from 'react-native-elements';
 import CustomInput from '../Component/Input';
@@ -17,6 +18,8 @@ import CustomHeader from '../Component/header';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {connect} from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
 
 import {themeColor, pinkColor} from '../Constant';
 import firebaseLib from 'react-native-firebase';
@@ -30,6 +33,10 @@ class Profile extends React.Component {
       loading: true,
       isFollowed: false,
       userData: '',
+      controls: false,
+      paused: true,
+      hidePlayPause: true,
+      hideSeekbar: true,
     };
   }
   static navigationOptions = {
@@ -143,7 +150,7 @@ class Profile extends React.Component {
     this.setState({loading: false});
   }
 
-  decideUser = (newData) => {
+  decideUser = newData => {
     console.log('decideUser');
 
     const {navigation, userObj} = this.props;
@@ -158,8 +165,13 @@ class Profile extends React.Component {
     this.setState({userData});
   };
 
-  componentWillReceiveProps(nextProps){
-    this.decideUser(nextProps.userObj)
+  componentWillReceiveProps(nextProps) {
+    this.decideUser(nextProps.userObj);
+  }
+  videoIsReady() {
+    console.log('videoIsReady');
+
+    this.setState({hidePlayPause: false, hideSeekbar: false});
   }
 
   render() {
@@ -261,17 +273,61 @@ class Profile extends React.Component {
             flexDirection: 'row',
           }}>
           {!!blogs.length &&
-            blogs.map((data, index) => (
-              <Image
-                source={{uri: data.imageUrl}}
-                style={{
-                  height: 110,
-                  width: '32%',
-                  margin: 1,
-                  resizeMode: 'stretch',
-                }}
-              />
-            ))}
+            blogs.map((data, index) => {
+              return (
+                <>
+                  <Image
+                    source={{uri: data.imageUrl}}
+                    style={{
+                      height: 110,
+                      width: '32%',
+                      margin: 1,
+                      resizeMode: 'stretch',
+                    }}
+                  />
+                  {!!data.videoUrl && (
+                    <View
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginVertical: 10,
+                      }}>
+                      {/* {Platform.OS === 'ios' ? (
+                        <Video
+                          source={{uri: data.videoUrl}}
+                          style={{width: '32%', height: 110}}
+                          paused={true}
+                          pictureInPicture={true}
+                          controls={true}
+                          onLoad={() => this.videoIsReady()}
+                          ref={ref => (this.videoRef = ref)}
+                        />
+                      ) : (
+                        <VideoPlayer
+                          source={{uri: data.videoUrl}}
+                          videoStyle={{
+                            width: '100%',
+                            height: 160,
+                            backgroundColor: 'red'
+                          }}
+                          style={{
+                            width: 180,
+                            height: 160,
+                          }}
+                          disableVolume={true}
+                          fullscreen={false}
+                          paused={this.state.paused}
+                          onLoad={() => this.videoIsReady()}
+                          disablePlayPause={this.state.hidePlayPause}
+                          disableSeekbar={this.state.hideSeekbar}
+                          disableBack={true}
+                        />
+                      )} */}
+                    </View>
+                  )}
+                </>
+              );
+            })}
         </View>
       </ScrollView>
     );

@@ -9,6 +9,7 @@ import {
   FlatList,
   Text,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {SearchBar, Icon} from 'react-native-elements';
 import {NavigationEvents} from 'react-navigation';
@@ -93,13 +94,7 @@ class SelectBlog extends React.Component {
 
   render() {
     const {navigation} = this.props;
-    let {
-      category,
-      blogsArr,
-      errMessage,
-      loading,
-      selectedIndex,
-    } = this.state;
+    let {category, blogsArr, errMessage, loading, selectedIndex} = this.state;
     console.log('errMessage', errMessage);
 
     return (
