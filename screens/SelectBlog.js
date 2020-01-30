@@ -75,10 +75,6 @@ class SelectBlog extends React.Component {
             if (following.indexOf(blog.data().userId) !== -1) {
               console.log(blog.data());
               blogsArr.push(blog.data());
-            } else {
-              console.log('Else');
-              this.setState({blogsArr: []});
-              return;
             }
             this.setState({blogsArr: [...blogsArr]});
           });
