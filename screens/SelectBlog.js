@@ -11,13 +11,16 @@ import {
   ScrollView,
 } from 'react-native';
 import {SearchBar, Icon} from 'react-native-elements';
+import {NavigationEvents} from 'react-navigation';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Drawer from 'react-native-drawer';
+import firebaseLib from 'react-native-firebase';
+import {connect} from 'react-redux';
+
 import CustomInput from '../Component/Input';
 import ControlPanel from '../screens/ControlPanel';
 import CustomButton from '../Component/Button';
-import {NavigationEvents} from 'react-navigation';
-
 import CustomHeader from '../Component/header';
-import Drawer from 'react-native-drawer';
 
 import {themeColor, pinkColor} from '../Constant';
 class SelectBlog extends React.Component {
@@ -25,18 +28,70 @@ class SelectBlog extends React.Component {
     super(props);
     this.state = {
       category: 0,
+      blogsArr: [],
+      errMessage: '',
+      loading: true,
+      selectedIndex: 0
     };
   }
   static navigationOptions = {
     header: null,
   };
 
+  componentDidMount() {
+    const { selectedIndex } = this.state
+    this.getBlog('photography', selectedIndex);
+  }
+
+  getBlog(item, index) {
+    this.setState({blogsArr: [], loading: true, selectedIndex: index}, async () => {
+      const {
+        userObj: {following},
+      } = this.props;
+      const {blogsArr, errMessage} = this.state;
+      const db = firebaseLib.firestore();
+      try {
+        console.log('******8 BLogsArr *********8', blogsArr);
+
+        const blogs = await db
+          .collection('Blog')
+          .where('category', '==', item.toLowerCase())
+          .get();
+          if(blogs.empty){
+            this.setState({errMessage: 'Sorry no Blogs found', blogsArr: []})
+          }
+          
+        blogs.docs.forEach(blog => {
+          if (following.indexOf(blog.data().userId) !== -1) {
+            console.log(blog.data());
+            blogsArr.push(blog.data());
+          } else {
+            console.log('Else');        
+            this.setState({blogsArr: []});
+            return;
+          }
+          this.setState({blogsArr: [...blogsArr]});
+        });
+      } catch (e) {
+        alert(e.message);
+      }
+      this.setState({ loading: false })
+    });
+  }
+
   render() {
     const {navigation} = this.props;
-    let {category} = this.state;
+    let {category, blogsArr, errMessage, loading, selectedIndex} = this.state;
+    console.log('errMessage', errMessage);
+
     return (
       <View style={{backgroundColor: '#323643', flex: 1}}>
         <CustomHeader navigation={navigation} title={'BLOG'} />
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{color: '#fff'}}
+        />
         <View
           style={{
             height: 60,
@@ -44,35 +99,39 @@ class SelectBlog extends React.Component {
             borderBottomWidth: 0.3,
           }}>
           <FlatList
-            data={['For you', 'Photography', 'Technology', 'Design', 'For you']}
+            data={['Photography', 'For you', 'Technology', 'Design', 'For you']}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({item, index}) => (
-              <Text
-                style={{
-                  padding: 12,
-                  color: category === index ? '#fff' : '#bbb',
-                  fontSize: 16,
-                }}>
-                {' '}
-                {item}
-              </Text>
+              <TouchableOpacity onPress={() => this.getBlog(item, index)}>
+                <Text
+                  style={{
+                    padding: 12,
+                    color: selectedIndex === index ? '#fff' : '#bbb',
+                    fontSize: 16,
+                  }}>
+                  {' '}
+                  {item}
+                </Text>
+              </TouchableOpacity>
             )}
           />
         </View>
-        <FlatList
-          data={['For you', 'Photography', 'Technology', 'Design', 'For you']}
-          numColumns={2}
-          renderItem={({item, index}) => (
-            <View style={styles.imageContainer}>
-              <Image source={{uri: ''}} style={styles.image} />
-              <Text style={styles.textHeading}>
-                Abcd Abcd Abcd Abcd Abcd Abcd
-              </Text>
-              <Text style={{color: '#ccc'}}>73 Comments</Text>
-            </View>
-          )}
-        />
+        {!!blogsArr.length ? (
+          <FlatList
+            data={blogsArr}
+            numColumns={2}
+            renderItem={({item, index}) => (
+              <View style={styles.imageContainer}>
+                <Image source={{uri: item.imageUrl}} style={styles.image} />
+                <Text style={styles.textHeading}>{item.blog}</Text>
+                <Text style={{color: '#ccc'}}>73 Comments</Text>
+              </View>
+            )}
+          />
+        ) : (
+        <Text style={styles.errMessage}>{errMessage}</Text>
+        )}
       </View>
     );
   }
@@ -93,5 +152,16 @@ const styles = StyleSheet.create({
   textHeading: {color: '#fff', fontWeight: 'bold', fontSize: 16},
   drawer: {shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
   main: {paddingLeft: 3},
+  errMessage: {color: '#fff', textAlign: 'center', fontSize: 20, marginTop: 20},
 });
-export default SelectBlog;
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+const mapStateToProps = state => {
+  return {
+    userObj: state.auth.user,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectBlog);
