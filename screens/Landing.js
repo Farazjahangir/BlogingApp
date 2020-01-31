@@ -22,27 +22,32 @@ export const ENTRIES1 = [
   {
       title: 'Beautiful and dramatic Antelope Canyon',
       subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-      illustration: 'https://i.imgur.com/UYiroysl.jpg'
+      illustration: 'https://i.imgur.com/UYiroysl.jpg',
+      thumbnail: require('../assets/landingScreen/1.jpeg')
   },
   {
       title: 'Earlier this morning, NYC',
       subtitle: 'Lorem ipsum dolor sit amet',
-      illustration: 'https://i.imgur.com/UPrs1EWl.jpg'
+      illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
+      thumbnail: require('../assets/landingScreen/2.jpeg')
   },
   {
       title: 'White Pocket Sunset',
       subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-      illustration: 'https://i.imgur.com/MABUbpDl.jpg'
+      illustration: 'https://i.imgur.com/MABUbpDl.jpg',
+      thumbnail: require('../assets/landingScreen/3.jpeg')
   },
   {
       title: 'Acrocorinth, Greece',
       subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-      illustration: 'https://i.imgur.com/KZsmUi2l.jpg'
+      illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
+      thumbnail: require('../assets/landingScreen/4.jpeg')
   },
   {
       title: 'The lone tree, majestic landscape of New Zealand',
       subtitle: 'Lorem ipsum dolor sit amet',
-      illustration: 'https://i.imgur.com/2nCt3Sbl.jpg'
+      illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
+      thumbnail: require('../assets/landingScreen/5.jpeg')
   },
   {
       title: 'Middle Earth, Germany',
@@ -68,7 +73,7 @@ export const ENTRIES1 = [
     return (
         <View style={styles.item}>
             <ParallaxImage
-                source={{ uri: item.thumbnail }}
+                source={item.thumbnail}
                 containerStyle={styles.imageContainer}
                 style={styles.image}
                 parallaxFactor={0.4}
@@ -113,6 +118,8 @@ export const ENTRIES1 = [
               hasParallaxImages={true}
               />
               </ScrollView>
+
+
 
               <View style = {styles.bottomButtons}>
                 <TouchableOpacity style = {styles.arrowButton} >
