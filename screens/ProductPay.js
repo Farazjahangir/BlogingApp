@@ -96,7 +96,6 @@ class ProductPay extends Component {
     const {userObj, emptyChart, navigation, chart} = this.props;
     const {userId} = userObj;
     const emailObj =  this.productObjToEmail()
-    console.log('******* emailObj ******',emailObj);
     
     console.log('Chart', chart);
     const productDetails = {
@@ -288,11 +287,13 @@ class ProductPay extends Component {
     const amount = this.props.navigation.state.params.amount;
     const subscription = this.props.navigation.state.params.subscription;
     const type = this.props.navigation.state.params.type;
+    const { address } = this.state
 
     const {customerId} = this.state;
     const data = {
       amount,
       customer: customerId,
+      address: address
     };
     const {navigation} = this.props;
     navigation.navigate('SavedCards', {data, subscription, type});

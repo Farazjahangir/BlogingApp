@@ -45,21 +45,50 @@ class SavedCards extends Component {
         this.setState({ source: val.id });
 
     }
+    productObjToEmail = () => {
+        const { chart } = this.props
+        const objToSend = []
+        chart.map((item, i) => {
+          const findedIndex = objToSend.findIndex(email => email.email === item.email)
+          if(findedIndex === -1){
+            const data = {
+              email: item.email,
+              products: [{
+                name: item.productName,
+                price: item.price
+              }]
+            }
+            objToSend.push(data)
+          }
+          else if (findedIndex !== -1){
+            const data = {
+              name: item.productName,
+              price: item.price
+            }
+            objToSend[findedIndex].products.push(data)
+          }
+        })
+        return objToSend    
+        
+      }    
     handleOk = async () => {
         const data = this.props.navigation.state.params.data
         const subscription = this.props.navigation.state.params.subscription
         const type = this.props.navigation.state.params.type
-
+        const emailObj =  this.productObjToEmail()
         this.setState({ showDialogue: false });
         const { source } = this.state
         const { emptyChart, navigation, chart, userObj: { userId } } = this.props
         data.source = source
         console.log(data)
         try {
+            data.forEmail = emailObj,
+            console.log('****************** data ***************', data);
+            
             this.setState({ loading: true })
             if (!subscription) {
                 // One Time Pay
-                let chargeResponse = await fetch('https://7fca4201.ngrok.io/charge-customer', {
+                let chargeResponse = await fetch('https://7d06cf88.ngrok.io/charge-customer', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -96,7 +125,7 @@ class SavedCards extends Component {
                     source: data.source,
                     type,
                 }
-                let chargeSubscription = await fetch('https://7fca4201.ngrok.io/subscription', {
+                let chargeSubscription = await fetch('https://7d06cf88.ngrok.io/subscription', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
