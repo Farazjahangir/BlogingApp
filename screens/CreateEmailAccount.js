@@ -25,7 +25,7 @@ class EmailAccount extends React.Component {
       password: null,
       confirmPassword: null,
       userName: null,
-      loading: false,
+      number: null
     };
   }
   static navigationOptions = {
@@ -49,7 +49,7 @@ class EmailAccount extends React.Component {
   };
 
   async signUp() {
-    const {userName, email, password} = this.state;
+    const {userName, email, password, number} = this.state;
     const {navigation} = this.props;
 
     if (this.checkValidation()) return;
@@ -60,6 +60,7 @@ class EmailAccount extends React.Component {
         email,
         password,
         userName.toLowerCase(),
+        number
       );
       this.props.loginUser(response);
       this.props.navigation.navigate('BlogCategory');
@@ -70,7 +71,7 @@ class EmailAccount extends React.Component {
   }
   render() {
     const {navigation} = this.props;
-    const {userName, email, password, confirmPassword, loading} = this.state;
+    const {userName, email, password, confirmPassword, loading, number} = this.state;
     return (
       <View style={{backgroundColor: '#323643', flex: 1}}>
         <Spinner
@@ -96,6 +97,15 @@ class EmailAccount extends React.Component {
             inputStyle={{fontWeight: 'bold'}}
             onChangeText={email => this.sText('email', email)}
             value={email}
+          />
+          <Input
+            placeholder={'Phone number with country code'}
+            placeholderTextColor={'#fff'}
+            inputContainerStyle={styles.inputContainer}
+            inputStyle={{fontWeight: 'bold'}}
+            onChangeText={number => this.sText('number', number)}
+            value={number}
+            keyboardType='number-name-phone-pad'
           />
           <Input
             placeholder={'Password'}
