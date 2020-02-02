@@ -28,29 +28,34 @@ class SmsCode extends React.Component {
   static navigationOptions = {
     header: null
   }
+  
   onValueChange (value) {
     this.setState({
       selected: value
     })
   }
   async loginWithNumber(){
-    // const { phoneNumber } = this.state
-    // try{
-    //   const response = await firebase.loginWithPhoneNumber(phoneNumber)
-    //   console.log('phoneAuthSnapshot' , response)
-    //   console.log('Response ======>', response);
+    const { phoneNumber } = this.state
+    const { navigation } = this.props
+    try{
+      const phoneAuthSnapshot = await firebase.loginWithPhoneNumber(phoneNumber)
+      // console.log('phoneAuthSnapshot' , phoneAuthSnapshot)
+      console.log('phoneAuthSnapshot ======>', phoneAuthSnapshot);
+      navigation.navigate('CodeConfirmation', { phoneAuthSnapshot })
       
-    //   auth.verifyPhoneNumber(phoneNumber).on('state_changed' , (phoneAuthSnapshot) => {
-    //     this.props.navigation.navigate('CodeConfirmation', {phoneAuthSnapshot, phoneNumber})        
-    //   })
-    // }
-    // catch(e){
-    //   alert(e.message)
-    // }
+      // auth.verifyPhoneNumber(phoneNumber).on('state_changed' , (phoneAuthSnapshot) => {
+      //   this.props.navigation.navigate('CodeConfirmation', {phoneAuthSnapshot, phoneNumber})        
+      // })
+    }
+    catch(e){
+      alert(e.message)
+    }
   }
   render () {
     const { navigation } = this.props
     const { phoneNumber } = this.state
+    console.log('Phone Number', phoneNumber);
+    
     return (
       <View style={{ backgroundColor: '#323643', flex: 1 }}>
         <View style={{ padding: 30, paddingLeft: 15 }}>

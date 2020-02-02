@@ -14,6 +14,11 @@ import { themeColor, pinkColor } from '../Constant/index'
 import { Picker } from 'native-base'
 import firebase from '../utils/firebase'
 import firebaseLib from "react-native-firebase";
+import { connect } from 'react-redux'
+import Spinner from 'react-native-loading-spinner-overlay';
+import { loginUser } from '../redux/actions/authActions'
+
+
 const auth = firebaseLib.auth()
 
 
@@ -21,7 +26,8 @@ class CodeConfirmation extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      selected: 'key1'
+      selected: 'key1',
+      loading: false
     }
   }
   static navigationOptions = {
@@ -32,6 +38,47 @@ class CodeConfirmation extends React.Component {
       selected: value
     })
   }
+
+  componentDidMount() {
+    let userObj = {}
+    console.log(this.props.loginUser)
+    userObj = 'fuck'
+    console.log(userObj);
+    
+    auth.onAuthStateChanged(async (user) => {
+  if (user){
+    this.setState({ loading: true })
+    const dataFind = await firebase.getDocument('Users', user.uid)
+    if(dataFind.exists){
+        console.log('dataFind.exists', dataFind.exists);
+        
+        userObj = dataFind.data();
+        this.props.loginUser(userObj)
+        this.props.navigation.navigate('App')  
+    }
+     else {
+       console.log('dataFind.exists', dataFind.exists);
+       
+      userObj = {
+        userName: "",
+        email: "",
+        photoUrl: "",
+        userId: user.uid,
+        followers: [],
+        following: [],
+        userPackage: 'none',
+        userType: 'free',
+        phoneNumber: user.phoneNumber
+      }
+      await firebase.setDocument('Users', user.uid, userObj)
+      this.props.loginUser(userObj)
+      this.props.navigation.navigate('BlogCategory')
+    }
+  }
+  this.setState({ loading: false })
+  });
+}
+  
   keyboardButton = (number , letters)=><TouchableOpacity style = {{height : 45 , borderRadius : 7 , 
     backgroundColor : '#5A5B5E'  , width : '31%' , justifyContent : 'center' , alignItems : 'center'}}>
       <Text style = {{color : "#fff" , fontSize : letters !== '' ? 15 : 18}}>{number}</Text> 
@@ -43,8 +90,8 @@ class CodeConfirmation extends React.Component {
   </TouchableOpacity>
 
   async confirmSmsCode(){
-    // const phoneAuthSnapshot = this.props.navigation.state.params.phoneAuthSnapshot
-    // console.log('phoneAuthSnapshot', phoneAuthSnapshot);
+    const phoneAuthSnapshot = this.props.navigation.state.params.phoneAuthSnapshot
+    console.log('phoneAuthSnapshot', phoneAuthSnapshot);
     
     // auth.onAuthStateChanged(user => {
     //   console.log('USER', user)
@@ -53,16 +100,16 @@ class CodeConfirmation extends React.Component {
     //   }
     // })
     
-    // const { code } = this.state
-    // console.log('Code', code)
-    // try{
-    //   const confirmation = await response.confirm(code)
-    //   console.log('confirmation', confirmation);
-    // }
-    // catch(e){
-    //   alert(e.message)
-    //   console.log('Errror ====>', e)
-    // }
+    const { code } = this.state
+    console.log('Code', code)
+    try{
+      const confirmation = await phoneAuthSnapshot.confirm(code)
+      console.log('confirmation', confirmation);
+    }
+    catch(e){
+      alert(e.message)
+      console.log('Errror ====>', e)
+    }
     
     // this.props.navigation.navigate('CodeConfirmation')
 
@@ -72,9 +119,15 @@ class CodeConfirmation extends React.Component {
     // await firebase.loginWithPhoneNumber(phoneNumber)
   }
   render () {
-    const { navigation } = this.props
+    const { navigation, loading } = this.props
     return (
         <View style={{ backgroundColor: '#323643', flex: 1 }}>
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#fff' }}
+        />
+
           <ScrollView>
         <View style={{ padding: 30, paddingLeft: 15 }}>
           <Text style={{ color: '#fff', fontSize: 30, fontWeight: 'bold' }}>
@@ -152,4 +205,14 @@ const styles = StyleSheet.create({
     borderRadius: 7
   },
 })
-export default CodeConfirmation
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loginUser: (userData) => dispatch(loginUser(userData))
+  }
+}
+const mapStateToProps = (state) => {
+  return {}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CodeConfirmation)
