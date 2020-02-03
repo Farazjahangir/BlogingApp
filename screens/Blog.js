@@ -44,6 +44,7 @@ class Blog extends React.Component {
       hideSeekbar: true,
       fullScreenHeight: null,
       loading: true,
+      usersData: [],
     };
   }
   static navigationOptions = {
@@ -61,6 +62,7 @@ class Blog extends React.Component {
     if (navigation.state.params) {
       link = this.props.navigation.state.params.link;
     }
+    const usersIds = [];
 
     // setTimeout(()=>{
     //   this.videoRef.presentFullscreenPlayer()
@@ -88,43 +90,49 @@ class Blog extends React.Component {
     } catch (e) {
       console.log('Error', e.message);
     }
-
-    gettingUsersInfo = () => {
-
-    }
-
-    const response = await db.collection('Blog').where('category', '==', blogCategory).orderBy('createdAt').onSnapshot(snapShot => {
-      snapShot.docChanges.forEach(change => {
-        if (change.type === 'added') {
-          const {blogs} = this.state;
-          console.log('IFFFFFFFFFFFFFFFFF Outside', following);
-
-          if (
-            following.indexOf(change.doc.data().userId) !== -1) {
-            console.log('IFFFFFFFFFFFFFFFFF');
-            blogs.push({id: change.doc.id, ...change.doc.data()});
-            // const usersIds = []
-            // userId.push()
-            // this.gettingUsersInfo()
+    const response = await db
+      .collection('Blog')
+      .orderBy('createdAt', 'desc')
+      .where('category', '==', blogCategory)
+      .onSnapshot(snapShot => {
+        snapShot.docChanges.forEach(change => {
+          if (change.type === 'added') {
+            const {blogs} = this.state;
+            if (following.indexOf(change.doc.data().userId) !== -1) {
+              blogs.push({id: change.doc.id, ...change.doc.data()});
+              usersIds.push(change.doc.data().userId);
+            }
+            this.setState({blogs: [...blogs], isBlogs: true});
           }
-          this.setState({blogs: [...blogs], isBlogs: true});
-        }
-        if (change.type === 'modified') {
-          console.log('Modified city: ', change.doc.data());
-        }
-        if (change.type === 'removed') {
-          console.log('Removed city: ', change.doc.data());
-        }
+        });
+        // console.log('snapShot ====>' , snapShot);
+        this.setState({usersIds}, () => {
+          this.gettingUsersInfo();
+        });
+
+        console.log('Response', snapShot);
       });
-      // console.log('snapShot ====>' , snapShot);
-      this.setState({loading: false});
-      console.log('Response', snapShot);
-    });
 
     // const snapShot = await response.forEach((doc)=> console.log('Response =====>' , doc.data()))
     // const snapShot = response.docChanges().forEach(() => (
     //     console.log('Response =====>', change.doc.data())))
   }
+
+  gettingUsersInfo = async () => {
+    const {blogs, usersIds} = this.state;
+    const db = firebase.firestore();
+    const usersData = [];
+    const uniqueArr = [...new Set(usersIds)];
+    for (var i = 0; i < uniqueArr.length; i++) {
+      const users = await db
+        .collection('Users')
+        .doc(uniqueArr[i])
+        .get();
+      usersData.push(users.data());
+    }
+    this.setState({usersData, loading: false});
+  };
+
   videoIsReady() {
     console.log('videoIsReady');
 
@@ -167,6 +175,14 @@ class Blog extends React.Component {
   );
 
   blog = (item, index) => {
+    const {usersData} = this.state;
+    usersData.map(user => {
+      if (user.userId === item.userId) {
+        item.userObj = user;
+      }
+    });
+    console.log('Item=====>', item);
+
     return (
       this.props.userObj.userId !== item.userId && (
         <View style={{width: '100%', marginBottom: 25}}>
@@ -174,11 +190,16 @@ class Blog extends React.Component {
             <View style={styles.title}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image
-                  source={require('../assets/avatar.png')}
+                  source={
+                    item.userObj.photoUrl
+                      ? {uri: item.userObj.photoUrl}
+                      : require('../assets/avatar.png')
+                  }
                   style={styles.imageStyle}
                 />
+
                 <Text style={{color: '#fff', fontSize: 16, fontWeight: 'bold'}}>
-                  {item.userName}
+                  {item.userObj.userName}
                 </Text>
               </View>
               <CustomButton
@@ -316,7 +337,7 @@ class Blog extends React.Component {
       navigation,
       userObj: {following},
     } = this.props;
-    let {follow, blogs, isBlogs, loading} = this.state;
+    let {follow, blogs, isBlogs, loading, usersData} = this.state;
     console.log('blogs', blogs);
 
     return (
@@ -332,7 +353,7 @@ class Blog extends React.Component {
           textStyle={{color: '#fff'}}
         />
 
-        {isBlogs && (
+        {isBlogs && !!usersData.length && (
           <FlatList
             data={blogs}
             keyExtractor={item => item}

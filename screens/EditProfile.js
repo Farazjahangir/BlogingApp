@@ -86,7 +86,9 @@ class EditProfile extends React.Component {
     } = this.props;
     let {photoUrl, userName, country} = this.state;
     this.setState({loading: true});
-    if (photoUrl) {
+    if (photoUrl && !photoUrl.includes('https')) {
+      console.log('sjdjashdjkashdjkashjkd iffff');
+      
       photoUrl = await firebase.uploadImage(photoUrl, userId);
     }
     const data = {

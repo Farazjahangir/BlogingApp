@@ -94,7 +94,8 @@ class PostBlog extends React.Component {
       userName: userObj.userName,
       imageUrl: '',
       videoUrl: '',
-      blogCategory: selected
+      category: selected,
+      createdAt: Date.now()
     };
     try {
       if (path) {
