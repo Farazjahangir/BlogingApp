@@ -64,9 +64,13 @@ export const ENTRIES1 = [
     header: null
   }
   componentDidMount() {
-    console.log('this.props',this.props);
+    console.log('****** LANDING_componentDidMount *********');
     
-    if (this.props.userObj) this.props.navigation.navigate('App')
+    if (this.props.userObj){
+      console.log('****** LANDING_iffffff *********');
+      
+      this.props.navigation.navigate('App')
+    } 
     
   }
   _renderItem ({item, index}, parallaxProps) {

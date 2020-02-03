@@ -43,8 +43,10 @@ class Profile extends React.Component {
     header: null,
   };
   async componentDidMount() {
+    console.log('componentDidMount Profile');
+    
     this.decideUser();
-    const {userObj} = this.props;
+    const {userObj , navigation} = this.props;
     let {userId} = userObj;
     if (this.props.navigation.state.params.otherUser) {
       userId = this.props.navigation.state.params.otherUser.userId;
@@ -155,14 +157,16 @@ class Profile extends React.Component {
 
     const {navigation, userObj} = this.props;
     let userData = '';
-    if (navigation.state.params.otherUser) {
-      console.log('Other USer ==============>');
-
-      userData = navigation.state.params.otherUser;
-    } else {
-      userData = newData ? newData : userObj;
+    if(!!userObj.userId){
+      if (navigation.state.params.otherUser) {
+        console.log('Other USer ==============>');
+  
+        userData = navigation.state.params.otherUser;
+      } else {
+        userData = newData ? newData : userObj;
+      }
+      this.setState({userData});
     }
-    this.setState({userData});
   };
 
   componentWillReceiveProps(nextProps) {
@@ -176,9 +180,14 @@ class Profile extends React.Component {
 
   render() {
     const {navigation, userObj} = this.props;
+    if(!userObj){
+      navigation.navigate('Auth')
+      return null
+    }
     let {comments, blogs, loading, isFollowed, userData} = this.state;
     const {userName, followers, following, userId, photoUrl} = userData;
     console.log('userData ====>', blogs);
+    
 
     return (
       <ScrollView
@@ -212,7 +221,7 @@ class Profile extends React.Component {
         <View style={styles.statsView}>
           {!!userData && this.statsNumber('FOLLOWING', following.length)}
           {!!userData && this.statsNumber('FOLLOWER', followers.length)}
-          {userId !== userObj.userId && (
+          {!!userId && userId !== userObj.userId && (
             <View>
               {isFollowed ? (
                 <CustomButton

@@ -8,6 +8,9 @@ const reducer = (state = {}, action) =>{
         case "LOGOUT_USER" : {
             return {...state , user : null}
         }
+        case "EMPTY_USER": {
+            return { ...state, user:null }
+        }
         default: {
             return state;
         }

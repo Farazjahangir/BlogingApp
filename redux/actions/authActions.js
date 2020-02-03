@@ -16,7 +16,17 @@ const logoutUser = (user) =>{
     }
 } 
 
+const emptyUser = (data) =>{
+    console.log('****** emptyUser ********');
+    
+    return { 
+        type : "EMPTY_USER",
+        data
+    }
+} 
+
 export {
     loginUser,
-    logoutUser
+    logoutUser,
+    emptyUser
 }

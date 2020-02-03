@@ -50,7 +50,6 @@ class Feedback extends React.Component {
 
     // UnCommit This
     firebaseLib.notifications().onNotificationOpened(notificationOpen => {
-      console.log('notificationOpen=======>', notificationOpen);
       navigation.navigate('Messages');
 
       // Get information about the notification that was opened
@@ -69,24 +68,19 @@ class Feedback extends React.Component {
     Linking.addEventListener('url', this.handleDeepLink);
     try {
       const url = await Linking.getInitialURL();
-      console.log('getInitialURL=====>', url);
       if (url) {
-        console.log('URL======>', url);
         const extractPath = url.split('/');
         const path = extractPath[3];
-        console.log('PAth =========>', path);
         navigation.navigate(path);
       }
+
+      console.log('***** REaltime *******', userId);
       
       db.collection('Users')
         .doc(userId)
         .onSnapshot(snapshot => {
-          console.log('REl Time USerID', userId);
           this.props.loginUser(snapshot.data());
-          console.log('Time_snapshot', snapshot.data());
-          
         });
-      console.log('LAst Console');
     } catch (e) {
       console.log('Error', e.message);
     }
@@ -101,19 +95,15 @@ class Feedback extends React.Component {
     } = this.props;
     const fcmToken = await fcm.getToken();
     const per = await fcm.hasPermission();
-    console.log('PEr =========>', per);
-
     await fcm.requestPermission();
     if (fcmToken) {
       await firebase.updateDoc('Users', userId, {token: fcmToken});
     } else {
-      console.log('fcmToken Error', fcmToken);
     }
   };
   handleDeepLink(e) {
     // const route = e.url.replace(/.*?:\/\//g, "");
     // this._navigator.replace(this.state.routes[route]);
-    console.log('handleDeepLink', e);
   }
 
   closeControlPanel = () => {
@@ -150,7 +140,6 @@ class Feedback extends React.Component {
   );
 
   feedBackListItem = (item, index) =>
-    this.props.userObj.userId !== item.userId && (
       <View style={styles.itemContainer}>
         <View>
           <Image
@@ -182,13 +171,17 @@ class Feedback extends React.Component {
           <Text style={{color: '#ccc', fontSize: 12}}> 4 Hrs ago</Text>
         </View>
       </View>
-    );
 
   render() {
-    const {navigation} = this.props;
+    console.log('**************** feedback **************8', this.props);
+    
+    const {navigation , userObj} = this.props;
+    if(userObj === undefined){
+      console.log('**************** feedback_userObj **************8', userObj);      
+      navigation.navigate('Auth')
+      return null
+    }
     let {comments, users, loading} = this.state;
-    console.log('loading ===========>', loading);
-
     return (
       <Drawer
         ref={ref => (this._drawer = ref)}
@@ -234,12 +227,12 @@ class Feedback extends React.Component {
               // onPress={() => this.setState({ comments: true })}
               buttonStyle={styles.commentButton}
               title={'Comments'}
-              backgroundColor={comments ? themeColor :pinkColor }
+              backgroundColor={comments ? themeColor : pinkColor}
             />
             <CustomButton
               // onPress={() => this.setState({ comments: false })}
               buttonStyle={styles.commentButton}
-              backgroundColor={!comments ? '#000000'  : pinkColor}
+              backgroundColor={!comments ? '#000000' : pinkColor}
               title={'Feedback'}
               titleStyle={styles.textPink}
               // onPress={() => Linking.openURL('example://blog')}
@@ -304,7 +297,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textPink: {
-    color: pinkColor
+    color: pinkColor,
   },
   iconContainer: {
     height: 18,
@@ -316,7 +309,12 @@ const styles = StyleSheet.create({
     marginTop: -12,
     marginLeft: 8,
   },
-  commentButton: {borderColor: '#000000', borderWidth: 1, width: 150, color: pinkColor},
+  commentButton: {
+    borderColor: '#000000',
+    borderWidth: 1,
+    width: 150,
+    color: pinkColor,
+  },
   rowFront: {
     alignItems: 'center',
     backgroundColor: '#CCC',

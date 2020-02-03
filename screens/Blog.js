@@ -89,7 +89,11 @@ class Blog extends React.Component {
       console.log('Error', e.message);
     }
 
-    const response = await db.collection('Blog').where('category', '==', blogCategory).onSnapshot(snapShot => {
+    gettingUsersInfo = () => {
+
+    }
+
+    const response = await db.collection('Blog').where('category', '==', blogCategory).orderBy('createdAt').onSnapshot(snapShot => {
       snapShot.docChanges.forEach(change => {
         if (change.type === 'added') {
           const {blogs} = this.state;
@@ -98,7 +102,10 @@ class Blog extends React.Component {
           if (
             following.indexOf(change.doc.data().userId) !== -1) {
             console.log('IFFFFFFFFFFFFFFFFF');
-            blogs.unshift({id: change.doc.id, ...change.doc.data()});
+            blogs.push({id: change.doc.id, ...change.doc.data()});
+            // const usersIds = []
+            // userId.push()
+            // this.gettingUsersInfo()
           }
           this.setState({blogs: [...blogs], isBlogs: true});
         }
@@ -160,14 +167,9 @@ class Blog extends React.Component {
   );
 
   blog = (item, index) => {
-    console.log(
-      'this.props.userObj.userId !== item.userId',
-      this.props.userObj.userId !== item.userId,
-    );
     return (
       this.props.userObj.userId !== item.userId && (
         <View style={{width: '100%', marginBottom: 25}}>
-          {console.log('this.state.controls', this.state.controls)}
           {!this.state.fullScreenHeight && (
             <View style={styles.title}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -251,7 +253,7 @@ class Blog extends React.Component {
           )}
           {!this.state.fullScreenHeight && (
             <TouchableOpacity onPress={() => this.navigateToDetail(item)}>
-              <Text style={styles.blogHeading}>{item.blog}</Text>
+              <Text style={styles.blogHeading}>{item.blogTitle}</Text>
             </TouchableOpacity>
           )}
           {!this.state.fullScreenHeight && (
