@@ -90,7 +90,8 @@ class AddProduct extends Component {
         retrunPolicy,
         userId: userObj.userId,
         createdAt: Date.now(),
-        email: userObj.email
+        email: userObj.email,
+        deleted: false,
       };
       const imageUrl = await firebase.uploadImage(path, userObj.userId);
       objToSend.imageUrl = imageUrl;

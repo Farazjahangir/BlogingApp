@@ -92,7 +92,10 @@ class Login extends React.Component {
           followers: [],
           following: [],
           userPackage: 'none',
-          userType: 'free'
+          userType: 'free',
+          deleted: false,
+          createdAt: Date.now(),
+          country: null
         }
         await firebase.setDocument('Users', fbUid, userObj)
         this.props.loginUser(userObj)

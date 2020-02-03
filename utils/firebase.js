@@ -8,7 +8,7 @@ const auth = firebaseLib.auth()
 const db = firebaseLib.firestore()
 const storageRef = firebaseLib.storage().ref()
 
-firebaseFunctions.signUpWithEmail = async (email , password , userName, number) => {
+firebaseFunctions.signUpWithEmail = async (email , password , userName, number, country) => {
     try{
         const authResponse = await auth.createUserWithEmailAndPassword(email, password)
         const userId = authResponse.user.uid        
@@ -20,7 +20,11 @@ firebaseFunctions.signUpWithEmail = async (email , password , userName, number) 
             following: [],
             userPackage: 'none',
             userType: 'free',
-            number
+            number,
+            deleted: false,
+            createdAt: Date.now(),
+            country,
+            photoUrl: null
         }
        await firebaseFunctions.setDocument('Users' , userId , userObj)
        userObj.userId = userId

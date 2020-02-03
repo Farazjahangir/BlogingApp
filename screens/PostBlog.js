@@ -91,11 +91,11 @@ class PostBlog extends React.Component {
       blogTitle,
       blog,
       userId: userObj.userId,
-      userName: userObj.userName,
       imageUrl: '',
       videoUrl: '',
       category: selected,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      deleted: false,
     };
     try {
       if (path) {

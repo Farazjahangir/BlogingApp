@@ -14,6 +14,7 @@ import {connect} from 'react-redux';
 import CustomHeader from '../Component/header';
 import CustomButton from '../Component/Button';
 import firebase from '../utils/firebase';
+import firebaseLib from 'react-native-firebase';
 import {loginUser} from '../redux/actions/authActions';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -25,7 +26,8 @@ class EmailAccount extends React.Component {
       password: null,
       confirmPassword: null,
       userName: null,
-      number: null
+      number: null,
+      country: null
     };
   }
   static navigationOptions = {
@@ -49,18 +51,30 @@ class EmailAccount extends React.Component {
   };
 
   async signUp() {
-    const {userName, email, password, number} = this.state;
+    const {userName, email, password, number, country} = this.state;
     const {navigation} = this.props;
+    const db = firebaseLib.firestore();
 
     if (this.checkValidation()) return;
 
     try {
       this.setState({loading: true});
+      const isNumber = await db
+        .collection('Users')
+        .where('number', '==', number)
+        .get();
+      if (!isNumber.empty) {
+        alert('this number is already associated with another account');
+        this.setState({loading: false});
+        return;
+      }
+
       const response = await firebase.signUpWithEmail(
         email,
         password,
         userName.toLowerCase(),
-        number
+        number,
+        country
       );
       this.props.loginUser(response);
       this.props.navigation.navigate('BlogCategory');
@@ -71,7 +85,15 @@ class EmailAccount extends React.Component {
   }
   render() {
     const {navigation} = this.props;
-    const {userName, email, password, confirmPassword, loading, number} = this.state;
+    const {
+      userName,
+      email,
+      password,
+      confirmPassword,
+      loading,
+      number,
+      country
+    } = this.state;
     return (
       <View style={{backgroundColor: '#323643', flex: 1}}>
         <Spinner
@@ -105,7 +127,7 @@ class EmailAccount extends React.Component {
             inputStyle={{fontWeight: 'bold'}}
             onChangeText={number => this.sText('number', number)}
             value={number}
-            keyboardType='number-name-phone-pad'
+            keyboardType="number-name-phone-pad"
           />
           <Input
             placeholder={'Password'}
@@ -127,6 +149,17 @@ class EmailAccount extends React.Component {
             }
             value={confirmPassword}
           />
+          <Input
+            placeholder={'Country'}
+            placeholderTextColor={'#fff'}
+            inputContainerStyle={styles.inputContainer}
+            inputStyle={{fontWeight: 'bold'}}
+            onChangeText={country =>
+              this.sText('country', country)
+            }
+            value={country}
+          />
+
           <View style={{marginVertical: 12, width: '100%'}}>
             <CustomButton
               title={'Sign Up'}
