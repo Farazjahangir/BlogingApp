@@ -64,7 +64,7 @@ export const ENTRIES1 = [
     header: null
   }
   componentDidMount() {
-    console.log('****** LANDING_componentDidMount *********');
+    console.log('****** LANDING_componentDidMount *********', this.props);
     
     if (this.props.userObj){
       console.log('****** LANDING_iffffff *********');

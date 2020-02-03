@@ -10,6 +10,8 @@ const loginUser = (user) =>{
 } 
 
 const logoutUser = (user) =>{
+    console.log('Logout User', user);
+    
     return { 
         type : "LOGOUT_USER",
         user

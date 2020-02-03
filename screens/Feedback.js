@@ -79,7 +79,9 @@ class Feedback extends React.Component {
       db.collection('Users')
         .doc(userId)
         .onSnapshot(snapshot => {
-          this.props.loginUser(snapshot.data());
+          if(!snapshot.data().deleted){
+            this.props.loginUser(snapshot.data());
+          }
         });
     } catch (e) {
       console.log('Error', e.message);

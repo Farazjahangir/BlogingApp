@@ -112,7 +112,9 @@ class EditProfile extends React.Component {
   handleCancel() {
     this.setState({showDialogue: false});
   }
+
   async startDeletingUser(password){
+    const db = firebaseLib.firestore()
     const { userObj, logoutUser, navigation } = this.props
     const { email, userId } = userObj
     const user = firebaseLib.auth().currentUser;
@@ -126,14 +128,11 @@ class EditProfile extends React.Component {
     try{
       var credentials = firebaseLib.auth.EmailAuthProvider.credential(email, password);
       const reAuthenticate = await user.reauthenticateWithCredential(credentials)
-      const response = await user.delete();
-      console.log('userId 1', userId);
-      
-      await firebase.deleteDoc('Users' , userId)
-      console.log('userId 2', userId);
+      firebase.updateDoc('Users' , userId , { deleted: true })      
+      // const response = await user.delete();
+      // await firebase.deleteDoc('Users' , userId)
 
       logoutUser()
-      // this.props.navigation.dispatch(this.getStackReseter('Auth'));
       navigation.navigate('Auth')
     }
     catch(e){
