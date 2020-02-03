@@ -41,6 +41,8 @@ class CodeConfirmation extends React.Component {
 
   componentDidMount() {
     let userObj = {}
+    const foundedId = this.props.navigation.state.params.foundedId
+
     console.log(this.props.loginUser)
     userObj = 'fuck'
     console.log(userObj);
@@ -48,32 +50,10 @@ class CodeConfirmation extends React.Component {
     auth.onAuthStateChanged(async (user) => {
   if (user){
     this.setState({ loading: true })
-    const dataFind = await firebase.getDocument('Users', user.uid)
-    if(dataFind.exists){
-        console.log('dataFind.exists', dataFind.exists);
-        
+    const dataFind = await firebase.getDocument('Users', foundedId)
         userObj = dataFind.data();
         this.props.loginUser(userObj)
         this.props.navigation.navigate('App')  
-    }
-     else {
-       console.log('dataFind.exists', dataFind.exists);
-       
-      userObj = {
-        userName: "",
-        email: "",
-        photoUrl: "",
-        userId: user.uid,
-        followers: [],
-        following: [],
-        userPackage: 'none',
-        userType: 'free',
-        phoneNumber: user.phoneNumber
-      }
-      await firebase.setDocument('Users', user.uid, userObj)
-      this.props.loginUser(userObj)
-      this.props.navigation.navigate('BlogCategory')
-    }
   }
   this.setState({ loading: false })
   });

@@ -21,10 +21,9 @@ import firebaseLib from 'react-native-firebase';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialogue from '../Component/Dialogue';
 // import DialogInput from 'react-native-dialog-input';
-import InputModal from '../Component/InputModal'
+import InputModal from '../Component/InputModal';
 import {logoutUser} from '../redux/actions/authActions';
 import {StackActions, NavigationActions} from 'react-navigation';
-
 
 import CustomButton from '../Component/Button';
 import CustomHeader from '../Component/header';
@@ -40,7 +39,8 @@ class EditProfile extends React.Component {
       country: '',
       showDialogue: false,
       inputDialogueShow: false,
-      password: ""
+      password: '',
+      number: null
     };
   }
   static navigationOptions = {
@@ -84,17 +84,18 @@ class EditProfile extends React.Component {
       userObj: {userId},
       navigation,
     } = this.props;
-    let {photoUrl, userName, country} = this.state;
+    let {photoUrl, userName, country, number} = this.state;
     this.setState({loading: true});
     if (photoUrl && !photoUrl.includes('https')) {
       console.log('sjdjashdjkashdjkashjkd iffff');
-      
+
       photoUrl = await firebase.uploadImage(photoUrl, userId);
     }
     const data = {
       photoUrl,
       userName,
       country,
+      number
     };
     try {
       await firebase.updateDoc('Users', userId, data);
@@ -106,39 +107,43 @@ class EditProfile extends React.Component {
   }
 
   async handleOk() {
-    this.setState({ inputDialogueShow: true, showDialogue: false })
+    this.setState({inputDialogueShow: true, showDialogue: false});
   }
 
   handleCancel() {
     this.setState({showDialogue: false});
   }
 
-  async startDeletingUser(password){
-    const db = firebaseLib.firestore()
-    const { userObj, logoutUser, navigation } = this.props
-    const { email, userId } = userObj
+  async startDeletingUser(password) {
+    const db = firebaseLib.firestore();
+    const {userObj, logoutUser, navigation} = this.props;
+    const {email, userId} = userObj;
     const user = firebaseLib.auth().currentUser;
     const credential = {
       email,
-      password
-    }
-    console.log('email',email);
-    console.log('password',password);
-    
-    try{
-      var credentials = firebaseLib.auth.EmailAuthProvider.credential(email, password);
-      const reAuthenticate = await user.reauthenticateWithCredential(credentials)
-      firebase.updateDoc('Users' , userId , { deleted: true })      
+      password,
+    };
+    console.log('email', email);
+    console.log('password', password);
+
+    try {
+      var credentials = firebaseLib.auth.EmailAuthProvider.credential(
+        email,
+        password,
+      );
+      const reAuthenticate = await user.reauthenticateWithCredential(
+        credentials,
+      );
+      firebase.updateDoc('Users', userId, {deleted: true});
       // const response = await user.delete();
       // await firebase.deleteDoc('Users' , userId)
 
-      logoutUser()
-      navigation.navigate('Auth')
+      logoutUser();
+      navigation.navigate('Auth');
+    } catch (e) {
+      alert(e);
     }
-    catch(e){
-      alert(e)
-    }
-    this.setState({ inputDialogueShow: false })
+    this.setState({inputDialogueShow: false});
   }
 
   getStackReseter(routeName) {
@@ -146,13 +151,21 @@ class EditProfile extends React.Component {
       index: 0,
       actions: [NavigationActions.navigate({routeName})],
     });
-  
+
     return resetAction;
   }
 
   render() {
     const {navigation} = this.props;
-    const {userName, photoUrl, country, loading, showDialogue, inputDialogueShow} = this.state;
+    const {
+      userName,
+      photoUrl,
+      country,
+      loading,
+      showDialogue,
+      inputDialogueShow,
+      number,
+    } = this.state;
 
     return (
       <ScrollView
@@ -222,6 +235,16 @@ class EditProfile extends React.Component {
           value={country}
           onChangeText={country => this.setState({country})}
         />
+        <Input
+          placeholder={'Phone number with country code'}
+          containerStyle={{width: '100%'}}
+          inputStyle={styles.inputStyle}
+          placeholderTextColor={'#bbb'}
+          inputContainerStyle={styles.inputContainer}
+          value={number}
+          onChangeText={number => this.setState({number})}
+          keyboardType='name-phone-pad'
+        />
         <View
           style={{
             borderBottomColor: '#444B60',
@@ -263,17 +286,17 @@ class EditProfile extends React.Component {
           closeDialog={() => {
             this.setState({ inputDialogueShow: false });
           }}></DialogInput> */}
-          <InputModal
-            visible={inputDialogueShow}
-            secureTextEntry={true}
-            placeholder= 'Password'
-            title="Re-enter Password"
-            description="This action requires re-authentication"
-            cancelText='Cancle'
-            submitText='Submit'
-            onCancel={() => this.setState({ inputDialogueShow: false })}
-            onSubmit = {(password) => this.startDeletingUser(password)}
-          />
+        <InputModal
+          visible={inputDialogueShow}
+          secureTextEntry={true}
+          placeholder="Password"
+          title="Re-enter Password"
+          description="This action requires re-authentication"
+          cancelText="Cancle"
+          submitText="Submit"
+          onCancel={() => this.setState({inputDialogueShow: false})}
+          onSubmit={password => this.startDeletingUser(password)}
+        />
       </ScrollView>
     );
   }
@@ -334,7 +357,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
   return {
-    logoutUser: (userData) => dispatch(logoutUser(userData))
+    logoutUser: userData => dispatch(logoutUser(userData)),
   };
 };
 const mapStateToProps = state => {

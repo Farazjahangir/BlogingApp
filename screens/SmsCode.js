@@ -15,6 +15,7 @@ import { Picker } from 'native-base'
 import firebase from '../utils/firebase'
 import firebaseLib from "react-native-firebase";
 const auth = firebaseLib.auth()
+const db = firebaseLib.firestore()
 
 
 class SmsCode extends React.Component {
@@ -38,10 +39,13 @@ class SmsCode extends React.Component {
     const { phoneNumber } = this.state
     const { navigation } = this.props
     try{
+      let foundedId;
+      const response = await db.collection('Users').where('number' , '==', phoneNumber).get()
+      if(response.empty) return alert('No user found against this number')
+      response.docs.forEach(item => foundedId = item.id)
+      
       const phoneAuthSnapshot = await firebase.loginWithPhoneNumber(phoneNumber)
-      // console.log('phoneAuthSnapshot' , phoneAuthSnapshot)
-      console.log('phoneAuthSnapshot ======>', phoneAuthSnapshot);
-      navigation.navigate('CodeConfirmation', { phoneAuthSnapshot })
+      navigation.navigate('CodeConfirmation', { phoneAuthSnapshot , foundedId })
       
       // auth.verifyPhoneNumber(phoneNumber).on('state_changed' , (phoneAuthSnapshot) => {
       //   this.props.navigation.navigate('CodeConfirmation', {phoneAuthSnapshot, phoneNumber})        
