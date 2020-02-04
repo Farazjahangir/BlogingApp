@@ -20,18 +20,32 @@ import { themeColor, pinkColor } from '../Constant'
 import ChartContainer from '../Component/ChartContainer'
 import { connect } from 'react-redux'
 import { addToChart } from '../redux/actions/chartActions'
+import firebase from '../utils/firebase'
 
 
 class Yourchart extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      next: false
+      next: false,
+      products: [],
     }
   }
   static navigationOptions = {
     header: null
   }
+
+  async componentDidMount() {
+    try{
+      const products = await firebase.getCollection('Products')
+      this.setState({ products });
+      
+    }
+    catch(e){
+      alert(e.message)
+    }
+  }
+  
   goforPay(amount) {
     this.props.navigation.navigate('ProductPay', { amount })
   }
@@ -44,11 +58,11 @@ class Yourchart extends React.Component {
   }
   render() {
     const { navigation, chart } = this.props
-    console.log('Chart========>', this.props);
+    const { products } = this.state
+    console.log('******* products **********', products);
+    
     let amount = 0
     chart.map(item => amount = item.price + amount)
-    console.log('Amount', amount);
-
 
     let { next } = this.state
     return (
@@ -67,9 +81,9 @@ class Yourchart extends React.Component {
             <Text style={styles.amount}>{`${amount}$`}</Text>
           </TouchableOpacity>}
         <Text style={styles.listHeading}>Last Viewed</Text>
-        <HorizontalList productInfo={true} />
-        <Text style={styles.listHeading}>Your Wish List</Text>
-        <HorizontalList productInfo={true} />
+        {!!products.length && <HorizontalList productInfo={true} data={products} />}
+        {/* <Text style={styles.listHeading}>Your Wish List</Text>
+        <HorizontalList productInfo={true} /> */}
       </ScrollView>
     )
   }

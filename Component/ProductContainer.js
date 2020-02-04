@@ -8,8 +8,6 @@ import {connect} from 'react-redux';
 class ProductContainer extends Component {
   render() {
     const {data, navigate, userObj} = this.props;
-    console.log('Data ====>', data.imageUrl);
-
     return (
       userObj.userId !== data.userId && (
         <TouchableOpacity onPress={navigate}>
