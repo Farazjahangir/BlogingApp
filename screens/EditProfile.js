@@ -106,7 +106,9 @@ class EditProfile extends React.Component {
     this.setState({loading: false});
   }
 
-  async handleOk() {
+  handleOk() {
+    console.log('handleOk =====>',);
+    
     this.setState({inputDialogueShow: true, showDialogue: false});
   }
 
@@ -167,6 +169,8 @@ class EditProfile extends React.Component {
       number,
     } = this.state;
 
+    console.log('inputDialogueShow ==>', inputDialogueShow);
+    
     return (
       <ScrollView
         stickyHeaderIndices={[0]}
@@ -287,7 +291,7 @@ class EditProfile extends React.Component {
             this.setState({ inputDialogueShow: false });
           }}></DialogInput> */}
         <InputModal
-          visible={inputDialogueShow}
+          visible={true}
           secureTextEntry={true}
           placeholder="Password"
           title="Re-enter Password"

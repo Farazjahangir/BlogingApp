@@ -26,7 +26,7 @@ export default CustomHeader = props => (
           color: '#fff',
           fontSize: 15,
           fontWeight: 'bold',
-          fontFamily: 'Myriad Pro Bold SemiExtended',
+          // fontFamily: 'Myriad Pro Bold SemiExtended',
         },
       }}
       rightComponent={
