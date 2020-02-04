@@ -52,7 +52,11 @@ class SearchUsers extends Component {
         .where('userName', '==', user.toLowerCase())
         .get();
 
-      userData.docs.forEach(item => users.push(item.data()));
+      userData.docs.forEach(item => {
+        if(!item.data().deleted){
+          users.push(item.data())
+        }
+      });
       console.log('userData', users);
       if (!users.length) alert('No User Found');
       this.setState({users});

@@ -98,7 +98,9 @@ class Blog extends React.Component {
         snapShot.docChanges.forEach(change => {
           if (change.type === 'added') {
             const {blogs} = this.state;
-            if (following.indexOf(change.doc.data().userId) !== -1) {
+            console.log('change.doc.data()',change.doc.data());
+            
+            if (following.indexOf(change.doc.data().userId) !== -1 && !change.doc.data().deleted) {
               blogs.push({id: change.doc.id, ...change.doc.data()});
               usersIds.push(change.doc.data().userId);
             }

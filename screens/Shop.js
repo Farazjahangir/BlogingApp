@@ -23,8 +23,10 @@ class Shop extends Component {
             snapShot.docChanges.forEach((change) => {
               if (change.type === "added") {
                 const { products } = this.state
-                products.unshift({ id: change.doc.id, ...change.doc.data() })
-                this.setState({ products: [...products], isProducts: true })
+                if(!change.doc.data().deleted){
+                    products.unshift({ id: change.doc.id, ...change.doc.data() })
+                    this.setState({ products: [...products], isProducts: true })
+                }
       
               }
               if (change.type === "modified") {
