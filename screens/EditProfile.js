@@ -291,7 +291,7 @@ class EditProfile extends React.Component {
             this.setState({ inputDialogueShow: false });
           }}></DialogInput> */}
         <InputModal
-          visible={true}
+          visible={inputDialogueShow}
           secureTextEntry={true}
           placeholder="Password"
           title="Re-enter Password"
