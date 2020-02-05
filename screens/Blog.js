@@ -98,21 +98,30 @@ class Blog extends React.Component {
         snapShot.docChanges.forEach(change => {
           if (change.type === 'added') {
             const {blogs} = this.state;
-            console.log('change.doc.data()',change.doc.data());
-            
-            if (following.indexOf(change.doc.data().userId) !== -1 && !change.doc.data().deleted) {
+            console.log('change.doc.data()', change.doc.data());
+
+            if (
+              following.indexOf(change.doc.data().userId) !== -1 &&
+              !change.doc.data().deleted
+            ) {
               blogs.push({id: change.doc.id, ...change.doc.data()});
               usersIds.push(change.doc.data().userId);
             }
             this.setState({blogs: [...blogs], isBlogs: true});
+          }
+          if (change.type === 'modified') {
+            const {blogs} = this.state;
+            const findedIndex = blogs.findIndex(
+              item => item.id === change.doc.id,
+            );
+            blogs[findedIndex] = {id: change.doc.id, ...change.doc.data()};
+            this.setState({blogs});
           }
         });
         // console.log('snapShot ====>' , snapShot);
         this.setState({usersIds}, () => {
           this.gettingUsersInfo();
         });
-
-        console.log('Response', snapShot);
       });
 
     // const snapShot = await response.forEach((doc)=> console.log('Response =====>' , doc.data()))
@@ -165,26 +174,65 @@ class Blog extends React.Component {
     }
   }
 
-  _icon = (name, color, onPress) => (
-    <TouchableOpacity onPress={onPress ? () => onPress() : ''}>
-      <Icon
-        type={'font-awesome'}
-        name={name}
-        color={color}
-        containerStyle={{marginHorizontal: 12}}
-      />
-    </TouchableOpacity>
-  );
+  like = async blogId => {
+    const db = firebaseLib.firestore();
+    const FieldValue = firebaseLib.firestore.FieldValue;
+    const {
+      userObj: {userId},
+    } = this.props;
+    try {
+      await db
+        .collection('Blog')
+        .doc(blogId)
+        .update({
+          likes: FieldValue.arrayUnion(userId),
+        });
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+
+  unLike = async blogId => {
+    const db = firebaseLib.firestore();
+    const FieldValue = firebaseLib.firestore.FieldValue;
+    const {
+      userObj: {userId},
+    } = this.props;
+    try {
+      await db
+        .collection('Blog')
+        .doc(blogId)
+        .update({
+          likes: FieldValue.arrayRemove(userId),
+        });
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+
+  _icon = (name, color, onPress) => {
+    return (
+      <TouchableOpacity onPress={onPress ? () => onPress() : ''}>
+        <Icon
+          type={'font-awesome'}
+          name={name}
+          color={color}
+          containerStyle={{marginHorizontal: 12}}
+        />
+      </TouchableOpacity>
+    );
+  };
 
   blog = (item, index) => {
+    const {
+      userObj: {userId},
+    } = this.props;
     const {usersData} = this.state;
     usersData.map(user => {
       if (user.userId === item.userId) {
         item.userObj = user;
       }
     });
-    console.log('Item=====>', item);
-
     return (
       this.props.userObj.userId !== item.userId && (
         <View style={{width: '100%', marginBottom: 25}}>
@@ -281,7 +329,9 @@ class Blog extends React.Component {
           )}
           {!this.state.fullScreenHeight && (
             <TouchableOpacity>
-              <Text style={styles.likes}>{item.likes} Likes 73 Comments</Text>
+              <Text style={styles.likes}>
+               {`Likes ${item.likes.length} Comments`}
+              </Text>
             </TouchableOpacity>
           )}
           {!this.state.fullScreenHeight && (
@@ -293,7 +343,10 @@ class Blog extends React.Component {
                 alignItems: 'center',
               }}>
               <View style={{flexDirection: 'row'}}>
-                {this._icon('heart-o', pinkColor)}
+
+                {!item.likes.includes(userId)
+                  ? this._icon('heart-o', pinkColor, () => this.like(item.id))
+                  : this._icon('heart', pinkColor, () => this.unLike(item.id))}
                 {this._icon('bookmark-o', '#fff')}
                 {this._icon('comment-o', '#fff', () => this.share(item))}
               </View>
@@ -340,8 +393,6 @@ class Blog extends React.Component {
       userObj: {following},
     } = this.props;
     let {follow, blogs, isBlogs, loading, usersData} = this.state;
-    console.log('blogs', blogs);
-
     return (
       <ScrollView
         stickyHeaderIndices={[0]}

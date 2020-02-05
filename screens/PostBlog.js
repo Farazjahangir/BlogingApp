@@ -96,6 +96,7 @@ class PostBlog extends React.Component {
       category: selected,
       createdAt: Date.now(),
       deleted: false,
+      likes: [],
     };
     try {
       if (path) {

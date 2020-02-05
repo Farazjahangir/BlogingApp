@@ -106,11 +106,11 @@ class EditProfile extends React.Component {
     this.setState({loading: false});
   }
 
-  handleOk() {
-    console.log('handleOk =====>',);
+  // handleOk() {
+  //   console.log('handleOk =====>',);
     
-    this.setState({inputDialogueShow: true, showDialogue: false});
-  }
+  //   this.setState({inputDialogueShow: true, showDialogue: false});
+  // }
 
   handleCancel() {
     this.setState({showDialogue: false});
@@ -120,22 +120,22 @@ class EditProfile extends React.Component {
     const db = firebaseLib.firestore();
     const {userObj, logoutUser, navigation} = this.props;
     const {email, userId} = userObj;
-    const user = firebaseLib.auth().currentUser;
-    const credential = {
-      email,
-      password,
-    };
+    // const user = firebaseLib.auth().currentUser;
+    // const credential = {
+    //   email,
+    //   password,
+    // };
     console.log('email', email);
     console.log('password', password);
 
     try {
-      var credentials = firebaseLib.auth.EmailAuthProvider.credential(
-        email,
-        password,
-      );
-      const reAuthenticate = await user.reauthenticateWithCredential(
-        credentials,
-      );
+      // var credentials = firebaseLib.auth.EmailAuthProvider.credential(
+      //   email,
+      //   password,
+      // );
+      // const reAuthenticate = await user.reauthenticateWithCredential(
+      //   credentials,
+      // );
       firebase.updateDoc('Users', userId, {deleted: true});
       // const response = await user.delete();
       // await firebase.deleteDoc('Users' , userId)
@@ -278,7 +278,7 @@ class EditProfile extends React.Component {
             okButtonLabel="Confirm"
             dialogVisible={showDialogue}
             handleCancel={() => this.handleCancel()}
-            handleOk={() => this.handleOk()}
+            handleOk={() => this.startDeletingUser()}
           />
         )}
         {/* <DialogInput
@@ -290,7 +290,8 @@ class EditProfile extends React.Component {
           closeDialog={() => {
             this.setState({ inputDialogueShow: false });
           }}></DialogInput> */}
-        <InputModal
+
+        {/* <InputModal
           visible={inputDialogueShow}
           secureTextEntry={true}
           placeholder="Password"
@@ -300,7 +301,7 @@ class EditProfile extends React.Component {
           submitText="Submit"
           onCancel={() => this.setState({inputDialogueShow: false})}
           onSubmit={password => this.startDeletingUser(password)}
-        />
+        /> */}
       </ScrollView>
     );
   }
