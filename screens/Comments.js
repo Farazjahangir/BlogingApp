@@ -33,7 +33,7 @@ class Comments extends Component {
     const {userObj} = this.props;
     const {comment, commentsArr} = this.state;
     const {userName, userId, photoUrl} = userObj;
-    if(!comment) return alert('Field is required')
+    if (!comment) return alert('Field is required');
     const commentObj = {
       userName,
       userId,
@@ -78,7 +78,10 @@ class Comments extends Component {
                   }
                   style={styles.imageStyle}
                 />
-                <Text style={styles.comment}>{item.comment}</Text>
+                <View>
+                  <Text style={styles.userName}>{item.userName}</Text>
+                  <Text style={styles.comment}>{item.comment}</Text>
+                </View>
               </View>
             ))}
         </ScrollView>
@@ -121,8 +124,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(Comments);
 
 const styles = StyleSheet.create({
   imageStyle: {
-    height: 45,
-    width: 45,
+    height: 50,
+    width: 50,
     borderRadius: 125,
     marginHorizontal: 12,
     resizeMode: 'contain',
@@ -135,4 +138,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 19,
   },
+  userName: {
+      color: '#fff',
+      fontWeight: 'bold',
+      marginBottom: 4,
+      fontSize: 11
+  }
 });
