@@ -97,6 +97,7 @@ class PostBlog extends React.Component {
       createdAt: Date.now(),
       deleted: false,
       likes: [],
+      comments: []
     };
     try {
       if (path) {

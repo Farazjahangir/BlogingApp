@@ -330,7 +330,7 @@ class Blog extends React.Component {
           {!this.state.fullScreenHeight && (
             <TouchableOpacity>
               <Text style={styles.likes}>
-               {`Likes ${item.likes.length} Comments`}
+               {`Likes ${item.likes.length} Comments ${item.comments.length}`}
               </Text>
             </TouchableOpacity>
           )}
@@ -347,8 +347,8 @@ class Blog extends React.Component {
                 {!item.likes.includes(userId)
                   ? this._icon('heart-o', pinkColor, () => this.like(item.id))
                   : this._icon('heart', pinkColor, () => this.unLike(item.id))}
-                {this._icon('bookmark-o', '#fff')}
-                {this._icon('comment-o', '#fff', () => this.share(item))}
+                {this._icon('bookmark-o', '#fff', () => this.share(item))}
+                {this._icon('comment-o', '#fff', () => this.props.navigation.navigate('Comments', {blog: item}) )}
               </View>
               {this._icon('ellipsis-h', '#fff')}
             </View>

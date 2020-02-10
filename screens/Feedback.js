@@ -44,6 +44,8 @@ class Feedback extends React.Component {
       navigation,
       userObj: {userId},
     } = this.props;
+
+    // navigation.navigate('Comments')
     // firebaseLib.notifications().onNotification(notification => {
     //   console.log('notification =====>', notification);
     // });

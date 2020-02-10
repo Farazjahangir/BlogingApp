@@ -37,6 +37,7 @@ import AddProduct from './screens/AddProduct'
 import ProductPay from './screens/ProductPay'
 import SavedCards from './screens/SavedCards'
 import SearchUsers from './screens/SearchUsers'
+import Comments from './screens/Comments'
 
 
 const AuthStack = createStackNavigator({
@@ -232,8 +233,13 @@ const AppStack = createStackNavigator({
     navigationOptions: {
       headerTitle: 'Search Users'
     }
+  },
+  Comments: {
+    screen: Comments,
+    navigationOptions: {
+      headerTitle: 'Search Users'
+    }
   }
-
 } , {initialRouteName : 'Feedback', header: null})
 
 const App = createSwitchNavigator({
