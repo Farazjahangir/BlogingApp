@@ -88,7 +88,7 @@ class SavedCards extends Component {
             this.setState({ loading: true })
             if (!subscription) {
                 // One Time Pay
-                let chargeResponse = await fetch('https://7d06cf88.ngrok.io/charge-customer', {
+                let chargeResponse = await fetch('https://61bc1a62.ngrok.io/charge-customer', {
                     headers: {
                         "Content-Type": 'application/json'
                     },
@@ -112,6 +112,7 @@ class SavedCards extends Component {
                 chart.map((item, index) => {
                     const c = {...item};
                     c.sellerId = chart[index].userId;
+                    c.isRecieved = false
                     delete c.userId;
                     delete c.createdAt
                     productDetails.products.push(c)
@@ -125,7 +126,7 @@ class SavedCards extends Component {
                     source: data.source,
                     type,
                 }
-                let chargeSubscription = await fetch('https://7d06cf88.ngrok.io/subscription', {
+                let chargeSubscription = await fetch('https://61bc1a62.ngrok.io/subscription', {
                     headers: {
                         "Content-Type": 'application/json'
                     },

@@ -6,6 +6,7 @@ import {themeColor} from '../Constant/index';
 export default CustomButton = props => (
   <Button
     title={props.title}
+    titleStyle={props.titleStyle}
     icon={
       props.iconName ? (
         <Icon

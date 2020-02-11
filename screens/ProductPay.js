@@ -129,7 +129,7 @@ class ProductPay extends Component {
       if (!customerId) {
         console.log('Ifff');
         // Creating stripe customer id if not found in database
-        let customerId = await fetch('https://5ea1a710.ngrok.io/customer-id', {
+        let customerId = await fetch('https://61bc1a62.ngrok.io/customer-id', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -162,7 +162,7 @@ class ProductPay extends Component {
       console.log('SourceBody', body);
 
       let fingerPrint = await fetch(
-        'https://5ea1a710.ngrok.io/customer-source',
+        'https://61bc1a62.ngrok.io/customer-source',
         {
           headers: {
             'Content-Type': 'application/json',
@@ -199,7 +199,7 @@ class ProductPay extends Component {
             forEmail: emailObj,
             address: address,
         }
-        let chargeResponse = await fetch('https://5ea1a710.ngrok.io/charge-customer', {
+        let chargeResponse = await fetch('https://61bc1a62.ngrok.io/charge-customer', {
             headers: {
                 "Content-Type": 'application/json'
             },
@@ -241,7 +241,7 @@ class ProductPay extends Component {
           type,
         };
         let chargeSubscription = await fetch(
-          'https://5ea1a710.ngrok.io/subscription',
+          'https://61bc1a62.ngrok.io/subscription',
           {
             headers: {
               'Content-Type': 'application/json',
