@@ -33,12 +33,13 @@ class ProductPay extends Component {
     customerId: '',
     loading: false,
     address: '',
+    accNum: ''
   };
   static navigationOptions = {
     header: null,
   };
   async componentDidMount() {
-    const {userObj} = this.props;
+    const {userObj, navigation} = this.props;
     const {email, userId} = userObj;
     const userData = await firebase.getDocument('Users', userId);
     const customerId = userData.data().customerId;
@@ -54,31 +55,33 @@ class ProductPay extends Component {
   };
 
   productObjToEmail = () => {
-    const { chart } = this.props
-    const objToSend = []
+    const {chart} = this.props;
+    const objToSend = [];
     chart.map((item, i) => {
-      const findedIndex = objToSend.findIndex(email => email.email === item.email)
-      if(findedIndex === -1){
+      const findedIndex = objToSend.findIndex(
+        email => email.email === item.email,
+      );
+      if (findedIndex === -1) {
         const data = {
           email: item.email,
-          products: [{
-            name: item.productName,
-            price: item.price
-          }]
-        }
-        objToSend.push(data)
-      }
-      else if (findedIndex !== -1){
+          products: [
+            {
+              name: item.productName,
+              price: item.price,
+            },
+          ],
+        };
+        objToSend.push(data);
+      } else if (findedIndex !== -1) {
         const data = {
           name: item.productName,
-          price: item.price
-        }
-        objToSend[findedIndex].products.push(data)
+          price: item.price,
+        };
+        objToSend[findedIndex].products.push(data);
       }
-    })
-    return objToSend    
-    
-  }
+    });
+    return objToSend;
+  };
 
   async pay() {
     let {
@@ -88,30 +91,30 @@ class ProductPay extends Component {
       cvcNumber,
       email,
       customerId,
-      address
+      address,
+      accNum,
     } = this.state;
     const subscription = this.props.navigation.state.params.subscription;
     const type = this.props.navigation.state.params.type;
-    const amount = this.props.navigation.state.params.amount
+    const amount = this.props.navigation.state.params.amount;
     const {userObj, emptyChart, navigation, chart} = this.props;
     const {userId} = userObj;
-    const emailObj =  this.productObjToEmail()
-    
+    const emailObj = this.productObjToEmail();
+
     console.log('Chart', chart);
     const productDetails = {
-        totalAmount : amount,
-        products: []
-    }
+      totalAmount: amount,
+      products: [],
+    };
 
     chart.map(item => {
-        const obj = {
-            productName : item.productName,
-            price: item.price
-        }
-        productDetails.products.push(obj)
-    })
+      const obj = {
+        productName: item.productName,
+        price: item.price,
+      };
+      productDetails.products.push(obj);
+    });
     console.log('productDetails', productDetails);
-    
 
     if (this.validateFields()) return;
     const params = {
@@ -129,7 +132,7 @@ class ProductPay extends Component {
       if (!customerId) {
         console.log('Ifff');
         // Creating stripe customer id if not found in database
-        let customerId = await fetch('https://61bc1a62.ngrok.io/customer-id', {
+        let customerId = await fetch('https://a24e08a2.ngrok.io/customer-id', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -162,7 +165,7 @@ class ProductPay extends Component {
       console.log('SourceBody', body);
 
       let fingerPrint = await fetch(
-        'https://61bc1a62.ngrok.io/customer-source',
+        'https://a24e08a2.ngrok.io/customer-source',
         {
           headers: {
             'Content-Type': 'application/json',
@@ -190,49 +193,55 @@ class ProductPay extends Component {
       const dbLib = firebaseLib.firestore();
 
       if (!subscription) {
-
         // One time Pay
         const chargeBody = {
-            customer,
-            amount,
-            source: fingerPrint.response.id,
-            forEmail: emailObj,
-            address: address,
-        }
-        let chargeResponse = await fetch('https://61bc1a62.ngrok.io/charge-customer', {
+          customer,
+          amount,
+          source: fingerPrint.response.id,
+          forEmail: emailObj,
+          address: address,
+        };
+        let chargeResponse = await fetch(
+          'https://a24e08a2.ngrok.io/charge-customer',
+          {
             headers: {
-                "Content-Type": 'application/json'
+              'Content-Type': 'application/json',
             },
             method: 'POST',
-            body: JSON.stringify(chargeBody)
-        })
-        chargeResponse = await chargeResponse.json()
+            body: JSON.stringify(chargeBody),
+          },
+        );
+        chargeResponse = await chargeResponse.json();
         // customerId = customerId.response.id
         if ('errorMessage' in chargeResponse) {
-          console.log('chargeResponse =========>', chargeResponse)
-          const { errorMessage: { raw: { message } } } = chargeResponse
-          alert('message')
-            this.setState({ loading: false })
-            return
+          console.log('chargeResponse =========>', chargeResponse);
+          const {
+            errorMessage: {
+              raw: {message},
+            },
+          } = chargeResponse;
+          alert('message');
+          this.setState({loading: false});
+          return;
         }
         console.log('Charge Response ========>', chargeResponse);
         const productDetails = {
-            userId,
-            products: [],
-            chargeDetails : chargeResponse,
-            amount,
-            createdAt: Date.now()
-        }
+          userId,
+          products: [],
+          chargeDetails: chargeResponse,
+          amount,
+          createdAt: Date.now(),
+        };
         console.log('productDetails', productDetails);
 
         chart.map((item, index) => {
-            const c = {...item};
-            c.sellerId = chart[index].userId;
-            delete c.userId;
-            delete c.createdAt
-            productDetails.products.push(c)
-        })
-        await firebase.addDocument('Orders', productDetails)
+          const c = {...item};
+          c.sellerId = chart[index].userId;
+          delete c.userId;
+          delete c.createdAt;
+          productDetails.products.push(c);
+        });
+        await firebase.addDocument('Orders', productDetails);
       } else {
         // Start Subscription
         const subscriptionBody = {
@@ -241,7 +250,7 @@ class ProductPay extends Component {
           type,
         };
         let chargeSubscription = await fetch(
-          'https://61bc1a62.ngrok.io/subscription',
+          'https://a24e08a2.ngrok.io/subscription',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -263,6 +272,11 @@ class ProductPay extends Component {
           userPackage: type,
           subscriptionId: chargeSubscription.subscription.id,
         };
+        if(accNum){
+          updateUserDoc.accNo = accNum
+          updateUserDoc.encrypted = false
+          updateUserDoc.last4Acc = accNum.slice(accNum.length - 4)
+        }
         await firebase.updateDoc('Users', userId, updateUserDoc);
       }
 
@@ -274,10 +288,10 @@ class ProductPay extends Component {
         .collection('Cards')
         .add(fingerPrint.response);
 
-      emptyChart()
+      emptyChart();
       this.setState({loading: false});
       alert('Success');
-      navigation.replace('Feedback')
+      navigation.replace('Feedback');
     } catch (e) {
       console.log('Error ====>', e);
     }
@@ -287,13 +301,13 @@ class ProductPay extends Component {
     const amount = this.props.navigation.state.params.amount;
     const subscription = this.props.navigation.state.params.subscription;
     const type = this.props.navigation.state.params.type;
-    const { address } = this.state
+    const {address} = this.state;
 
     const {customerId} = this.state;
     const data = {
       amount,
       customer: customerId,
-      address: address
+      address: address,
     };
     const {navigation} = this.props;
     navigation.navigate('SavedCards', {data, subscription, type});
@@ -307,9 +321,12 @@ class ProductPay extends Component {
       cvcNumber,
       email,
       loading,
-      address
+      address,
+      accNum
     } = this.state;
     const amount = this.props.navigation.state.params.amount;
+    const subscription = this.props.navigation.state.params.subscription;
+    const { userObj: { last4Acc } } = this.props
     console.log('cardNumber', cardNumber);
 
     return (
@@ -400,6 +417,20 @@ class ProductPay extends Component {
             onChangeText={text => this.setState({cardNumber: text})}
             keyboardType="number-pad"
           />
+          {subscription && (
+            <Input
+              placeholder={'Acc Number for revcieve payments'}
+              value={last4Acc ? last4Acc : accNum}
+              placeholderTextColor={'#fff'}
+              inputContainerStyle={{height: 80}}
+              inputStyle={{
+                color: '#fff',
+                letterSpacing: 2,
+              }}
+              onChangeText={text => this.setState({accNum: text})}
+              disabled= { last4Acc ? true : false }
+            />
+          )}
           <Input
             placeholder={'Expiration month'}
             value={expMonth}

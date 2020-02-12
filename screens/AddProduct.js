@@ -26,6 +26,15 @@ class AddProduct extends Component {
   static navigationOptions = {
     header: null,
   };
+
+  componentDidMount() {
+    const { userObj: { userType }, navigation } = this.props
+    if(userType === 'free'){
+      alert('You have to buy subscription for selling products')
+      navigation.goBack()
+    }
+  }
+  
   galleryPermissionAndroid() {
     return request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
   }

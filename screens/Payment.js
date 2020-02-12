@@ -154,7 +154,7 @@ class Payment extends React.Component {
         id: subscriptionId,
       };
       let cancelSubscription = await fetch(
-        'https://5ea1a710.ngrok.io/cancel-subscription',
+        'https://a24e08a2.ngrok.io/cancel-subscription',
         {
           headers: {
             'Content-Type': 'application/json',

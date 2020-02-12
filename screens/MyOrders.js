@@ -84,7 +84,7 @@ class MyOrders extends React.Component {
         amount: item.price,
         email: item.email,
       };
-      const res = await fetch('https://61bc1a62.ngrok.io/send-mail', {
+      const res = await fetch('https://a24e08a2.ngrok.io/send-mail', {
         headers: {
           'Content-Type': 'application/json',
         },
