@@ -132,7 +132,7 @@ class ProductPay extends Component {
       if (!customerId) {
         console.log('Ifff');
         // Creating stripe customer id if not found in database
-        let customerId = await fetch('https://a24e08a2.ngrok.io/customer-id', {
+        let customerId = await fetch('http://167.99.6.226/customer-id', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -165,7 +165,7 @@ class ProductPay extends Component {
       console.log('SourceBody', body);
 
       let fingerPrint = await fetch(
-        'https://a24e08a2.ngrok.io/customer-source',
+        'http://167.99.6.226/customer-source',
         {
           headers: {
             'Content-Type': 'application/json',
@@ -202,7 +202,7 @@ class ProductPay extends Component {
           address: address,
         };
         let chargeResponse = await fetch(
-          'https://a24e08a2.ngrok.io/charge-customer',
+          'http://167.99.6.226/charge-customer',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -250,7 +250,7 @@ class ProductPay extends Component {
           type,
         };
         let chargeSubscription = await fetch(
-          'https://a24e08a2.ngrok.io/subscription',
+          'http://167.99.6.226/subscription',
           {
             headers: {
               'Content-Type': 'application/json',

@@ -19,12 +19,15 @@ import CustomInput from '../Component/Input';
 import CustomButton from '../Component/Button';
 import CustomHeader from '../Component/header';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import firebase from 'react-native-firebase';
+import firebase from '../utils/firebase';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {connect} from 'react-redux';
 import firebaseLib from 'react-native-firebase';
+import {loginUser} from '../redux/actions/authActions';
+import ControlPanel from '../screens/ControlPanel';
+import Drawer from 'react-native-drawer';
 
 import {themeColor, pinkColor} from '../Constant';
 import {NavigationEvents} from 'react-navigation';
@@ -52,16 +55,33 @@ class Blog extends React.Component {
   };
 
   async componentDidMount() {
-    const db = firebase.firestore();
+    const {
+      userObj: {userId},
+    } = this.props;
+    firebaseLib.notifications().onNotificationOpened(notificationOpen => {
+      navigation.navigate('Messages');
+
+      // Get information about the notification that was opened
+      // const notification: Notification = notificationOpen.notification;
+    });
+    const notification = await firebaseLib
+      .notifications()
+      .getInitialNotification();
+    if (notification) {
+      navigation.navigate('Messages');
+    }
+
+    this.fcmToken();
+    // ******************************************
+    const db = firebaseLib.firestore();
+    Linking.addEventListener('url', this.handleDeepLink);
+    this.setState({loading: false});
+
     const {
       userObj: {following, blogCategory},
       navigation,
     } = this.props;
     console.log('PRops', this.props);
-    let link = '';
-    if (navigation.state.params) {
-      link = this.props.navigation.state.params.link;
-    }
     const usersIds = [];
 
     // setTimeout(()=>{
@@ -70,68 +90,115 @@ class Blog extends React.Component {
 
     try {
       const url = await Linking.getInitialURL();
-      console.log('getInitialURL=====>', url);
-      console.log('getInitialLink=====>', link);
-      if (!link && url) {
-        console.log('URL======>', url);
+      console.log('Url =====>', url);
+      if (url) {
+        const extractPath = url.split('/');
+        const path = extractPath[3];
+        navigation.navigate(path);
+      }
+
+      console.log('***** REaltime *******', userId);
+
+      db.collection('Users')
+        .doc(userId)
+        .onSnapshot(snapshot => {
+          if (!snapshot.data().deleted) {
+            this.props.loginUser(snapshot.data());
+          }
+        });
+
+      // IF app is open using a blog shareable external link
+      if (url) {
         const extractId = url.split('/');
         const id = extractId[4];
+        console.log('Id ==========>', id);
         const dbResponse = await db
           .collection('Blog')
           .doc(id)
           .get();
         console.log('DB_RESPONSE', dbResponse.data());
         const {blogs} = this.state;
-        blogs.push(dbResponse.data());
-        this.setState({blogs, isBlogs: true, loading: false});
+        console.log('sajdhsjkdhasjkhdksj', dbResponse.id);
+        blogs.push({id: dbResponse.id, ...dbResponse.data()});
+        usersIds.push(dbResponse.data().userId);
+        this.setState({blogs, isBlogs: true, loading: false, usersIds}, () => {
+          this.gettingUsersInfo();
+        });
         return;
         // navigation.navigate(path)
+      }
+      // IF app opens directly
+      else {
+        const response = await db
+          .collection('Blog')
+          .orderBy('createdAt', 'desc')
+          .where('category', '==', blogCategory)
+          .onSnapshot(snapShot => {
+            snapShot.docChanges.forEach(change => {
+              if (change.type === 'added') {
+                const {blogs} = this.state;
+                console.log('change.doc.data()', change.doc.data());
+
+                if (
+                  following.indexOf(change.doc.data().userId) !== -1 &&
+                  !change.doc.data().deleted
+                ) {
+                  blogs.push({id: change.doc.id, ...change.doc.data()});
+                  usersIds.push(change.doc.data().userId);
+                }
+                this.setState({blogs: [...blogs], isBlogs: true});
+              }
+              if (change.type === 'modified') {
+                const {blogs} = this.state;
+                const findedIndex = blogs.findIndex(
+                  item => item.id === change.doc.id,
+                );
+                blogs[findedIndex] = {id: change.doc.id, ...change.doc.data()};
+                this.setState({blogs});
+              }
+            });
+            // console.log('snapShot ====>' , snapShot);
+            this.setState({usersIds}, () => {
+              this.gettingUsersInfo();
+            });
+          });
       }
     } catch (e) {
       console.log('Error', e.message);
     }
-    const response = await db
-      .collection('Blog')
-      .orderBy('createdAt', 'desc')
-      .where('category', '==', blogCategory)
-      .onSnapshot(snapShot => {
-        snapShot.docChanges.forEach(change => {
-          if (change.type === 'added') {
-            const {blogs} = this.state;
-            console.log('change.doc.data()', change.doc.data());
-
-            if (
-              following.indexOf(change.doc.data().userId) !== -1 &&
-              !change.doc.data().deleted
-            ) {
-              blogs.push({id: change.doc.id, ...change.doc.data()});
-              usersIds.push(change.doc.data().userId);
-            }
-            this.setState({blogs: [...blogs], isBlogs: true});
-          }
-          if (change.type === 'modified') {
-            const {blogs} = this.state;
-            const findedIndex = blogs.findIndex(
-              item => item.id === change.doc.id,
-            );
-            blogs[findedIndex] = {id: change.doc.id, ...change.doc.data()};
-            this.setState({blogs});
-          }
-        });
-        // console.log('snapShot ====>' , snapShot);
-        this.setState({usersIds}, () => {
-          this.gettingUsersInfo();
-        });
-      });
 
     // const snapShot = await response.forEach((doc)=> console.log('Response =====>' , doc.data()))
     // const snapShot = response.docChanges().forEach(() => (
     //     console.log('Response =====>', change.doc.data())))
+
+    this.setState({loading: false});
   }
+
+  fcmToken = async () => {
+    const fcm = firebaseLib.messaging();
+    const db = firebaseLib.firestore();
+    const {
+      userObj: {userId},
+    } = this.props;
+    const fcmToken = await fcm.getToken();
+    const per = await fcm.hasPermission();
+    await fcm.requestPermission();
+    if (fcmToken) {
+      await firebase.updateDoc('Users', userId, {token: fcmToken});
+    } else {
+    }
+  };
+
+  closeControlPanel = () => {
+    this._drawer.close();
+  };
+  openControlPanel = () => {
+    this._drawer.open();
+  };
 
   gettingUsersInfo = async () => {
     const {blogs, usersIds} = this.state;
-    const db = firebase.firestore();
+    const db = firebaseLib.firestore();
     const usersData = [];
     const uniqueArr = [...new Set(usersIds)];
     for (var i = 0; i < uniqueArr.length; i++) {
@@ -224,6 +291,7 @@ class Blog extends React.Component {
   };
 
   blog = (item, index) => {
+    console.log('Item', item);
     const {
       userObj: {userId},
     } = this.props;
@@ -330,7 +398,7 @@ class Blog extends React.Component {
           {!this.state.fullScreenHeight && (
             <TouchableOpacity>
               <Text style={styles.likes}>
-               {`Likes ${item.likes.length} Comments ${item.comments.length}`}
+                {`Likes ${item.likes.length} Comments ${item.comments.length}`}
               </Text>
             </TouchableOpacity>
           )}
@@ -343,12 +411,13 @@ class Blog extends React.Component {
                 alignItems: 'center',
               }}>
               <View style={{flexDirection: 'row'}}>
-
                 {!item.likes.includes(userId)
                   ? this._icon('heart-o', pinkColor, () => this.like(item.id))
                   : this._icon('heart', pinkColor, () => this.unLike(item.id))}
                 {this._icon('bookmark-o', '#fff', () => this.share(item))}
-                {this._icon('comment-o', '#fff', () => this.props.navigation.navigate('Comments', {blog: item}) )}
+                {this._icon('comment-o', '#fff', () =>
+                  this.props.navigation.navigate('Comments', {blog: item}),
+                )}
               </View>
               {this._icon('ellipsis-h', '#fff')}
             </View>
@@ -393,27 +462,46 @@ class Blog extends React.Component {
       userObj: {following},
     } = this.props;
     let {follow, blogs, isBlogs, loading, usersData} = this.state;
+    console.log('usersData ***********************', usersData);
     return (
-      <ScrollView
-        stickyHeaderIndices={[0]}
-        style={{backgroundColor: '#323643', flex: 1}}>
-        {!this.state.fullScreenHeight && (
-          <CustomHeader title={'BLOG'} navigation={navigation} />
-        )}
-        <Spinner
-          visible={loading}
-          textContent={'Loading...'}
-          textStyle={{color: '#fff'}}
-        />
-
-        {isBlogs && !!usersData.length && (
-          <FlatList
-            data={blogs}
-            keyExtractor={item => item}
-            renderItem={({item, index}) => this.blog(item, index)}
+      <Drawer
+        ref={ref => (this._drawer = ref)}
+        type="overlay"
+        tapToClose={true}
+        openDrawerOffset={0.2} // 20% gap on the right side of drawer
+        panCloseMask={0.2}
+        closedDrawerOffset={-3}
+        styles={styles.drawer}
+        tweenHandler={ratio => ({
+          main: {opacity: (2 - ratio) / 2},
+        })}
+        content={<ControlPanel />}>
+        <NavigationEvents onDidFocus={() => this.closeControlPanel()} />
+        <ScrollView
+          stickyHeaderIndices={[0]}
+          style={{backgroundColor: '#323643', flex: 1}}>
+          {!this.state.fullScreenHeight && (
+            <CustomHeader
+              home
+              title={'BLOG'}
+              // navigation={navigation}
+              onPress={() => this.openControlPanel()}
+            />
+          )}
+          <Spinner
+            visible={loading}
+            textContent={'Loading...'}
+            textStyle={{color: '#fff'}}
           />
-        )}
-      </ScrollView>
+          {isBlogs && !!usersData.length && (
+            <FlatList
+              data={blogs}
+              keyExtractor={item => item}
+              renderItem={({item, index}) => this.blog(item, index)}
+            />
+          )}
+        </ScrollView>
+      </Drawer>
     );
   }
 }
@@ -450,9 +538,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     borderBottomWidth: 0.5,
   },
+  drawer: {shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
 });
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    loginUser: userData => dispatch(loginUser(userData)),
+  };
 };
 const mapStateToProps = state => {
   return {

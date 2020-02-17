@@ -240,7 +240,7 @@ const AppStack = createStackNavigator({
       headerTitle: 'Search Users'
     }
   }
-} , {initialRouteName : 'Feedback', header: null})
+} , {initialRouteName : 'Blog', header: null})
 
 const App = createSwitchNavigator({
   Auth: {

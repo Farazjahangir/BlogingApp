@@ -28,6 +28,7 @@ class Comments extends Component {
 
   async commentBlog() {
     const blogId = this.props.navigation.state.params.blog.id;
+    console.log('blogId', blogId)
     const db = firebaseLib.firestore();
     const FieldValue = firebaseLib.firestore.FieldValue;
     const {userObj} = this.props;
