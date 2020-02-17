@@ -178,6 +178,12 @@ class Profile extends React.Component {
     this.setState({hidePlayPause: false, hideSeekbar: false});
   }
 
+  navigate(blog , userData){
+    const { navigation } = this.props
+    blog.userObj = userData
+    navigation.navigate('BlogDetail', {data: blog})
+  }
+
   render() {
     const {navigation, userObj} = this.props;
     if(!userObj){

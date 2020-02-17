@@ -55,6 +55,7 @@ class Blog extends React.Component {
   };
 
   async componentDidMount() {
+    this.setState({ loading: true })
     const {
       userObj: {userId},
     } = this.props;
@@ -83,10 +84,6 @@ class Blog extends React.Component {
     } = this.props;
     console.log('PRops', this.props);
     const usersIds = [];
-
-    // setTimeout(()=>{
-    //   this.videoRef.presentFullscreenPlayer()
-    // }, 5000)
 
     try {
       const url = await Linking.getInitialURL();
@@ -166,12 +163,11 @@ class Blog extends React.Component {
     } catch (e) {
       console.log('Error', e.message);
     }
-
+    this.setState({ loading: false })
     // const snapShot = await response.forEach((doc)=> console.log('Response =====>' , doc.data()))
     // const snapShot = response.docChanges().forEach(() => (
     //     console.log('Response =====>', change.doc.data())))
 
-    this.setState({loading: false});
   }
 
   fcmToken = async () => {
@@ -208,7 +204,7 @@ class Blog extends React.Component {
         .get();
       usersData.push(users.data());
     }
-    this.setState({usersData, loading: false});
+    this.setState({usersData});
   };
 
   videoIsReady() {
