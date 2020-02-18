@@ -64,7 +64,7 @@ class ControlPanel extends React.Component {
           {/* <Image source = {require('../assets/logo.jpeg')}
              style = {{height : 300 , width : 300 , resizeMode : "contain"}} /> */}
           {this.menuButtons('PROFILE', 'Profile')}
-          {this.menuButtons('BLOG', 'Blog', true)}
+          {/* {this.menuButtons('BLOG', 'Blog', true)} */}
           {this.menuButtons('MESSAGES', 'Messages')}
           {/* {this.menuButtons('MY ADDRESSES' , 'MyAddress')} */}
           {/* {this.menuButtons('ADD PHOTO' , 'AddPhoto')} */}

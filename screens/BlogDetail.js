@@ -87,7 +87,7 @@ class BlogDetail extends React.Component {
 
   render() {
     const {fullScreenHeight, loading} = this.state;
-    const {navigation} = this.props;
+    const {navigation, userObj:{ userId }} = this.props;
     const data = this.props.navigation.state.params.data;
     console.log('data =======>', data);
     let {follow} = this.state;
@@ -120,13 +120,14 @@ class BlogDetail extends React.Component {
                   {data.userObj.userName}
                 </Text>
               </View>
+              {data.userId !== userId && 
               <CustomButton
                 title={'UnFollow'}
                 buttonStyle={{borderColor: '#ccc', borderWidth: 1, height: 40}}
                 containerStyle={{width: 120}}
                 backgroundColor={this.state.follow ? pinkColor : themeColor}
                 onPress={() => this.unFollow(data.userObj.userId)}
-              />
+              />}
             </View>
           </View>
         )}

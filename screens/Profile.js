@@ -44,9 +44,9 @@ class Profile extends React.Component {
   };
   async componentDidMount() {
     console.log('componentDidMount Profile');
-    
+
     this.decideUser();
-    const {userObj , navigation} = this.props;
+    const {userObj, navigation} = this.props;
     let {userId} = userObj;
     if (this.props.navigation.state.params.otherUser) {
       userId = this.props.navigation.state.params.otherUser.userId;
@@ -157,10 +157,10 @@ class Profile extends React.Component {
 
     const {navigation, userObj} = this.props;
     let userData = '';
-    if(!!userObj.userId){
+    if (!!userObj.userId) {
       if (navigation.state.params.otherUser) {
         console.log('Other USer ==============>');
-  
+
         userData = navigation.state.params.otherUser;
       } else {
         userData = newData ? newData : userObj;
@@ -178,22 +178,22 @@ class Profile extends React.Component {
     this.setState({hidePlayPause: false, hideSeekbar: false});
   }
 
-  navigate(blog , userData){
-    const { navigation } = this.props
-    blog.userObj = userData
-    navigation.navigate('BlogDetail', {data: blog})
+  navigateToDetails(blog, userData) {
+    const {navigation} = this.props;
+    blog.userObj = userData;
+    console.log(blog)
+    navigation.navigate('BlogDetail', {data: blog});
   }
 
   render() {
     const {navigation, userObj} = this.props;
-    if(!userObj){
-      navigation.navigate('Auth')
-      return null
+    if (!userObj) {
+      navigation.navigate('Auth');
+      return null;
     }
     let {comments, blogs, loading, isFollowed, userData} = this.state;
     const {userName, followers, following, userId, photoUrl} = userData;
     console.log('userData ====>', blogs);
-    
 
     return (
       <ScrollView
@@ -287,27 +287,30 @@ class Profile extends React.Component {
             flexWrap: 'wrap',
             flexDirection: 'row',
           }}>
-          {!!blogs.length &&
-            blogs.map((data, index) => {
-              return (
-                <>
-                  <Image
-                    source={{uri: data.imageUrl}}
-                    style={{
-                      height: 110,
-                      width: '32%',
-                      margin: 1,
-                      resizeMode: 'stretch',
-                    }}
-                  />
-                  {!!data.videoUrl && (
-                    <View
+          <View style={{flex:1, flexDirection: 'row', flexWrap: 'wrap'}}>
+            {!!blogs.length &&
+              blogs.map((data, index) => {
+                return (
+                  <TouchableOpacity 
+                    style={{height: 110, width: '32%', margin: 1,}}
+                    onPress={() => this.navigateToDetails(data, userData)}
+                    >
+                    <Image
+                      source={{uri: data.imageUrl}}
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        marginVertical: 10,
-                      }}>
-                      {/* {Platform.OS === 'ios' ? (
+                        height: '100%',
+                        width: '100%',
+                        resizeMode: 'stretch',
+                      }}
+                    />
+                    {!!data.videoUrl && (
+                      <View
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          marginVertical: 10,
+                        }}>
+                        {/* {Platform.OS === 'ios' ? (
                         <Video
                           source={{uri: data.videoUrl}}
                           style={{width: '32%', height: 110}}
@@ -338,11 +341,12 @@ class Profile extends React.Component {
                           disableBack={true}
                         />
                       )} */}
-                    </View>
-                  )}
-                </>
-              );
-            })}
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
+          </View>
         </View>
       </ScrollView>
     );
