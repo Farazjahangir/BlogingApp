@@ -194,6 +194,11 @@ class ProductPay extends Component {
 
       if (!subscription) {
         // One time Pay
+        if(!address){
+          this.setState({ loading: false })
+          alert('All fields are required')
+          return
+        }
         const chargeBody = {
           customer,
           amount,
@@ -243,6 +248,10 @@ class ProductPay extends Component {
         });
         await firebase.addDocument('Orders', productDetails);
       } else {
+        if(!accNum && !last4Acc){
+          this.setState({ loading: false })
+          return alert('All Fields are required')
+        }
         // Start Subscription
         const subscriptionBody = {
           customerId,
@@ -291,7 +300,7 @@ class ProductPay extends Component {
       emptyChart();
       this.setState({loading: false});
       alert('Success');
-      navigation.replace('Feedback');
+      navigation.replace('Blog');
     } catch (e) {
       console.log('Error ====>', e);
     }
@@ -394,7 +403,7 @@ class ProductPay extends Component {
             keyboardType="email-address"
             editable={false}
           />
-          <Input
+          {!subscription && <Input
             placeholder={'Address '}
             value={address}
             placeholderTextColor={'#fff'}
@@ -404,7 +413,7 @@ class ProductPay extends Component {
               letterSpacing: 2,
             }}
             onChangeText={text => this.setState({address: text})}
-          />
+          /> }
           <Input
             placeholder={'Card Number'}
             value={cardNumber}
@@ -420,7 +429,7 @@ class ProductPay extends Component {
           {subscription && (
             <Input
               placeholder={'Acc Number for revcieve payments'}
-              value={last4Acc ? last4Acc : accNum}
+              value={last4Acc ? `*********${last4Acc}` : accNum}
               placeholderTextColor={'#fff'}
               inputContainerStyle={{height: 80}}
               inputStyle={{

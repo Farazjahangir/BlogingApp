@@ -82,7 +82,7 @@ class MyOrders extends React.Component {
       const objToSent = {
         accountNo: sellerAccNo,
         amount: item.price,
-        email: item.email,
+        email: 'jahangirfaraz98@gmail.com',
       };
       const res = await fetch('http://167.99.6.226/send-mail', {
         headers: {
