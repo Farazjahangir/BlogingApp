@@ -52,7 +52,7 @@ export const ENTRIES1 = [
   {
       title: 'Middle Earth, Germany',
       subtitle: 'Lorem ipsum dolor sit amet',
-      illustration: 'https://i.imgur.com/lceHsT6l.jpg'
+      thumbnail: require('../assets/landingScreen/6.jpg')
   }
 ];
 

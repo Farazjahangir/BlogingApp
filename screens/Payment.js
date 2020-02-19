@@ -32,13 +32,13 @@ export const ENTRIES1 = [
     type: 'BUSINESS',
     rate: '$39.99',
     description: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/UYiroysl.jpg',
+    illustration: require('../assets/Subscription/Asset1.png'),
   },
   {
     type: 'ADVANCE',
     rate: '$399.99',
     description: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/UYiroysl.jpg',
+    illustration: require('../assets/Subscription/Asset2.png'),
   },
 ];
 
@@ -154,7 +154,7 @@ class Payment extends React.Component {
         id: subscriptionId,
       };
       let cancelSubscription = await fetch(
-        'http://167.99.6.226/cancel-subscription',
+        'https://blogstar.app/cancel-subscription',
         {
           headers: {
             'Content-Type': 'application/json',
@@ -204,7 +204,7 @@ class Payment extends React.Component {
           renderItem={({item, index}, parallaxProps) => (
             <View style={{flex: 1, justifyContent: 'space-around'}}>
               <ParallaxImage
-                source={{uri: item.illustration}}
+                source={item.illustration}
                 containerStyle={{height: 220}}
                 style={{borderRadius: 10}}
                 parallaxFactor={0.4}

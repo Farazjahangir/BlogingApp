@@ -84,7 +84,7 @@ class MyOrders extends React.Component {
         amount: item.price,
         email: 'jahangirfaraz98@gmail.com',
       };
-      const res = await fetch('http://167.99.6.226/send-mail', {
+      const res = await fetch('https://blogstar.app/send-mail', {
         headers: {
           'Content-Type': 'application/json',
         },

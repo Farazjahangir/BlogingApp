@@ -132,7 +132,7 @@ class ProductPay extends Component {
       if (!customerId) {
         console.log('Ifff');
         // Creating stripe customer id if not found in database
-        let customerId = await fetch('http://167.99.6.226/customer-id', {
+        let customerId = await fetch('https://blogstar.app/customer-id', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -165,7 +165,7 @@ class ProductPay extends Component {
       console.log('SourceBody', body);
 
       let fingerPrint = await fetch(
-        'http://167.99.6.226/customer-source',
+        'https://blogstar.app/customer-source',
         {
           headers: {
             'Content-Type': 'application/json',
@@ -207,7 +207,7 @@ class ProductPay extends Component {
           address: address,
         };
         let chargeResponse = await fetch(
-          'http://167.99.6.226/charge-customer',
+          'https://blogstar.app/charge-customer',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -259,7 +259,7 @@ class ProductPay extends Component {
           type,
         };
         let chargeSubscription = await fetch(
-          'http://167.99.6.226/subscription',
+          'https://blogstar.app/subscription',
           {
             headers: {
               'Content-Type': 'application/json',

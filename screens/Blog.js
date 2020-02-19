@@ -48,6 +48,7 @@ class Blog extends React.Component {
       fullScreenHeight: null,
       loading: true,
       usersData: [],
+      isError: false,
     };
   }
   static navigationOptions = {
@@ -55,7 +56,7 @@ class Blog extends React.Component {
   };
 
   async componentDidMount() {
-    this.setState({ loading: true })
+    this.setState({loading: true});
     const {
       userObj: {userId},
     } = this.props;
@@ -131,6 +132,10 @@ class Blog extends React.Component {
           .orderBy('createdAt', 'desc')
           .where('category', '==', blogCategory)
           .onSnapshot(snapShot => {
+            if(snapShot.empty){
+              this.setState({ loading: false, isError: true })
+              return
+            }
             snapShot.docChanges.forEach(change => {
               if (change.type === 'added') {
                 const {blogs} = this.state;
@@ -163,11 +168,10 @@ class Blog extends React.Component {
     } catch (e) {
       console.log('Error', e.message);
     }
-    this.setState({ loading: false })
+    this.setState({loading: false});
     // const snapShot = await response.forEach((doc)=> console.log('Response =====>' , doc.data()))
     // const snapShot = response.docChanges().forEach(() => (
     //     console.log('Response =====>', change.doc.data())))
-
   }
 
   fcmToken = async () => {
@@ -457,7 +461,7 @@ class Blog extends React.Component {
       navigation,
       userObj: {following},
     } = this.props;
-    let {follow, blogs, isBlogs, loading, usersData} = this.state;
+    let {follow, blogs, isBlogs, loading, usersData, isError} = this.state;
     console.log('usersData ***********************', usersData);
     return (
       <Drawer
@@ -495,6 +499,17 @@ class Blog extends React.Component {
               keyExtractor={item => item}
               renderItem={({item, index}) => this.blog(item, index)}
             />
+          )}
+          {isError && (
+            <Text
+              style={{
+                fontSize: 19,
+                color: '#fff',
+                textAlign: 'center',
+                marginTop: 30,
+              }}>
+              Sorry no blogs found
+            </Text>
           )}
         </ScrollView>
       </Drawer>

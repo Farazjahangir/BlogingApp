@@ -114,7 +114,7 @@ class SavedCards extends Component {
           data.address = address
         // One Time Pay
         let chargeResponse = await fetch(
-          'http://167.99.6.226/charge-customer',
+          'https://blogstar.app/charge-customer',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ class SavedCards extends Component {
           type,
         };
         let chargeSubscription = await fetch(
-          'http://167.99.6.226/subscription',
+          'https://blogstar.app/subscription',
           {
             headers: {
               'Content-Type': 'application/json',
