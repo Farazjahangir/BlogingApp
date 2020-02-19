@@ -18,6 +18,7 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import firebase from 'react-native-firebase'
 import { NotificationOpen } from 'react-native-firebase';
+import SplashScreen from 'react-native-splash-screen';
 
 // import DeepLinking from 'react-native-deep-linking';
 
@@ -28,6 +29,10 @@ class App extends Component {
   }
 
   async componentDidMount() {
+
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1000)
     
   //   firebase.notifications().onNotification((notification) => {
   //     console.log('notification =====>', notification);
