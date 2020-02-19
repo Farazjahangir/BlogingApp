@@ -174,15 +174,23 @@ class PostBlog extends React.Component {
       alert(e.message)
     }
   }
+
+  
   async uploadVideo() {
     if (Platform.OS === 'android') {
       const result = await this.galleryPermissionAndroid();
       if (result !== RESULTS.GRANTED) return;
     }
-    const video = await ImagePicker.openPicker({
-      mediaType: 'video',
-    });
-    this.setState({videoPath: video.path, path: ''});
+    try {
+      const video = await ImagePicker.openPicker({
+        mediaType: 'video',
+      });
+      this.setState({videoPath: video.path, path: ''});
+    }
+    catch(e){
+      console.log('Error', e.message)
+      alert(e.message)
+    }
   }
 
   render() {
