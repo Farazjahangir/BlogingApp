@@ -72,10 +72,10 @@ class ControlPanel extends React.Component {
           {this.menuButtons('MY Orders', 'MyOrders')}
           {this.menuButtons('Shop', 'Shop')}
           {this.menuButtons('Search', 'SearchUsers')}
-          {this.menuButtons('AddProduct', 'AddProduct')}
-          {this.menuButtons('Select Blog', 'SelectBlog')}
-          {this.menuButtons('Privacy', 'Privacy')}
-          {this.menuButtons('Payment', 'Payment')}
+          {this.menuButtons('Add Product', 'AddProduct')}
+          {/* {this.menuButtons('Select Blog', 'SelectBlog')} */}
+          {/* {this.menuButtons('Privacy', 'Privacy')} */}
+          {this.menuButtons('Subscription', 'Payment')}
           {/* {this.menuButtons('Support' , 'Support')} */}
           <TouchableOpacity
             style={{
