@@ -108,7 +108,7 @@ class EmailAccount extends React.Component {
             placeholder={'Username'}
             placeholderTextColor={'#fff'}
             inputContainerStyle={styles.inputContainer}
-            inputStyle={{fontWeight: 'bold'}}
+            inputStyle={{fontWeight: 'bold', color:'#fff'}}
             onChangeText={userName => this.sText('userName', userName)}
             value={userName}
           />
@@ -116,7 +116,7 @@ class EmailAccount extends React.Component {
             placeholder={'Email'}
             placeholderTextColor={'#fff'}
             inputContainerStyle={styles.inputContainer}
-            inputStyle={{fontWeight: 'bold'}}
+            inputStyle={{fontWeight: 'bold', color:'#fff'}}
             onChangeText={email => this.sText('email', email)}
             value={email}
           />
@@ -124,7 +124,7 @@ class EmailAccount extends React.Component {
             placeholder={'Phone number with country code'}
             placeholderTextColor={'#fff'}
             inputContainerStyle={styles.inputContainer}
-            inputStyle={{fontWeight: 'bold'}}
+            inputStyle={{fontWeight: 'bold', color:'#fff'}}
             onChangeText={number => this.sText('number', number)}
             value={number}
             keyboardType="number-name-phone-pad"
@@ -134,7 +134,7 @@ class EmailAccount extends React.Component {
             secureTextEntry={true}
             placeholderTextColor={'#fff'}
             inputContainerStyle={styles.inputContainer}
-            inputStyle={{fontWeight: 'bold'}}
+            inputStyle={{fontWeight: 'bold', color:'#fff'}}
             onChangeText={password => this.sText('password', password)}
             value={password}
           />
@@ -143,7 +143,7 @@ class EmailAccount extends React.Component {
             secureTextEntry={true}
             placeholderTextColor={'#fff'}
             inputContainerStyle={styles.inputContainer}
-            inputStyle={{fontWeight: 'bold'}}
+            inputStyle={{fontWeight: 'bold', color:'#fff'}}
             onChangeText={confirmPassword =>
               this.sText('confirmPassword', confirmPassword)
             }
@@ -153,7 +153,7 @@ class EmailAccount extends React.Component {
             placeholder={'Country'}
             placeholderTextColor={'#fff'}
             inputContainerStyle={styles.inputContainer}
-            inputStyle={{fontWeight: 'bold'}}
+            inputStyle={{fontWeight: 'bold', color:'#fff'}}
             onChangeText={country =>
               this.sText('country', country)
             }

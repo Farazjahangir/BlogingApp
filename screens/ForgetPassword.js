@@ -92,7 +92,7 @@ export default class ForgetPassword extends React.Component {
           <CustomInput
             placeholder={'Email'}
             placeholderTextColor={'#fff'}
-            inputStyle={{fontWeight: 'bold'}}
+            inputStyle={{fontWeight: 'bold', color:'#fff'}}
             onChangeText={email => this.setState({email})}
           />
           <View style={{marginVertical: 12}}>

@@ -125,10 +125,10 @@ class Login extends React.Component {
         <CustomHeader navigation={navigation} title={'Login'} />
         <View style={{ flex: 1, alignItems: 'center', marginTop: "32%" }}>
           <Input placeholder={'Email'} placeholderTextColor={'#fff'}
-            inputContainerStyle={styles.inputContainer} inputStyle={{ fontWeight: 'bold' }} onChangeText={(email) => this.setState({ email: email })} value={email} />
+            inputContainerStyle={styles.inputContainer} inputStyle={{ fontWeight: 'bold', color:'#fff' }} onChangeText={(email) => this.setState({ email: email })} value={email} />
 
           <Input placeholder={'Password'} secureTextEntry={true} placeholderTextColor={'#fff'}
-            inputContainerStyle={styles.inputContainer} inputStyle={{ fontWeight: 'bold' }} onChangeText={(password) => this.setState({ password: password })} value={password} />
+            inputContainerStyle={styles.inputContainer} inputStyle={{ fontWeight: 'bold', color:'#fff' }} onChangeText={(password) => this.setState({ password: password })} value={password} />
 
           <View style={{ flexDirection: "row", justifyContent: "center", marginVertical: 12 }}>
             <Button onPress={() => this.login()} title={'Login'} buttonStyle={styles.buttonStyle} />

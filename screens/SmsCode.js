@@ -25,7 +25,7 @@ class SmsCode extends React.Component {
     super(props)
     this.state = {
       selected: 'key1',
-      phoneNumber: '+923442778759'
+      phoneNumber: ''
     }
   }
   static navigationOptions = {
@@ -87,8 +87,8 @@ class SmsCode extends React.Component {
             <Picker.Item label='Net Banking' value='key4' />
           </Picker>
         </View> */}
-        <Input placeholder = {'Phone Number'} value={phoneNumber} keyboardType = {'numeric'} placeholderTextColor = {'#fff'} 
-         inputContainerStyle = {styles.inputContainer} inputStyle = {{fontWeight : 'bold' , fontSize :14}} onChangeText={(text)=> this.setState({ phoneNumber: text })} />
+        <Input placeholder = {'Phone Number With Country code'} value={phoneNumber} keyboardType = {'numeric'} placeholderTextColor = {'#fff'} 
+         inputContainerStyle = {styles.inputContainer} inputStyle = {{fontWeight : 'bold' , fontSize :14, color:'#fff'}} onChangeText={(text)=> this.setState({ phoneNumber: text })} />
              <View style = {{marginVertical  : 12}}>
              <CustomButton
                   onPress ={()=> this.loginWithNumber()}
