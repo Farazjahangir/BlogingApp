@@ -60,20 +60,23 @@ class Blog extends React.Component {
     const {
       userObj: {userId},
     } = this.props;
-    firebaseLib.notifications().onNotificationOpened(notificationOpen => {
-      navigation.navigate('Messages');
 
-      // Get information about the notification that was opened
-      // const notification: Notification = notificationOpen.notification;
-    });
-    const notification = await firebaseLib
-      .notifications()
-      .getInitialNotification();
-    if (notification) {
-      navigation.navigate('Messages');
+    if(Platform.OS !== 'ios'){
+      firebaseLib.notifications().onNotificationOpened(notificationOpen => {
+        navigation.navigate('Messages');
+  
+        // Get information about the notification that was opened
+        // const notification: Notification = notificationOpen.notification;
+      });
+      const notification = await firebaseLib
+        .notifications()
+        .getInitialNotification();
+      if (notification) {
+        navigation.navigate('Messages');
+      }
+      this.fcmToken();
     }
 
-    this.fcmToken();
     // ******************************************
     const db = firebaseLib.firestore();
     Linking.addEventListener('url', this.handleDeepLink);
@@ -279,6 +282,7 @@ class Blog extends React.Component {
   };
 
   blog = (item, index) => {
+    console.log(item)
     const {
       userObj: {userId},
     } = this.props;
