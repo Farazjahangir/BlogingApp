@@ -216,7 +216,7 @@ class EditProfile extends React.Component {
           value={userName}
           onChangeText={userName => this.setState({userName})}
         />
-        <View style={styles.picker}>
+        {/* <View style={styles.picker}>
           <Picker
             note
             mode="dropdown"
@@ -229,7 +229,7 @@ class EditProfile extends React.Component {
             <Picker.Item label="Credit Card" value="key3" />
             <Picker.Item label="Net Banking" value="key4" />
           </Picker>
-        </View>
+        </View> */}
         <Input
           placeholder={'Country'}
           containerStyle={{width: '100%'}}

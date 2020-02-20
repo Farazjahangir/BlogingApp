@@ -10,6 +10,8 @@ import {
 } from 'react-native'
 import { Icon, Input, Button } from 'react-native-elements'
 import CustomButton from '../Component/Button'
+import CustomHeader from '../Component/header';
+
 import { themeColor, pinkColor } from '../Constant/index'
 import { Picker } from 'native-base'
 import firebase from '../utils/firebase'
@@ -62,6 +64,7 @@ class SmsCode extends React.Component {
     
     return (
       <View style={{ backgroundColor: '#323643', flex: 1 }}>
+        <CustomHeader navigation={navigation} title={'Phone Number'} />
         <View style={{ padding: 30, paddingLeft: 15 }}>
           <Text style={{ color: '#fff', fontSize: 30, fontWeight: 'bold' }}>
             Your Phone
@@ -71,7 +74,7 @@ class SmsCode extends React.Component {
           </Text>
         </View>
         <View style = {{flex : 1 , justifyContent : "flex-end"}}>
-        <View  style={styles.picker} >
+        {/* <View  style={styles.picker} >
           <Picker
             note
             mode='dropdown'
@@ -85,7 +88,7 @@ class SmsCode extends React.Component {
             <Picker.Item label='Credit Card' value='key3' />
             <Picker.Item label='Net Banking' value='key4' />
           </Picker>
-        </View>
+        </View> */}
         <Input placeholder = {'Phone Number'} value={phoneNumber} keyboardType = {'numeric'} placeholderTextColor = {'#fff'} 
          inputContainerStyle = {styles.inputContainer} inputStyle = {{fontWeight : 'bold' , fontSize :14}} onChangeText={(text)=> this.setState({ phoneNumber: text })} />
              <View style = {{marginVertical  : 12}}>

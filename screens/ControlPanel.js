@@ -39,7 +39,7 @@ class ControlPanel extends React.Component {
   menuButtons = (name, route, link) => (
     <TouchableOpacity
       style={{
-        height: 100,
+        height: 60,
         borderBottomColor: '#bbb',
         borderBottomWidth: 0.5,
         margin: 2,
@@ -60,20 +60,20 @@ class ControlPanel extends React.Component {
         end={{x: 1, y: 0}}
         colors={['#FF6B98', '#FE787E', '#FE8663']}
         style={{flex: 1, justifyContent: 'center'}}>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{justifyContent: 'center', flex: 1}}>
           {/* <Image source = {require('../assets/logo.jpeg')}
              style = {{height : 300 , width : 300 , resizeMode : "contain"}} /> */}
-          {this.menuButtons('PROFILE', 'Profile')}
+          {this.menuButtons('Profile', 'Profile')}
           {/* {this.menuButtons('BLOG', 'Blog', true)} */}
-          {this.menuButtons('MESSAGES', 'Messages')}
+          {this.menuButtons('Messages', 'Messages')}
           {/* {this.menuButtons('MY ADDRESSES' , 'MyAddress')} */}
           {/* {this.menuButtons('ADD PHOTO' , 'AddPhoto')} */}
           {this.menuButtons('Post Blog', 'PostBlog')}
-          {this.menuButtons('MY Orders', 'MyOrders')}
+          {this.menuButtons('My Orders', 'MyOrders')}
           {this.menuButtons('Shop', 'Shop')}
           {this.menuButtons('Search', 'SearchUsers')}
           {this.menuButtons('Add Product', 'AddProduct')}
-          {/* {this.menuButtons('Select Blog', 'SelectBlog')} */}
+          {this.menuButtons('Select Blog', 'SelectBlog')}
           {/* {this.menuButtons('Privacy', 'Privacy')} */}
           {this.menuButtons('Subscription', 'Payment')}
           {/* {this.menuButtons('Support' , 'Support')} */}

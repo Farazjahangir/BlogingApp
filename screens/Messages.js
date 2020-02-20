@@ -24,14 +24,13 @@ import firebase from '../utils/firebase';
 import FirebaseLib from 'react-native-firebase';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-
 class Messages extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       image: '',
       otherUsersArr: [],
-      loading: true
+      loading: true,
     };
   }
   static navigationOptions = {
@@ -42,44 +41,43 @@ class Messages extends React.Component {
     const {userId} = this.props.userObj;
     const otherUsersArr = [];
     const db = FirebaseLib.firestore();
-    const idsArray = await firebase.getDocumentByQuery(
-      'Rooms',
-      'userObj.' + userId,
-      '==',
-      true,
-    );
-    console.log('idsArray', idsArray);
-    if(!idsArray.length) return this.setState({ loading: false })
+    try {
+      const idsArray = await firebase.getDocumentByQuery(
+        'Rooms',
+        'userObj.' + userId,
+        '==',
+        true,
+      );
+      if (!idsArray.length) return this.setState({loading: false});
 
-    for (var i = 0; i < idsArray.length; i++) {
-      if (idsArray[i] !== userId) {
-        const otherUsers = await firebase.getDocument('Users', idsArray[i]);
-        const response = await db
-          .collection('Rooms')
-          .where('userObj.' + userId, '==', true)
-          .where('userObj.' + idsArray[i], '==', true)
-          .get();
-        console.log('Response ====>', response);
-
-        response.forEach(async value => {
-          const doc = await db
+      for (var i = 0; i < idsArray.length; i++) {
+        if (idsArray[i] !== userId) {
+          const otherUsers = await firebase.getDocument('Users', idsArray[i]);
+          const response = await db
             .collection('Rooms')
-            .doc(value.id)
-            .collection('Messages')
-            .orderBy('createdAt')
+            .where('userObj.' + userId, '==', true)
+            .where('userObj.' + idsArray[i], '==', true)
             .get();
 
-          const lastIndex = doc.docs.length - 1;
-          const message = doc.docs[lastIndex].data().message;
-          console.log('message', message);
+          response.forEach(async value => {
+            const doc = await db
+              .collection('Rooms')
+              .doc(value.id)
+              .collection('Messages')
+              .orderBy('createdAt')
+              .get();
 
-          otherUsers.data().lastMessage = message;
-          console.log('otherUsers.data() ==========>', otherUsers.data());
+            const lastIndex = doc.docs.length - 1;
+            const message = doc.docs[lastIndex].data().message;
+            otherUsers.data().lastMessage = message;
 
-          otherUsersArr.push(otherUsers.data());
-          this.setState({otherUsersArr , loading: false});
-        });
+            otherUsersArr.push(otherUsers.data());
+            this.setState({otherUsersArr, loading: false});
+          });
+        }
       }
+    } catch (e) {
+      alert(e.message)
     }
   }
 
@@ -89,11 +87,13 @@ class Messages extends React.Component {
         this.props.navigation.navigate('Chat', {otherUserId: item.userId})
       }
       style={styles.messageContainer}>
-      {console.log('Item', item)}
-
       <View>
         <Image
-          source={require('../assets/avatar.png')}
+          source={
+            item.photoUrl
+              ? {uri: item.photoUrl}
+              : require('../assets/avatar.png')
+          }
           style={styles.msgImage}
         />
         <View style={[styles.iconContainer, {backgroundColor: pinkColor}]}>
@@ -110,10 +110,9 @@ class Messages extends React.Component {
   );
 
   render() {
-    const {navigation} = this.props.navigation;
+    const {navigation} = this.props;
+    console.log('NAvigation', navigation);
     const {otherUsersArr, loading} = this.state;
-    console.log('otherUsersArr==otherUsersArr[0]', otherUsersArr);
-    console.log('otherUsersArr', otherUsersArr.length);
 
     return (
       <View style={styles.container}>
@@ -123,8 +122,8 @@ class Messages extends React.Component {
           textStyle={{color: '#fff'}}
         />
 
-        <StatusBar backgroundColor={themeColor} translucent />
-        <View
+        {/* <StatusBar backgroundColor={themeColor} translucent /> */}
+        {/* <View
           style={{
             height: 100,
             flexDirection: 'row',
@@ -141,8 +140,9 @@ class Messages extends React.Component {
             }}>
             Messages
           </Text>
-        </View>
-        <SearchBar
+        </View> */}
+        <CustomHeader navigation={navigation} title={'Messages'} />
+        {/* <SearchBar
           containerStyle={{
             margin: 8,
             borderRadius: 5,
@@ -152,14 +152,14 @@ class Messages extends React.Component {
           }}
           placeholder={'Search'}
           inputContainerStyle={{backgroundColor: '#fff'}}
-        />
+        /> */}
         <View
           style={{
             paddingHorizontal: 12,
             borderBottomColor: 'grey',
             borderBottomWidth: 3,
           }}>
-          <Text style={{color: '#ccc', fontSize: 13, fontWeight: 'bold'}}>
+          {/* <Text style={{color: '#ccc', fontSize: 13, fontWeight: 'bold'}}>
             {' '}
             ONLINE CONTACTS
           </Text>
@@ -200,7 +200,7 @@ class Messages extends React.Component {
                 </View>
               )}
             />
-          </View>
+          </View> */}
         </View>
         <FlatList
           data={otherUsersArr}

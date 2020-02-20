@@ -7,6 +7,7 @@ import {themeColor, pinkColor} from '../Constant/index';
 import Logo from '../Component/LogoImage';
 export default CustomHeader = props => (
   <View>
+    {console.log(props)}
     <StatusBar backgroundColor={themeColor} translucent />
     <Header
       barStyle="light-content" // or directly

@@ -121,7 +121,7 @@ class MyOrders extends React.Component {
           textContent={'Loading...'}
           textStyle={{color: '#fff'}}
         />
-        <SearchBar
+        {/* <SearchBar
           containerStyle={{
             margin: 8,
             borderRadius: 5,
@@ -130,7 +130,7 @@ class MyOrders extends React.Component {
           }}
           placeholder={'Search'}
           inputContainerStyle={{backgroundColor: '#fff'}}
-        />
+        /> */}
         <FlatList
           data={myorders}
           keyExtractor={item => item}

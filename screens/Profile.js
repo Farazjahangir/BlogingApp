@@ -204,7 +204,10 @@ class Profile extends React.Component {
           textContent={'Loading...'}
           textStyle={{color: '#fff'}}
         />
-        <CustomHeader title={'PROFILE'} rightIcon navigation={navigation} />
+        <CustomHeader 
+          title={'PROFILE'}
+          // rightIcon
+          navigation={navigation} />
         <View style={{alignSelf: 'center', width: '60%', alignItems: 'center'}}>
           <View style={styles.imageWrapper}>
             {photoUrl ? (
@@ -263,7 +266,7 @@ class Profile extends React.Component {
                 size={25}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Icon
                 type={'font-awesome'}
                 name={'image'}
@@ -278,7 +281,7 @@ class Profile extends React.Component {
                 color={'#fff'}
                 size={25}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         )}
         <View

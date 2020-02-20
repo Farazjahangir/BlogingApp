@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {Icon, Input, Button} from 'react-native-elements';
 import CustomButton from '../Component/Button';
+import CustomHeader from '../Component/header';
 import {themeColor, pinkColor} from '../Constant/index';
 
 class SignUp extends React.Component {
@@ -23,7 +24,7 @@ class SignUp extends React.Component {
     const {navigation} = this.props;
     return (
       <View style={{backgroundColor: '#323643', flex: 1}}>
-        <View
+        {/* <View
           style={{
             height: 100,
             flexDirection: 'row',
@@ -41,7 +42,8 @@ class SignUp extends React.Component {
             containerStyle={{marginTop: 8}}
             size={25}
           />
-        </View>
+        </View> */}
+        <CustomHeader navigation={navigation} title={'Sign Up'} />
 
         <ScrollView></ScrollView>
         <View style={{justifyContent: 'flex-end', marginVertical: 25}}>

@@ -9,6 +9,7 @@ import {
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import FirebaseLib from 'react-native-firebase'
 import { connect } from 'react-redux'
+import CustomHeader from '../Component/header';
 
 import firebase from '../utils/firebase'
 import { loginUser } from '../redux/actions/authActions'
@@ -117,14 +118,15 @@ class Login extends React.Component {
           textContent={'Loading...'}
           textStyle={{ color: '#fff' }}
         />
-        <View style={{
+        {/* <View style={{
           height: 100, flexDirection: 'row', alignItems: 'center',
           justifyContent: 'space-between', marginHorizontal: 15,
         }}>
           <Text style={{ color: '#fff', fontSize: 25, fontWeight: 'bold' }}>Login</Text>
           <Icon type={'font-awesome'} name={'angle-left'} color={'#fff'} containerStyle={{ marginTop: 8 }}
             size={25} />
-        </View>
+        </View> */}
+        <CustomHeader navigation={navigation} title={'Login'} />
         <View style={{ flex: 1, alignItems: 'center', marginTop: "32%" }}>
           <Input placeholder={'Email'} placeholderTextColor={'#fff'}
             inputContainerStyle={styles.inputContainer} inputStyle={{ fontWeight: 'bold' }} onChangeText={(email) => this.setState({ email: email })} value={email} />

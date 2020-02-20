@@ -98,7 +98,7 @@ class ProductPay extends Component {
     const type = this.props.navigation.state.params.type;
     const amount = this.props.navigation.state.params.amount;
     const {userObj, emptyChart, navigation, chart} = this.props;
-    const {userId} = userObj;
+    const {userId, last4Acc} = userObj;
     const emailObj = this.productObjToEmail();
 
     console.log('Chart', chart);
@@ -128,7 +128,6 @@ class ProductPay extends Component {
     try {
       let customer = customerId;
       this.setState({loading: true});
-
       if (!customerId) {
         console.log('Ifff');
         // Creating stripe customer id if not found in database
@@ -147,6 +146,8 @@ class ProductPay extends Component {
         await firebase.updateDoc('Users', userId, {customerId});
         this.setState({customerId});
       }
+      console.log('Try ===>')
+
 
       // generating token for stripe customer payment source
       let token = await stripe.createToken(params);
