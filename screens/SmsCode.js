@@ -60,8 +60,6 @@ class SmsCode extends React.Component {
   render () {
     const { navigation } = this.props
     const { phoneNumber } = this.state
-    console.log('Phone Number', phoneNumber);
-    
     return (
       <View style={{ backgroundColor: '#323643', flex: 1 }}>
         <CustomHeader navigation={navigation} title={'Phone Number'} />

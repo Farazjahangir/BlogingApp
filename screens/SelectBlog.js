@@ -60,8 +60,6 @@ class SelectBlog extends React.Component {
         const {blogsArr, errMessage} = this.state;
         const db = firebaseLib.firestore();
         try {
-          console.log('******8 BLogsArr *********8', blogsArr);
-
           const blogs = await db
             .collection('Blog')
             .where('category', '==', item.toLowerCase())
@@ -71,10 +69,7 @@ class SelectBlog extends React.Component {
           }
 
           blogs.docs.forEach(blog => {
-            console.log('BLog', blog);
-
             if (following.indexOf(blog.data().userId) !== -1) {
-              console.log(blog.data());
               blogsArr.push(blog.data());
             }
             this.setState({blogsArr: [...blogsArr]});
@@ -87,16 +82,12 @@ class SelectBlog extends React.Component {
     );
   }
   videoIsReady() {
-    console.log('videoIsReady');
-
     this.setState({hidePlayPause: false, hideSeekbar: false});
   }
 
   render() {
     const {navigation} = this.props;
     let {category, blogsArr, errMessage, loading, selectedIndex} = this.state;
-    console.log('errMessage', errMessage);
-
     return (
       <View style={{backgroundColor: '#323643', flex: 1}}>
         <CustomHeader navigation={navigation} title={'BLOG'} />

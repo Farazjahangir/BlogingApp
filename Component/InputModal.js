@@ -30,7 +30,6 @@ const InputModal = props => {
     cancelButtonStyle = '',
     submitButtonStyle = '',
   } = props;
-  console.log('PRops', props);
 
   return (
     <Modal transparent={true} visible={visible}>

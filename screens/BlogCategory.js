@@ -40,8 +40,6 @@ class BlogCategory extends React.Component {
   };
 
   async selectBlogCategory(category) {
-    console.log('selectBlogCategory', category);
-    
     const {
       userObj: {userId},
       navigation,

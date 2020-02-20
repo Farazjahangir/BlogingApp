@@ -31,8 +31,6 @@ export default class ForgetPassword extends React.Component {
   }
 
   async changePassword() {
-    console.log('changePassword');
-
     const {email} = this.state;
     if (!email) return alert('Input email');
     try {

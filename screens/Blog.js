@@ -83,20 +83,15 @@ class Blog extends React.Component {
       userObj: {following, blogCategory},
       navigation,
     } = this.props;
-    console.log('PRops', this.props);
     const usersIds = [];
 
     try {
       const url = await Linking.getInitialURL();
-      console.log('Url =====>', url);
       if (url) {
         const extractPath = url.split('/');
         const path = extractPath[3];
         navigation.navigate(path);
       }
-
-      console.log('***** REaltime *******', userId);
-
       db.collection('Users')
         .doc(userId)
         .onSnapshot(snapshot => {
@@ -109,14 +104,11 @@ class Blog extends React.Component {
       if (url) {
         const extractId = url.split('/');
         const id = extractId[4];
-        console.log('Id ==========>', id);
         const dbResponse = await db
           .collection('Blog')
           .doc(id)
           .get();
-        console.log('DB_RESPONSE', dbResponse.data());
         const {blogs} = this.state;
-        console.log('sajdhsjkdhasjkhdksj', dbResponse.id);
         blogs.push({id: dbResponse.id, ...dbResponse.data()});
         usersIds.push(dbResponse.data().userId);
         this.setState({blogs, isBlogs: true, loading: false, usersIds}, () => {
@@ -139,8 +131,6 @@ class Blog extends React.Component {
             snapShot.docChanges.forEach(change => {
               if (change.type === 'added') {
                 const {blogs} = this.state;
-                console.log('change.doc.data()', change.doc.data());
-
                 if (
                   following.indexOf(change.doc.data().userId) !== -1 &&
                   !change.doc.data().deleted
@@ -212,8 +202,6 @@ class Blog extends React.Component {
   };
 
   videoIsReady() {
-    console.log('videoIsReady');
-
     this.setState({hidePlayPause: false, hideSeekbar: false});
   }
   navigateToDetail(item) {
@@ -291,7 +279,6 @@ class Blog extends React.Component {
   };
 
   blog = (item, index) => {
-    console.log('Item', item);
     const {
       userObj: {userId},
     } = this.props;
@@ -462,7 +449,6 @@ class Blog extends React.Component {
       userObj: {following},
     } = this.props;
     let {follow, blogs, isBlogs, loading, usersData, isError} = this.state;
-    console.log('usersData ***********************', usersData);
     return (
       <Drawer
         ref={ref => (this._drawer = ref)}

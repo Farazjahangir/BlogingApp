@@ -146,7 +146,6 @@ class Payment extends React.Component {
   async cancel(item) {
     const {userObj} = this.props;
     const {userId, subscriptionId} = userObj;
-    console.log('subscriptionId', subscriptionId);
 
     try {
       this.setState({loading: true});
@@ -163,8 +162,6 @@ class Payment extends React.Component {
           body: JSON.stringify({subscriptionId}),
         },
       );
-      console.log('cancelSubscription',!cancelSubscription.ok);
-      console.log('cancelSubscription',cancelSubscription.ok);
       
       if (!cancelSubscription.ok) {
         alert('Something Wrong');

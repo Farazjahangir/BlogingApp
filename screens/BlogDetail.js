@@ -40,8 +40,6 @@ class BlogDetail extends React.Component {
     header: null,
   };
   videoIsReady() {
-    console.log('videoIsReady');
-
     this.setState({hidePlayPause: false, hideSeekbar: false});
   }
 
@@ -89,7 +87,6 @@ class BlogDetail extends React.Component {
     const {fullScreenHeight, loading} = this.state;
     const {navigation, userObj:{ userId }} = this.props;
     const data = this.props.navigation.state.params.data;
-    console.log('data =======>', data);
     let {follow} = this.state;
     return (
       <ScrollView style={{backgroundColor: '#323643', flex: 1}}>

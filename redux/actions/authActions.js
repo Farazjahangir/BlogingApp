@@ -1,8 +1,6 @@
 /* eslint-disable */
 
 const loginUser = (user) =>{
-    console.log('loginUser' , user);
-    
     return { 
         type : "LOGIN_USER",
         user
@@ -10,8 +8,6 @@ const loginUser = (user) =>{
 } 
 
 const logoutUser = (user) =>{
-    console.log('Logout User', user);
-    
     return { 
         type : "LOGOUT_USER",
         user
@@ -19,8 +15,6 @@ const logoutUser = (user) =>{
 } 
 
 const emptyUser = (data) =>{
-    console.log('****** emptyUser ********');
-    
     return { 
         type : "EMPTY_USER",
         data

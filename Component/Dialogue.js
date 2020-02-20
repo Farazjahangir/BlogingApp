@@ -8,8 +8,6 @@ import Dialog from "react-native-dialog";
 export default class Dialogue extends Component {    
       render() {
           const { handleOk, handleCancel, dialogVisible, title, description, okButtonLabel } = this.props
-          console.log('dialogVisible', dialogVisible);
-          
         return (
           <View>
             <Dialog.Container visible={dialogVisible}>

@@ -74,7 +74,6 @@ class MyOrders extends React.Component {
   async recieved(item) {
     const {myorders} = this.state;
     const { navigation } = this.props
-    console.log(item);
     try {
     this.setState({ loading: true })
       const sellerDoc = await firebase.getDocument('Users', item.sellerId);

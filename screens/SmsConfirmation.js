@@ -43,9 +43,7 @@ class CodeConfirmation extends React.Component {
     let userObj = {}
     const foundedId = this.props.navigation.state.params.foundedId
 
-    console.log(this.props.loginUser)
     userObj = 'fuck'
-    console.log(userObj);
     
     auth.onAuthStateChanged(async (user) => {
   if (user){
@@ -71,8 +69,6 @@ class CodeConfirmation extends React.Component {
 
   async confirmSmsCode(){
     const phoneAuthSnapshot = this.props.navigation.state.params.phoneAuthSnapshot
-    console.log('phoneAuthSnapshot', phoneAuthSnapshot);
-    
     // auth.onAuthStateChanged(user => {
     //   console.log('USER', user)
     //   if(user){
@@ -81,10 +77,8 @@ class CodeConfirmation extends React.Component {
     // })
     
     const { code } = this.state
-    console.log('Code', code)
     try{
       const confirmation = await phoneAuthSnapshot.confirm(code)
-      console.log('confirmation', confirmation);
     }
     catch(e){
       alert(e.message)

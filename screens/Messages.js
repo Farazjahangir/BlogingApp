@@ -111,7 +111,6 @@ class Messages extends React.Component {
 
   render() {
     const {navigation} = this.props;
-    console.log('NAvigation', navigation);
     const {otherUsersArr, loading} = this.state;
 
     return (

@@ -33,7 +33,6 @@ class ControlPanel extends React.Component {
     this.props.logoutUser();
     this.props.navigation.navigate('Auth');
     const data = await AccessToken.getCurrentAccessToken();
-    console.log('AccessToken.getCurrentAccessToken()', data);
   }
 
   menuButtons = (name, route, link) => (

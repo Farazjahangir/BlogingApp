@@ -44,7 +44,6 @@ class SearchUsers extends Component {
     if (!user) return alert('Field is required');
     users = [];
     const db = firebaseLib.firestore();
-    console.log('user======>', user.toLowerCase());
     try {
       this.setState({loading: true});
       const userData = await db
@@ -57,7 +56,6 @@ class SearchUsers extends Component {
           users.push(item.data())
         }
       });
-      console.log('userData', users);
       if (!users.length) alert('No User Found');
       this.setState({users});
     } catch (e) {
@@ -119,8 +117,6 @@ class SearchUsers extends Component {
   render() {
     const {navigation, userObj} = this.props;
     const {users, loading, user} = this.state;
-    console.log('USerObj', userObj);
-    console.log('users', users);
 
     return (
       <ScrollView

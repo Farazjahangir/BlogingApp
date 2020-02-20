@@ -101,11 +101,8 @@ class Feedback extends React.Component {
       </View>
 
   render() {
-    console.log('**************** feedback **************8', this.props);
-    
     const {navigation , userObj} = this.props;
     if(userObj === undefined){
-      console.log('**************** feedback_userObj **************8', userObj);      
       navigation.navigate('Auth')
       return null
     }

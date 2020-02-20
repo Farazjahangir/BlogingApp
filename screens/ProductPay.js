@@ -101,7 +101,6 @@ class ProductPay extends Component {
     const {userId, last4Acc} = userObj;
     const emailObj = this.productObjToEmail();
 
-    console.log('Chart', chart);
     const productDetails = {
       totalAmount: amount,
       products: [],
@@ -114,8 +113,6 @@ class ProductPay extends Component {
       };
       productDetails.products.push(obj);
     });
-    console.log('productDetails', productDetails);
-
     if (this.validateFields()) return;
     const params = {
       card: {
@@ -129,7 +126,6 @@ class ProductPay extends Component {
       let customer = customerId;
       this.setState({loading: true});
       if (!customerId) {
-        console.log('Ifff');
         // Creating stripe customer id if not found in database
         let customerId = await fetch('https://blogstar.app/customer-id', {
           headers: {
@@ -146,9 +142,6 @@ class ProductPay extends Component {
         await firebase.updateDoc('Users', userId, {customerId});
         this.setState({customerId});
       }
-      console.log('Try ===>')
-
-
       // generating token for stripe customer payment source
       let token = await stripe.createToken(params);
       if ('error' in token) {
@@ -163,8 +156,6 @@ class ProductPay extends Component {
         token,
         customer,
       };
-      console.log('SourceBody', body);
-
       let fingerPrint = await fetch(
         'https://blogstar.app/customer-source',
         {
@@ -186,10 +177,6 @@ class ProductPay extends Component {
         this.setState({loading: false});
         return;
       }
-
-      console.log('fingerPrint ====>', fingerPrint);
-      console.log('customerId', customerId);
-
       // customerId = customerId.response.id
       const dbLib = firebaseLib.firestore();
 
@@ -220,7 +207,6 @@ class ProductPay extends Component {
         chargeResponse = await chargeResponse.json();
         // customerId = customerId.response.id
         if ('errorMessage' in chargeResponse) {
-          console.log('chargeResponse =========>', chargeResponse);
           const {
             errorMessage: {
               raw: {message},
@@ -230,7 +216,6 @@ class ProductPay extends Component {
           this.setState({loading: false});
           return;
         }
-        console.log('Charge Response ========>', chargeResponse);
         const productDetails = {
           userId,
           products: [],
@@ -238,8 +223,6 @@ class ProductPay extends Component {
           amount,
           createdAt: Date.now(),
         };
-        console.log('productDetails', productDetails);
-
         chart.map((item, index) => {
           const c = {...item};
           c.sellerId = chart[index].userId;
@@ -275,8 +258,6 @@ class ProductPay extends Component {
           this.setState({loading: false});
           return;
         }
-        console.log('chargeSubscription', chargeSubscription);
-
         const updateUserDoc = {
           userType: 'paid',
           userPackage: type,
@@ -337,7 +318,6 @@ class ProductPay extends Component {
     const amount = this.props.navigation.state.params.amount;
     const subscription = this.props.navigation.state.params.subscription;
     const { userObj: { last4Acc } } = this.props
-    console.log('cardNumber', cardNumber);
 
     return (
       <ScrollView

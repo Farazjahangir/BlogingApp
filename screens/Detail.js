@@ -50,14 +50,11 @@ class Detail extends React.Component {
 
   addIntoChart(data) {
     const {addToChart, chart} = this.props;
-    console.log('Chart', chart);
-
     const findObj = chart.some(item => item.id === data.id);
     if (!findObj) {
       chart.push(data);
       addToChart(chart);
       alert('Added in chart');
-      console.log(this.props);
       return;
     }
     alert('You have already added this item in your chart');
@@ -70,7 +67,6 @@ class Detail extends React.Component {
         params: {data},
       },
     } = navigation;
-    console.log('Data ====>', data);
     let {follow} = this.state;
     return (
       <ScrollView
@@ -93,12 +89,12 @@ class Detail extends React.Component {
               marginHorizontal: 5,
               marginTop: 5,
             }}>
-            <TouchableOpacity style={styles.imageBtn}>
+            {/* <TouchableOpacity style={styles.imageBtn}>
               <Icon type={'font-awesome'} name={'star-o'} color={'#000'} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.imageBtn}>
               <Icon type={'feather'} name={'upload'} color={'#000'} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View>
             <Text style={styles.productName}>{data.productName}</Text>
@@ -106,11 +102,11 @@ class Detail extends React.Component {
         </ImageBackground>
         <View style={[styles.borderBottom, {paddingTop: 8}]}>
           <View style={styles.inputView}>
-            <Input
+            {/* <Input
               placeholder={'Select Color'}
               containerStyle={{width: '70%'}}
               inputContainerStyle={styles.input}
-            />
+            /> */}
             <CustomButton
               title={`$ ${data.price}`}
               buttonStyle={styles.borderButton}
@@ -143,7 +139,7 @@ class Detail extends React.Component {
             </Text>
             <Text style={{color: 'grey'}}>{data.returnPolicy}</Text>
           </View>
-          <View style={styles.borderBottom}>
+          {/* <View style={styles.borderBottom}>
             <View style={[styles.title, {marginVertical: 15}]}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image
@@ -173,7 +169,7 @@ class Detail extends React.Component {
             }}>
             OTHER PRODUCTS
           </Text>
-          <HorizontalList height={140} productInfo={true} />
+          <HorizontalList height={140} productInfo={true} /> */}
         </View>
       </ScrollView>
     );
@@ -230,8 +226,6 @@ const mapDispatchToProps = dispatch => {
   };
 };
 const mapStateToProps = state => {
-  console.log(state);
-
   return {chart: state.chart.chart};
 };
 

@@ -34,7 +34,6 @@ class SavedCards extends Component {
   async componentDidMount() {
     const db = firebaseLib.firestore();
     const subscription = this.props.navigation.state.params.subscription;
-    console.log('subscription', subscription);
     const {
       userObj: {userId},
     } = this.props;
@@ -48,7 +47,6 @@ class SavedCards extends Component {
         .get();
       cardsRes = cardsRes._docs.forEach(data => cards.push(data.data()));
       this.setState({cards});
-      console.log('Cards', cards);
     } catch (e) {
       console.log('Eror ====>', e.message);
     }
@@ -100,11 +98,8 @@ class SavedCards extends Component {
       userObj: {userId, last4Acc},
     } = this.props;
     data.source = source;
-    console.log(data);
     try {
       (data.forEmail = emailObj),
-        console.log('****************** data ***************', data);
-
       this.setState({loading: true});
       if (!subscription) {
           if(!address){

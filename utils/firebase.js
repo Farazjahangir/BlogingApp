@@ -114,7 +114,6 @@ firebaseFunctions.deleteDoc = async (collection , docId) => {
 
 firebaseFunctions.uploadImage = async (image , userId) => {
     try{
-        console.log('image===>',image)
         let name = `${Date.now()} - ${userId}`
         const response = await firebaseLib.storage().ref(name).putFile(image)
         const url = await storageRef.child(name).getDownloadURL();

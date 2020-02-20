@@ -68,8 +68,6 @@ class EditProfile extends React.Component {
       includeBase64: true,
       cropping: true,
     });
-    console.log('Image', image);
-
     this.setState({photoUrl: image.path});
   }
 
@@ -87,8 +85,6 @@ class EditProfile extends React.Component {
     let {photoUrl, userName, country, number} = this.state;
     this.setState({loading: true});
     if (photoUrl && !photoUrl.includes('https')) {
-      console.log('sjdjashdjkashdjkashjkd iffff');
-
       photoUrl = await firebase.uploadImage(photoUrl, userId);
     }
     const data = {
@@ -125,9 +121,6 @@ class EditProfile extends React.Component {
     //   email,
     //   password,
     // };
-    console.log('email', email);
-    console.log('password', password);
-
     try {
       // var credentials = firebaseLib.auth.EmailAuthProvider.credential(
       //   email,
@@ -168,9 +161,6 @@ class EditProfile extends React.Component {
       inputDialogueShow,
       number,
     } = this.state;
-
-    console.log('inputDialogueShow ==>', inputDialogueShow);
-    
     return (
       <ScrollView
         stickyHeaderIndices={[0]}

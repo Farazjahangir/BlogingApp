@@ -59,8 +59,6 @@ class Yourchart extends React.Component {
   render() {
     const { navigation, chart } = this.props
     const { products } = this.state
-    console.log('******* products **********', products);
-    
     let amount = 0
     chart.map(item => amount = item.price + amount)
 

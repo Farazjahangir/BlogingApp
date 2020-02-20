@@ -8,8 +8,6 @@ export default HorizontalList = props => {
   const {data} = props;
   const renderRandomProducts = () => {
     const {data} = props;
-    console.log('Data ============>', data);
-
     if (data) {
       const randomNumbers = [];
       data.map((item, i) => {

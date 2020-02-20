@@ -42,10 +42,6 @@ class Login extends React.Component {
 
   async login() {
     const { email, password } = this.state
-    console.log('Email', email);
-    console.log('PAss', password);
-
-
 
     if (this.checkValidation()) return
     try {

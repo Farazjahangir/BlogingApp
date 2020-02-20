@@ -43,24 +43,17 @@ class Profile extends React.Component {
     header: null,
   };
   async componentDidMount() {
-    console.log('componentDidMount Profile');
-
     this.decideUser();
     const {userObj, navigation} = this.props;
     let {userId} = userObj;
     if (this.props.navigation.state.params.otherUser) {
       userId = this.props.navigation.state.params.otherUser.userId;
-      console.log('userId========>', userId);
-
       if (userObj.following.indexOf(userId) !== -1) {
-        console.log('IFffffffffffff');
-
         this.setState({isFollowed: true});
       }
     }
 
     const db = firebaseLib.firestore();
-    console.log('USerId', userId);
     const blogs = [];
 
     try {
@@ -68,7 +61,6 @@ class Profile extends React.Component {
         .collection('Blog')
         .where('userId', '==', userId)
         .get();
-      console.log('UserBlogs ====>', userId);
 
       userBlogs = userBlogs.docs.forEach(doc => blogs.push(doc.data()));
       this.setState({blogs, loading: false});
@@ -153,14 +145,10 @@ class Profile extends React.Component {
   }
 
   decideUser = newData => {
-    console.log('decideUser');
-
     const {navigation, userObj} = this.props;
     let userData = '';
     if (!!userObj.userId) {
       if (navigation.state.params.otherUser) {
-        console.log('Other USer ==============>');
-
         userData = navigation.state.params.otherUser;
       } else {
         userData = newData ? newData : userObj;
@@ -173,15 +161,12 @@ class Profile extends React.Component {
     this.decideUser(nextProps.userObj);
   }
   videoIsReady() {
-    console.log('videoIsReady');
-
     this.setState({hidePlayPause: false, hideSeekbar: false});
   }
 
   navigateToDetails(blog, userData) {
     const {navigation} = this.props;
     blog.userObj = userData;
-    console.log(blog)
     navigation.navigate('BlogDetail', {data: blog});
   }
 
@@ -193,8 +178,6 @@ class Profile extends React.Component {
     }
     let {comments, blogs, loading, isFollowed, userData} = this.state;
     const {userName, followers, following, userId, photoUrl} = userData;
-    console.log('userData ====>', blogs);
-
     return (
       <ScrollView
         stickyHeaderIndices={[0]}

@@ -63,14 +63,10 @@ class PostBlog extends React.Component {
     }
   }
   componentWillUnmount() {
-    console.log('componentWillUnmount');
-
     BackHandler.removeEventListener('hardwareBackPress', this.savingDraft);
   }
 
   onValueChange(value) {
-    console.log('Value', value);
-    
     this.setState({
       selected: value,
     });
@@ -133,7 +129,6 @@ class PostBlog extends React.Component {
       mime: '',
       data: '',
     };
-    console.log('blogData', blogData);
 
     const response = await firebase.setDocument(
       'Drafts',
@@ -151,8 +146,6 @@ class PostBlog extends React.Component {
     return request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
   }
   videoIsReady() {
-    console.log('videoIsReady');
-
     this.setState({hidePlayPause: false, hideSeekbar: false});
   }
 
