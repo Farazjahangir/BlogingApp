@@ -5683,10 +5683,10 @@ react-native-gesture-handler@^1.5.2:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-image-crop-picker@0.26.1:
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.26.1.tgz#3499ff5d4a09c9a9e927eb4f6ff936015ff594f1"
-  integrity sha512-5JdOjQS2V5L/vfb8+jPTUYx4VZPLvhZTyCUjiG0BZCbh+N1L24Kj2C+8EOuWS7xXXHrz5Bpe/eq5lQO1Efc+Yw==
+react-native-image-crop-picker@^0.26.1:
+  version "0.26.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.26.2.tgz#c70985ff6740e63569f90b185be0516d83f5933b"
+  integrity sha512-KnPtSJklwXr/BNdcyAlDp9xkDCQyJ5ZA4dM10elBc2aIXac/4CndbiPFZrwu4GlAYYYKlkiTTwTYW+h4RyGLaw==
 
 react-native-iphone-x-helper@^1.0.3:
   version "1.2.1"
@@ -7424,9 +7424,9 @@ xtend@~4.0.1:
   integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
 
 y18n@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
-  integrity sha1-bRX7qITAhnnA136I53WegR4H+kE=
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.2.tgz#85c901bd6470ce71fc4bb723ad209b70f7f28696"
+  integrity sha512-uGZHXkHnhF0XeeAPgnKfPv1bgKAYyVvmNL1xlKsPYZPaIHxGti2hHqvOCQv71XMsLxu1QjergkqogUnms5D3YQ==
 
 "y18n@^3.2.1 || ^4.0.0", y18n@^4.0.0:
   version "4.0.0"
